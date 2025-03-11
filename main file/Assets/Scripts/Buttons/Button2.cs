@@ -1,4 +1,7 @@
 using UnityEngine;
+using System.Diagnostics;
+using System.IO;
+using UnityEngine.UI;
 public class Button2 : MonoBehaviour
 {
  //  private Vanish backdrop0; 
@@ -20,7 +23,8 @@ public class Button2 : MonoBehaviour
     
     public void OnMouseDown()
     {
-        State.IncrementState();
+        string folderPath = @"C:\Users\yosha\main file\Assets\Frames"; // Change this to your folder path
+        Process.Start("explorer.exe", folderPath);
 
        // backdrop0.Update();  // Call the function in the other script
     }
