@@ -24,8 +24,8 @@ MonoBehaviour:
   m_missingGlyphCharacter: 0
   m_ClearDynamicDataOnBuild: 1
   m_warningsDisabled: 0
-  m_defaultFontAsset: {fileID: 0}
-  m_defaultFontAssetPath: 
+  m_defaultFontAsset: {fileID: 11400000, guid: fae96d7343eba644aaf572ff1a3dd244, type: 2}
+  m_defaultFontAssetPath: Fonts & Materials/AvenirNextLTPro-Regular SDF.asset
   m_defaultFontSize: 0
   m_defaultAutoSizeMinRatio: 0
   m_defaultAutoSizeMaxRatio: 0
