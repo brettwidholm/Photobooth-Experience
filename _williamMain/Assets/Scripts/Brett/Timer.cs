@@ -106,7 +106,7 @@ public class Timer : MonoBehaviour
         }
 
         // checks which screen is active by object name in hierarchy
-        if (screenControl.IsScreenActive("Start Screen")){
+        if (screenControl.IsScreenActive("Start Screen") || screenControl.IsScreenActive("Photo Capture")){
             programTime = 20.0f; 
             // keeps timer constant on whichever screens we need
         }
@@ -135,19 +135,19 @@ public class Timer : MonoBehaviour
         }
     }
 
-    void UpdateScreenReference()
-    {
+    void UpdateScreenReference(){
         if (screenControl.screen0.activeInHierarchy)
             currentScreen = screenControl.screen0.transform;
         else if (screenControl.screen1.activeInHierarchy)
             currentScreen = screenControl.screen1.transform;
         else if (screenControl.screen2.activeInHierarchy)
             currentScreen = screenControl.screen2.transform;
+        else if (screenControl.screen3.activeInHierarchy)
+            currentScreen = screenControl.screen3.transform;
         //will need all screens here, not ideal but will find a workaround later
     }
 
-    void UpdateTextPosition()
-    {
+    void UpdateTextPosition(){
         if (currentScreen != null)
         {
             timerText.transform.SetParent(currentScreen, false);

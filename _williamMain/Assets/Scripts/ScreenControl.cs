@@ -3,9 +3,12 @@ using UnityEngine;
 public class ScreenControl : MonoBehaviour
 {
     //references to screens
+    //CHANGE SCREEN GAMEOBJECT NAMES
     public GameObject screen0; //Start Screen
     public GameObject screen1; //Instructions Screen
     public GameObject screen2; //Tap to begin screen (placeholder)
+    public GameObject screen3; //Photo Capture
+
     public TransitionOverlay transitionOverlay; //fade to black
 
     void Awake() // Runs as soon as the scene loads (before Play Mode)
@@ -18,14 +21,25 @@ public class ScreenControl : MonoBehaviour
         Showscreen0();
     }
 
-    
-        void SetInitialScreen()
+    void Update()
+    {
+     if(IsScreenActive("Tap to Begin Screen")){
+            if (Input.GetMouseButtonDown(0)){
+                Debug.Log("we going to the next screen");
+                ShowScreen3();
+            }
+
+     }
+    }
+
+    void SetInitialScreen()
     {
         if (screen0 != null && screen1 != null)
         {
             screen0.SetActive(true);
             screen1.SetActive(false);
             screen2.SetActive(false);
+            screen3.SetActive(false);
         }
     }
 
@@ -42,6 +56,7 @@ public class ScreenControl : MonoBehaviour
             screen0.SetActive(true);
             screen1.SetActive(false);
             screen2.SetActive(false);
+            screen3.SetActive(false);
             
         });
         Debug.Log("Start screen is active!");
@@ -52,6 +67,7 @@ public class ScreenControl : MonoBehaviour
             screen0.SetActive(false);
             screen1.SetActive(true);
             screen2.SetActive(false);
+            screen3.SetActive(false);
             
         });
         Debug.Log("instructions screen is active!");
@@ -62,10 +78,24 @@ public class ScreenControl : MonoBehaviour
         screen0.SetActive(false);
         screen1.SetActive(false);
         screen2.SetActive(true);
+        screen3.SetActive(false);
+        
+    });
+        Debug.Log("tap to begin screen is active!");
+
+    }
+
+        public void ShowScreen3(){
+        transitionOverlay.FadeTransition(() => {
+        screen0.SetActive(false);
+        screen1.SetActive(false);
+        screen2.SetActive(false);
+        screen3.SetActive(true);
         
     });
     Debug.Log("tap to begin screen is active!");
-}
+
+    }
 
 public bool IsScreenActive(string screenName){
     GameObject screen = GameObject.Find(screenName);
