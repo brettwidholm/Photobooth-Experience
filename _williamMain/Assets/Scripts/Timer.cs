@@ -74,6 +74,7 @@ else if(programTime > 5.0f){
 
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
@@ -82,6 +83,7 @@ public class Timer : MonoBehaviour
     public TextMeshProUGUI warningText;
 
     public ScreenControl screenControl; // Reference to ScreenControl
+    public Button resetButton;
 
     private Transform currentScreen; // The active screen (panel)
 
@@ -109,9 +111,12 @@ public class Timer : MonoBehaviour
         if (screenControl.IsScreenActive("Start Screen") || screenControl.IsScreenActive("Photo Capture")){
             programTime = 20.0f; 
             // keeps timer constant on whichever screens we need
+            resetButton.gameObject.SetActive(false);
         }
         else{
             programTime -= Time.deltaTime; // run on other screens
+
+            resetButton.gameObject.SetActive(true);
         }
 
         // Moves the timer/warning text to active screen
