@@ -68,7 +68,7 @@ public class Timer : MonoBehaviour
                 break;
             }
         }
-        /* //old method was redundant but leaving here just in case
+        /* //This old method was overkill but leaving here just in case
         if (screenControl.screen0.activeInHierarchy)
             currentScreen = screenControl.screen0.transform;
         else if (screenControl.screen1.activeInHierarchy)
