@@ -1,112 +1,163 @@
 using UnityEngine;
-
+using TMPro;
+using UnityEngine.UI;
 public class ScreenControl : MonoBehaviour
 {
-    //references to screens
-    //CHANGE SCREEN GAMEOBJECT NAMES
     public GameObject screen0; //Start Screen
     public GameObject screen1; //Instructions Screen
     public GameObject screen2; //Tap to begin screen (placeholder)
     public GameObject screen3; //Photo Capture
-
+    public GameObject screen4; //Preview GIF Screen
+    public GameObject screen5; //Info Screen
+    public GameObject screen6; //Confirmation Screen
+    public GameObject screen7; //Success Screen
+    public Button resetButton;
+    public GameObject BlockCLogo;
     public TransitionOverlay transitionOverlay; //fade to black
 
-    void Awake() // Runs as soon as the scene loads (before Play Mode)
-    {
-        SetInitialScreen();
-    }
     void Start()
     {
-        //starts only showing screen0
-        Showscreen0();
+        Showscreen0(); //starts only showing screen0
     }
 
     void Update()
     {
+    if(IsScreenActive("Start Screen")){
+        resetButton.gameObject.SetActive(false);
+     }
+     else{
+        resetButton.gameObject.SetActive(true);
+     }
+
      if(IsScreenActive("Tap to Begin Screen")){
             if (Input.GetMouseButtonDown(0)){
                 Debug.Log("we going to the next screen");
-                ShowScreen3();
+                ShowScreen3(); //go to photo capture screen
             }
-
      }
     }
 
-    void SetInitialScreen()
-    {
-        if (screen0 != null && screen1 != null)
-        {
-            screen0.SetActive(true);
-            screen1.SetActive(false);
-            screen2.SetActive(false);
-            screen3.SetActive(false);
-        }
-    }
-
-    // Runs when any value in the Inspector changes 
-    // to make sure the first screen is the actual screen shown in the scene view and game view frame before playing
-    //I think this needs fixing because there is an immediate fade to black when playing
-    void OnValidate(){
-        if (!Application.isPlaying){
-            SetInitialScreen();
-        }
-    }
-    public void Showscreen0(){
+    public void Showscreen0(){//Start Screen
         transitionOverlay.FadeTransition(() => {
             screen0.SetActive(true);
             screen1.SetActive(false);
             screen2.SetActive(false);
             screen3.SetActive(false);
-            
+            screen4.SetActive(false);
+            screen5.SetActive(false);
+            screen6.SetActive(false);
+            screen7.SetActive(false);
         });
         Debug.Log("Start screen is active!");
     }
 
-    public void Showscreen1(){
+    public void Showscreen1(){//Instructions Screen
         transitionOverlay.FadeTransition(() => {
             screen0.SetActive(false);
             screen1.SetActive(true);
             screen2.SetActive(false);
             screen3.SetActive(false);
-            
+            screen4.SetActive(false);
+            screen5.SetActive(false);
+            screen6.SetActive(false);
+            screen7.SetActive(false);
         });
         Debug.Log("instructions screen is active!");
     }
 
-    public void ShowScreen2(){
+    public void ShowScreen2(){//Tap to begin screen
         transitionOverlay.FadeTransition(() => {
-        screen0.SetActive(false);
-        screen1.SetActive(false);
-        screen2.SetActive(true);
-        screen3.SetActive(false);
-        
+            screen0.SetActive(false);
+            screen1.SetActive(false);
+            screen2.SetActive(true);
+            screen3.SetActive(false);
+            screen4.SetActive(false);
+            screen5.SetActive(false);
+            screen6.SetActive(false);
+            screen7.SetActive(false);
     });
         Debug.Log("tap to begin screen is active!");
-
     }
 
-        public void ShowScreen3(){
+    public void ShowScreen3(){//Photo Capture
         transitionOverlay.FadeTransition(() => {
-        screen0.SetActive(false);
-        screen1.SetActive(false);
-        screen2.SetActive(false);
-        screen3.SetActive(true);
-        
+            screen0.SetActive(false);
+            screen1.SetActive(false);
+            screen2.SetActive(false);
+            screen3.SetActive(true);
+            screen4.SetActive(false);
+            screen5.SetActive(false);
+            screen6.SetActive(false);
+            screen7.SetActive(false);
+        //will need to make the photo capture sequence begin automatically
     });
-    Debug.Log("tap to begin screen is active!");
-
+        Debug.Log("Photo Capture is active!");
     }
 
-public bool IsScreenActive(string screenName){
-    GameObject screen = GameObject.Find(screenName);
-    if (screen != null){
-        return screen.activeInHierarchy;
+    public void ShowScreen4(){//Preview GIF Screen
+        transitionOverlay.FadeTransition(() => {
+            screen0.SetActive(false);
+            screen1.SetActive(false);
+            screen2.SetActive(false);
+            screen3.SetActive(false);
+            screen4.SetActive(true);
+            screen5.SetActive(false);
+            screen6.SetActive(false);
+            screen7.SetActive(false);
+        });
+        Debug.Log("Preview GIF screen is active!");
     }
-    else{
-        //Debug.LogWarning($"Screen {screenName} not found!");
-        return false;
+
+    public void ShowScreen5(){//Info Screen
+        transitionOverlay.FadeTransition(() => {
+            screen0.SetActive(false);
+            screen1.SetActive(false);
+            screen2.SetActive(false);
+            screen3.SetActive(false);
+            screen4.SetActive(false);
+            screen5.SetActive(true);
+            screen6.SetActive(false);
+            screen7.SetActive(false);
+        });
+        Debug.Log("Info screen is active!");
     }
-}
+
+    public void ShowScreen6(){//Confirmation Screen
+        transitionOverlay.FadeTransition(() => {
+            screen0.SetActive(false);
+            screen1.SetActive(false);
+            screen2.SetActive(false);
+            screen3.SetActive(false);
+            screen4.SetActive(false);
+            screen5.SetActive(false);
+            screen6.SetActive(true);
+            screen7.SetActive(false);
+        });
+        Debug.Log("Confirmation screen is active!");
+    }
+        public void ShowScreen7(){//Success Screen
+        transitionOverlay.FadeTransition(() => {
+            screen0.SetActive(false);
+            screen1.SetActive(false);
+            screen2.SetActive(false);
+            screen3.SetActive(false);
+            screen4.SetActive(false);
+            screen5.SetActive(false);
+            screen6.SetActive(false);
+            screen7.SetActive(true);
+        });
+        Debug.Log("Success screen is active!");
+    }
+
+    public bool IsScreenActive(string screenName){
+        GameObject screen = GameObject.Find(screenName);
+        if (screen != null){
+            return screen.activeInHierarchy;
+        }
+        else{
+            return false;
+        }
+    }
 
 }
 

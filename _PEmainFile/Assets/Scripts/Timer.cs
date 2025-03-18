@@ -1,77 +1,3 @@
-/*
-using UnityEngine;
-using System.Collections;
-using TMPro;
-
-//thank you https://discussions.unity.com/t/simple-timer/56201/2 :)
-
-public class Timer: MonoBehaviour {
-
-public float programTime = 20.0f;
-public TextMeshProUGUI timerText;
-
-public TextMeshProUGUI warningText; 
-
-public void Start(){
-    Debug.Log("GO GO GO!!!!");
-    timerText.text = $"Timer: {programTime:F0}"; //no decimals, that creates more panic than needed
-    warningText.text = "TOUCH THE SCREEN";
-    timerText.enabled = false;
-    warningText.enabled = false;
-    //warning.HideWarning();
-    Update();
-}
-
-public void Update(){
-    
-Debug.Log("updating timer");
-//Console.WriteLine("updating timer");
-
-timerText.text = $"Timer: {programTime:F0}";
-
-if (Input.GetMouseButtonDown(0)){
-    programTime = 20.0f; //if left click made reset timer 
-
-    //in this branch we can add a circle that pops up to show a click (might be nice)
-}
-
-
-if(State.GetState() != 0 && State.GetState() != 3  ){
-
-    programTime -= Time.deltaTime;
-}
-else if(State.GetState() == 0 || State.GetState() == 3) {
-    programTime = 20.0f;
-
-}
-
-if (programTime <= 0.0f)
-{
-   Debug.Log("out of time... bye :(");
-   //Console.WriteLine("out of time... bye :(");
-   State.StateReset();
-   //TimerPause();
-}
-
-if (programTime <= 5.0f){
-    
-    timerText.enabled = true;
-    warningText.enabled = true;
-   // warning.ShowWarning();
-}
-else if(programTime > 5.0f){
-    
-    timerText.enabled = false;  
-    warningText.enabled = false;
-   // warning.HideWarning(); 
-}
-}
-
-
-}
-*/
-
-
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
@@ -81,11 +7,8 @@ public class Timer : MonoBehaviour
     public float programTime = 20.0f;
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI warningText;
-
-    public ScreenControl screenControl; // Reference to ScreenControl
-    public Button resetButton;
-
-    private Transform currentScreen; // The active screen (panel)
+    public ScreenControl screenControl; 
+    private Transform currentScreen; 
 
     void Start()
     {
@@ -109,14 +32,10 @@ public class Timer : MonoBehaviour
 
         // checks which screen is active by object name in hierarchy
         if (screenControl.IsScreenActive("Start Screen") || screenControl.IsScreenActive("Photo Capture")){
-            programTime = 20.0f; 
-            // keeps timer constant on whichever screens we need
-            resetButton.gameObject.SetActive(false);
+            programTime = 20.0f;   // keeps timer constant on whichever screens we need
         }
         else{
             programTime -= Time.deltaTime; // run on other screens
-
-            resetButton.gameObject.SetActive(true);
         }
 
         // Moves the timer/warning text to active screen
@@ -141,6 +60,15 @@ public class Timer : MonoBehaviour
     }
 
     void UpdateScreenReference(){
+        foreach (Transform screen in screenControl.transform)
+        {
+            if (screen.gameObject.activeInHierarchy)
+            {
+                currentScreen = screen;
+                break;
+            }
+        }
+        /* //old method was redundant but leaving here just in case
         if (screenControl.screen0.activeInHierarchy)
             currentScreen = screenControl.screen0.transform;
         else if (screenControl.screen1.activeInHierarchy)
@@ -150,6 +78,7 @@ public class Timer : MonoBehaviour
         else if (screenControl.screen3.activeInHierarchy)
             currentScreen = screenControl.screen3.transform;
         //will need all screens here, not ideal but will find a workaround later
+        */
     }
 
     void UpdateTextPosition(){
