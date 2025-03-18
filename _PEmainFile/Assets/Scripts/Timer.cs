@@ -31,7 +31,7 @@ public class Timer : MonoBehaviour
         }
 
         // checks which screen is active by object name in hierarchy
-        if (screenControl.IsScreenActive("Start Screen") || screenControl.IsScreenActive("Photo Capture")){
+        if (screenControl.IsScreenActive("Start Screen") || screenControl.IsScreenActive("Photo Capture") || screenControl.IsScreenActive("DevMode")){
             programTime = 20.0f;   // keeps timer constant on whichever screens we need
         }
         else{
