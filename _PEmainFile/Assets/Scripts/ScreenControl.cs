@@ -18,26 +18,37 @@ public class ScreenControl : MonoBehaviour
 
     void Start()
     {
-        //Showscreen0(); //starts only showing screen0 but does fade transition on start
-        screen0.SetActive(true); // start with start screen active (here just in case it gets disabled in hierarchy)
+        //starts only showing screen0 but does not call showScreen0() to avoid fade transition on start
+        devMode.SetActive(false);
+        screen0.SetActive(true); //***
+        screen1.SetActive(false);
+        screen2.SetActive(false);
+        screen3.SetActive(false);
+        screen4.SetActive(false);
+        screen5.SetActive(false);
+        screen6.SetActive(false);
+        screen7.SetActive(false);
     }
 
     void Update()
     {
-    if(IsScreenActive("Start Screen")){
-        resetButton.gameObject.SetActive(false);
-     }
-     else{
-        resetButton.gameObject.SetActive(true);
-     }
+        if(IsScreenActive("Start Screen")){
+            resetButton.gameObject.SetActive(false);
+        }
+        else{
+            resetButton.gameObject.SetActive(true);
+        }
 
-     if(IsScreenActive("Tap to Begin Screen")){
-            if (Input.GetMouseButtonDown(0)){
-                Debug.Log("we going to the next screen");
-                ShowScreen3(); //go to photo capture screen
-            }
-     }
+        if(IsScreenActive("Tap to Begin Screen")){
+                if (Input.GetMouseButtonDown(0)){
+                    Debug.Log("we going to the next screen");
+                    ShowScreen3(); //go to photo capture screen
+                }
+        }
     }
+
+    //I will put these in a list or an array to minimize this abomination as soon as I remember to
+    //will also change all the names to be less dumb
     public void ShowDevMode(){//Dev Mode
         transitionOverlay.FadeTransition(() => {
             devMode.SetActive(true);
@@ -52,6 +63,7 @@ public class ScreenControl : MonoBehaviour
         });
         Debug.Log("Dev mode is active!");
     }
+
     public void Showscreen0(){//Start Screen
         transitionOverlay.FadeTransition(() => {
             devMode.SetActive(false);

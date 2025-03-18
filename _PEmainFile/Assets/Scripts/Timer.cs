@@ -40,6 +40,7 @@ public class Timer : MonoBehaviour
 
         // Moves the timer/warning text to active screen
         //makes both TMpro objects a child of the active screen
+        //I know there is an existing way to make this obsolete, will check in later
         UpdateScreenReference();
         UpdateTextPosition();
 
