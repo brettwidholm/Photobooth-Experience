@@ -3,7 +3,6 @@ using TMPro;
 using UnityEngine.UI;
 public class ScreenControl : MonoBehaviour
 {
-    public GameObject devMode; //dev mode 
     public GameObject screen0; //Start Screen
     public GameObject screen1; //Instructions Screen
     public GameObject screen2; //Tap to begin screen (placeholder)
@@ -12,61 +11,21 @@ public class ScreenControl : MonoBehaviour
     public GameObject screen5; //Info Screen
     public GameObject screen6; //Confirmation Screen
     public GameObject screen7; //Success Screen
+
+    public GameObject websosa; //webcam
+
+    public GameObject flash;  //camera flash
+
+    public GifGen giffy;
+    public bool flashOn = false;
+
+    public float flashTime = 0.3f;
     public Button resetButton;
     public GameObject BlockCLogo;
     public TransitionOverlay transitionOverlay; //fade to black
 
     void Start()
     {
-        //starts only showing screen0 but does not call showScreen0() to avoid fade transition on start
-        devMode.SetActive(false);
-        screen0.SetActive(true); //***
-        screen1.SetActive(false);
-        screen2.SetActive(false);
-        screen3.SetActive(false);
-        screen4.SetActive(false);
-        screen5.SetActive(false);
-        screen6.SetActive(false);
-        screen7.SetActive(false);
-    }
-
-    void Update()
-    {
-        if(IsScreenActive("Start Screen")){
-            resetButton.gameObject.SetActive(false);
-        }
-        else{
-            resetButton.gameObject.SetActive(true);
-        }
-
-        if(IsScreenActive("Tap to Begin Screen")){
-                if (Input.GetMouseButtonDown(0)){
-                    Debug.Log("we going to the next screen");
-                    ShowScreen3(); //go to photo capture screen
-                }
-        }
-    }
-
-    //I will put these in a list or an array to minimize this abomination as soon as I remember to
-    //will also change all the names to be less dumb
-    public void ShowDevMode(){//Dev Mode
-        transitionOverlay.FadeTransition(() => {
-            devMode.SetActive(true);
-            screen0.SetActive(false);
-            screen1.SetActive(false);
-            screen2.SetActive(false);
-            screen3.SetActive(false);
-            screen4.SetActive(false);
-            screen5.SetActive(false);
-            screen6.SetActive(false);
-            screen7.SetActive(false);
-        });
-        Debug.Log("Dev mode is active!");
-    }
-
-    public void Showscreen0(){//Start Screen
-        transitionOverlay.FadeTransition(() => {
-            devMode.SetActive(false);
             screen0.SetActive(true);
             screen1.SetActive(false);
             screen2.SetActive(false);
@@ -75,13 +34,67 @@ public class ScreenControl : MonoBehaviour
             screen5.SetActive(false);
             screen6.SetActive(false);
             screen7.SetActive(false);
+            websosa.SetActive(false);
+            flash.SetActive(false);
+
+       // Showscreen0(); //starts only showing screen0
+    }
+
+    void Update()
+    {
+
+    if(flashOn){
+        flashTime -= Time.deltaTime;
+        Flash();
+    }
+
+    if(IsScreenActive("Start Screen")){
+        resetButton.gameObject.SetActive(false);
+     }
+     else{
+        resetButton.gameObject.SetActive(true);
+     }
+
+     if(IsScreenActive("Tap to Begin Screen")){
+            if (Input.GetMouseButtonDown(0)){
+                Debug.Log("we going to the next screen");
+                ShowScreen3(); //go to photo capture screen
+            }
+     }
+    }
+
+    public void Flash(){
+        Debug.Log("in the cut");
+        flashOn = true;
+        flash.SetActive(true);
+        if(flashTime < 0.0f){
+            
+            flashOn = false;
+            flash.SetActive(false);
+            flashTime = 0.3f;
+        }
+
+    }
+
+
+    public void Showscreen0(){//Start Screen
+        transitionOverlay.FadeTransition(() => {
+            screen0.SetActive(true);
+            screen1.SetActive(false);
+            screen2.SetActive(false);
+            screen3.SetActive(false);
+            screen4.SetActive(false);
+            screen5.SetActive(false);
+            screen6.SetActive(false);
+            screen7.SetActive(false);
+            websosa.SetActive(false);
+            flash.SetActive(false);
         });
         Debug.Log("Start screen is active!");
     }
 
     public void Showscreen1(){//Instructions Screen
         transitionOverlay.FadeTransition(() => {
-            devMode.SetActive(false);
             screen0.SetActive(false);
             screen1.SetActive(true);
             screen2.SetActive(false);
@@ -90,13 +103,13 @@ public class ScreenControl : MonoBehaviour
             screen5.SetActive(false);
             screen6.SetActive(false);
             screen7.SetActive(false);
+            websosa.SetActive(false);
         });
         Debug.Log("instructions screen is active!");
     }
 
     public void ShowScreen2(){//Tap to begin screen
         transitionOverlay.FadeTransition(() => {
-            devMode.SetActive(false);
             screen0.SetActive(false);
             screen1.SetActive(false);
             screen2.SetActive(true);
@@ -105,13 +118,13 @@ public class ScreenControl : MonoBehaviour
             screen5.SetActive(false);
             screen6.SetActive(false);
             screen7.SetActive(false);
+            websosa.SetActive(true);
     });
         Debug.Log("tap to begin screen is active!");
     }
 
     public void ShowScreen3(){//Photo Capture
-        transitionOverlay.FadeTransition(() => {
-            devMode.SetActive(false);
+        //transitionOverlay.FadeTransition(() => {
             screen0.SetActive(false);
             screen1.SetActive(false);
             screen2.SetActive(false);
@@ -120,14 +133,16 @@ public class ScreenControl : MonoBehaviour
             screen5.SetActive(false);
             screen6.SetActive(false);
             screen7.SetActive(false);
+            websosa.SetActive(true);
         //will need to make the photo capture sequence begin automatically
-    });
+    //});
         Debug.Log("Photo Capture is active!");
     }
 
     public void ShowScreen4(){//Preview GIF Screen
+        
+        giffy.ConvertImagesToGif();
         transitionOverlay.FadeTransition(() => {
-            devMode.SetActive(false);
             screen0.SetActive(false);
             screen1.SetActive(false);
             screen2.SetActive(false);
@@ -136,13 +151,14 @@ public class ScreenControl : MonoBehaviour
             screen5.SetActive(false);
             screen6.SetActive(false);
             screen7.SetActive(false);
+            websosa.SetActive(false);
+           // giffy.Start();
         });
         Debug.Log("Preview GIF screen is active!");
     }
 
     public void ShowScreen5(){//Info Screen
         transitionOverlay.FadeTransition(() => {
-            devMode.SetActive(false);
             screen0.SetActive(false);
             screen1.SetActive(false);
             screen2.SetActive(false);
@@ -157,7 +173,6 @@ public class ScreenControl : MonoBehaviour
 
     public void ShowScreen6(){//Confirmation Screen
         transitionOverlay.FadeTransition(() => {
-            devMode.SetActive(false);
             screen0.SetActive(false);
             screen1.SetActive(false);
             screen2.SetActive(false);
@@ -171,7 +186,6 @@ public class ScreenControl : MonoBehaviour
     }
         public void ShowScreen7(){//Success Screen
         transitionOverlay.FadeTransition(() => {
-            devMode.SetActive(false);
             screen0.SetActive(false);
             screen1.SetActive(false);
             screen2.SetActive(false);

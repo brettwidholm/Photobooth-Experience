@@ -31,7 +31,7 @@ public class Timer : MonoBehaviour
         }
 
         // checks which screen is active by object name in hierarchy
-        if (screenControl.IsScreenActive("Start Screen") || screenControl.IsScreenActive("Photo Capture") || screenControl.IsScreenActive("DevMode")){
+        if (screenControl.IsScreenActive("Start Screen") || screenControl.IsScreenActive("Photo Capture")){
             programTime = 20.0f;   // keeps timer constant on whichever screens we need
         }
         else{
@@ -40,7 +40,6 @@ public class Timer : MonoBehaviour
 
         // Moves the timer/warning text to active screen
         //makes both TMpro objects a child of the active screen
-        //I know there is an existing way to make this obsolete, will check in later
         UpdateScreenReference();
         UpdateTextPosition();
 
@@ -69,7 +68,7 @@ public class Timer : MonoBehaviour
                 break;
             }
         }
-        /* //This old method was overkill but leaving here just in case
+        /* //old method was redundant but leaving here just in case
         if (screenControl.screen0.activeInHierarchy)
             currentScreen = screenControl.screen0.transform;
         else if (screenControl.screen1.activeInHierarchy)
