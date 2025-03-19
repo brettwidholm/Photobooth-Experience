@@ -52,7 +52,7 @@ ExportedObj/
 *.pdb.meta
 *.mdb.meta
 #added ignores after sprint2 review
-*.vscode/
+.vscode/
 *.meta
 
 # Unity3D generated file on crash reports
