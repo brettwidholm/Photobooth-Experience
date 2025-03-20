@@ -53,7 +53,6 @@ ExportedObj/
 *.mdb.meta
 #added ignores after sprint2 review
 .vscode/
-*.meta
 
 # Unity3D generated file on crash reports
 sysinfo.txt
