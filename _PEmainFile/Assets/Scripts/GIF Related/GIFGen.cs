@@ -9,7 +9,7 @@ public class GifGen : MonoBehaviour
     public string inputFolder =  @"C:\Users\yosha\_PEmainFile\Assets\Photos";
     public string outputFolder =  @"C:\Users\yosha\_PEmainFile\Assets\gif";
     public string outputGifName = "rad.gif";
-    public int frameRate = 10; 
+    public int frameRate = 2; 
 
 public IEnumerator DelayedGifCreation()
 {

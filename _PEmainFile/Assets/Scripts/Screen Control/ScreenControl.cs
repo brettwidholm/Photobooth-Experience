@@ -24,6 +24,10 @@ public class ScreenControl : MonoBehaviour
     public GameObject BlockCLogo;
     public TransitionOverlay transitionOverlay; //fade to black
 
+    public GameObject gifPrev; //preview gif screen :)
+
+    public SpriteAnimator loader; //loads gif to quasigif
+
     void Start()
     {
             screen0.SetActive(true);
@@ -36,7 +40,7 @@ public class ScreenControl : MonoBehaviour
             screen7.SetActive(false);
             websosa.SetActive(false);
             flash.SetActive(false);
-
+            gifPrev.SetActive(false);
        // Showscreen0(); //starts only showing screen0
     }
 
@@ -89,6 +93,7 @@ public class ScreenControl : MonoBehaviour
             screen7.SetActive(false);
             websosa.SetActive(false);
             flash.SetActive(false);
+            gifPrev.SetActive(false);
         });
         Debug.Log("Start screen is active!");
     }
@@ -134,6 +139,7 @@ public class ScreenControl : MonoBehaviour
             screen6.SetActive(false);
             screen7.SetActive(false);
             websosa.SetActive(true);
+            gifPrev.SetActive(false);
         //will need to make the photo capture sequence begin automatically
     //});
         Debug.Log("Photo Capture is active!");
@@ -142,6 +148,8 @@ public class ScreenControl : MonoBehaviour
     public void ShowScreen4(){//Preview GIF Screen
         
         giffy.ConvertImagesToGif();
+                    loader.LoadSprites();
+            
         transitionOverlay.FadeTransition(() => {
             screen0.SetActive(false);
             screen1.SetActive(false);
@@ -152,7 +160,10 @@ public class ScreenControl : MonoBehaviour
             screen6.SetActive(false);
             screen7.SetActive(false);
             websosa.SetActive(false);
+            gifPrev.SetActive(true);
            // giffy.Start();
+
+            
         });
         Debug.Log("Preview GIF screen is active!");
     }
@@ -167,6 +178,7 @@ public class ScreenControl : MonoBehaviour
             screen5.SetActive(true);
             screen6.SetActive(false);
             screen7.SetActive(false);
+            gifPrev.SetActive(false);
         });
         Debug.Log("Info screen is active!");
     }
