@@ -3,6 +3,9 @@ using TMPro;
 using UnityEngine.UI;
 public class ScreenControl : MonoBehaviour
 {
+
+    //screens/transitions:
+    //-------------------------------------
     public GameObject screen0; //Start Screen
     public GameObject screen1; //Instructions Screen
     public GameObject screen2; //Tap to begin screen (placeholder)
@@ -12,21 +15,43 @@ public class ScreenControl : MonoBehaviour
     public GameObject screen6; //Confirmation Screen
     public GameObject screen7; //Success Screen
 
+    public TransitionOverlay transitionOverlay; //fade to white
+    
+    
+    //-------------------------------------------------
+    //webcam related:
+    //-------------------------------------------------
     public GameObject websosa; //webcam
-
     public GameObject flash;  //camera flash
-
-    public GifGen giffy;
     public bool flashOn = false;
-
     public float flashTime = 0.3f;
-    public Button resetButton;
-    public GameObject BlockCLogo;
-    public TransitionOverlay transitionOverlay; //fade to black
 
-    public GameObject gifPrev; //preview gif screen :)
+    //-----------------------------------------------
+    //gif related:
+    //------------------------------------------------
+    public GifGen giffy; //object for generating the gif itself
+     public GameObject gifPrev; //preview gif screen :)
+     public SpriteAnimator loader; //loads gif to quasigif (takes images in folder and makes animation)
 
-    public SpriteAnimator loader; //loads gif to quasigif
+
+    //-----------------------------------------
+    //buttons and logos:
+    //-----------------------------------
+    public GameObject BlockCLogo; //our lovely cofc logo
+    public Button resetButton;  //global reset button
+
+    public GameObject backButtonInstructions; //back button on instructions
+    public GameObject backButtonInfo; //back button on info
+
+    public GameObject backButtonConfirm; //back button on confirmation
+
+    public GameObject previewShareButton; //share button on preview
+
+    public GameObject nextButtonInfo; //next button on info
+
+    public GameObject sendEmailButton; //send button for email
+    
+    public GameObject emailEntryBox; //the box to enter email
 
     void Start()
     {
@@ -41,6 +66,15 @@ public class ScreenControl : MonoBehaviour
             websosa.SetActive(false);
             flash.SetActive(false);
             gifPrev.SetActive(false);
+            
+            
+            backButtonInstructions.SetActive(false); //sets all necessary button to be turned off
+            backButtonInfo.SetActive(false);
+            backButtonConfirm.SetActive(false);
+            previewShareButton.SetActive(false);
+            nextButtonInfo.SetActive(false);
+            sendEmailButton.SetActive(false);
+            emailEntryBox.SetActive(false);
        // Showscreen0(); //starts only showing screen0
     }
 
@@ -94,6 +128,15 @@ public class ScreenControl : MonoBehaviour
             websosa.SetActive(false);
             flash.SetActive(false);
             gifPrev.SetActive(false);
+            emailEntryBox.SetActive(false);
+
+            backButtonInstructions.SetActive(false); //sets all necessary button to be turned off
+            backButtonInfo.SetActive(false);
+            backButtonConfirm.SetActive(false);
+            previewShareButton.SetActive(false);
+            nextButtonInfo.SetActive(false);
+            sendEmailButton.SetActive(false);
+            emailEntryBox.SetActive(false);
         });
         Debug.Log("Start screen is active!");
     }
@@ -109,6 +152,8 @@ public class ScreenControl : MonoBehaviour
             screen6.SetActive(false);
             screen7.SetActive(false);
             websosa.SetActive(false);
+
+            backButtonInstructions.SetActive(true);
         });
         Debug.Log("instructions screen is active!");
     }
@@ -124,6 +169,8 @@ public class ScreenControl : MonoBehaviour
             screen6.SetActive(false);
             screen7.SetActive(false);
             websosa.SetActive(true);
+
+            backButtonInstructions.SetActive(false);
     });
         Debug.Log("tap to begin screen is active!");
     }
@@ -140,6 +187,9 @@ public class ScreenControl : MonoBehaviour
             screen7.SetActive(false);
             websosa.SetActive(true);
             gifPrev.SetActive(false);
+            previewShareButton.SetActive(false);
+
+
         //will need to make the photo capture sequence begin automatically
     //});
         Debug.Log("Photo Capture is active!");
@@ -161,6 +211,12 @@ public class ScreenControl : MonoBehaviour
             screen7.SetActive(false);
             websosa.SetActive(false);
             gifPrev.SetActive(true);
+
+            emailEntryBox.SetActive(false);
+            previewShareButton.SetActive(true);
+            backButtonInfo.SetActive(false);
+            backButtonConfirm.SetActive(false);
+            nextButtonInfo.SetActive(false);
            // giffy.Start();
 
             
@@ -179,6 +235,12 @@ public class ScreenControl : MonoBehaviour
             screen6.SetActive(false);
             screen7.SetActive(false);
             gifPrev.SetActive(false);
+
+            emailEntryBox.SetActive(true);
+            previewShareButton.SetActive(false);
+            backButtonInfo.SetActive(true);
+            sendEmailButton.SetActive(false);
+            nextButtonInfo.SetActive(true);
         });
         Debug.Log("Info screen is active!");
     }
@@ -193,6 +255,11 @@ public class ScreenControl : MonoBehaviour
             screen5.SetActive(false);
             screen6.SetActive(true);
             screen7.SetActive(false);
+
+            emailEntryBox.SetActive(false);
+            backButtonConfirm.SetActive(true);
+            sendEmailButton.SetActive(true);
+            nextButtonInfo.SetActive(false);
         });
         Debug.Log("Confirmation screen is active!");
     }
@@ -206,6 +273,9 @@ public class ScreenControl : MonoBehaviour
             screen5.SetActive(false);
             screen6.SetActive(false);
             screen7.SetActive(true);
+
+            backButtonConfirm.SetActive(false);
+            sendEmailButton.SetActive(false);
         });
         Debug.Log("Success screen is active!");
     }
