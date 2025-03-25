@@ -172,4 +172,11 @@ public class EmailController : MonoBehaviour
         counter = 1;  // Go back to the email input step
         UpdateUI();
     }
+
+    //not the final product for touchscreen keyboard
+    public void EmailInputSelect(){
+        System.Diagnostics.Process.Start("tabtip.exe");
+
+        //TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default, false, false, false, false, "Enter your email address");
+    }
 }

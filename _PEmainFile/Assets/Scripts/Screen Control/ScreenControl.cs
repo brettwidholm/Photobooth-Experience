@@ -6,6 +6,7 @@ public class ScreenControl : MonoBehaviour
 
     //screens/transitions:
     //-------------------------------------
+    public GameObject devMode; //dev mode screen
     public GameObject screen0; //Start Screen
     public GameObject screen1; //Instructions Screen
     public GameObject screen2; //Tap to begin screen (placeholder)
@@ -55,6 +56,7 @@ public class ScreenControl : MonoBehaviour
 
     void Start()
     {
+            devMode.SetActive(false);
             screen0.SetActive(true);
             screen1.SetActive(false);
             screen2.SetActive(false);
@@ -115,8 +117,23 @@ public class ScreenControl : MonoBehaviour
     }
 
 
+    public void ShowDevMode(){//Dev Mode
+        transitionOverlay.FadeTransition(() => {
+            devMode.SetActive(true);
+            screen0.SetActive(false);
+            screen1.SetActive(false);
+            screen2.SetActive(false);
+            screen3.SetActive(false);
+            screen4.SetActive(false);
+            screen5.SetActive(false);
+            screen6.SetActive(false);
+            screen7.SetActive(false);
+        });
+        Debug.Log("Dev mode is active!");
+    }
     public void Showscreen0(){//Start Screen
         transitionOverlay.FadeTransition(() => {
+            devMode.SetActive(false);
             screen0.SetActive(true);
             screen1.SetActive(false);
             screen2.SetActive(false);
@@ -143,6 +160,7 @@ public class ScreenControl : MonoBehaviour
 
     public void Showscreen1(){//Instructions Screen
         transitionOverlay.FadeTransition(() => {
+            devMode.SetActive(false);
             screen0.SetActive(false);
             screen1.SetActive(true);
             screen2.SetActive(false);
@@ -160,6 +178,7 @@ public class ScreenControl : MonoBehaviour
 
     public void ShowScreen2(){//Tap to begin screen
         transitionOverlay.FadeTransition(() => {
+            devMode.SetActive(false);
             screen0.SetActive(false);
             screen1.SetActive(false);
             screen2.SetActive(true);
@@ -177,6 +196,7 @@ public class ScreenControl : MonoBehaviour
 
     public void ShowScreen3(){//Photo Capture
         //transitionOverlay.FadeTransition(() => {
+            devMode.SetActive(false);
             screen0.SetActive(false);
             screen1.SetActive(false);
             screen2.SetActive(false);
@@ -201,6 +221,7 @@ public class ScreenControl : MonoBehaviour
                     loader.LoadSprites();
             
         transitionOverlay.FadeTransition(() => {
+            devMode.SetActive(false);
             screen0.SetActive(false);
             screen1.SetActive(false);
             screen2.SetActive(false);
@@ -226,6 +247,7 @@ public class ScreenControl : MonoBehaviour
 
     public void ShowScreen5(){//Info Screen
         transitionOverlay.FadeTransition(() => {
+            devMode.SetActive(false);
             screen0.SetActive(false);
             screen1.SetActive(false);
             screen2.SetActive(false);
@@ -247,6 +269,7 @@ public class ScreenControl : MonoBehaviour
 
     public void ShowScreen6(){//Confirmation Screen
         transitionOverlay.FadeTransition(() => {
+            devMode.SetActive(false);
             screen0.SetActive(false);
             screen1.SetActive(false);
             screen2.SetActive(false);
@@ -265,6 +288,7 @@ public class ScreenControl : MonoBehaviour
     }
         public void ShowScreen7(){//Success Screen
         transitionOverlay.FadeTransition(() => {
+            devMode.SetActive(false);
             screen0.SetActive(false);
             screen1.SetActive(false);
             screen2.SetActive(false);

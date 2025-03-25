@@ -8,7 +8,8 @@ public class Timer : MonoBehaviour
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI warningText;
     public ScreenControl screenControl; 
-    private Transform currentScreen; 
+    private Transform currentScreen;
+    public ResetScene resetScene; 
 
     void Start()
     {
@@ -45,7 +46,8 @@ public class Timer : MonoBehaviour
 
         if (programTime <= 0.0f){
             Debug.Log("out of time... bye :(");
-            screenControl.Showscreen0();
+            //screenControl.Showscreen0();
+            resetScene.RestartScene();
         }
 
         // Show warning when time is ≤ 5s
@@ -68,17 +70,6 @@ public class Timer : MonoBehaviour
                 break;
             }
         }
-        /* //old method was redundant but leaving here just in case
-        if (screenControl.screen0.activeInHierarchy)
-            currentScreen = screenControl.screen0.transform;
-        else if (screenControl.screen1.activeInHierarchy)
-            currentScreen = screenControl.screen1.transform;
-        else if (screenControl.screen2.activeInHierarchy)
-            currentScreen = screenControl.screen2.transform;
-        else if (screenControl.screen3.activeInHierarchy)
-            currentScreen = screenControl.screen3.transform;
-        //will need all screens here, not ideal but will find a workaround later
-        */
     }
 
     void UpdateTextPosition(){
