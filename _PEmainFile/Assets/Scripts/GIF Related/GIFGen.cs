@@ -6,8 +6,8 @@ using System.Collections;
 //note, thank chat for this one :)
 public class GifGen : MonoBehaviour
 {
-    public string inputFolder =  @"C:\Users\willi\Desktop\Class\CSCI495\CapstoneUnityProject\Photobooth-Experience\_PEmainFile\Assets\Photos";
-    public string outputFolder =  @"C:\Users\willi\Desktop\Class\CSCI495\CapstoneUnityProject\Photobooth-Experience\_PEmainFile\Assets\gif";
+    public string inputFolder =  @"C:\Users\holmeswj\Documents\GitHub\Photobooth-Experience\_PEmainFile\Assets\Photos";
+    public string outputFolder =  @"C:\Users\holmeswj\Documents\GitHub\Photobooth-Experience\_PEmainFile\Assets\gif";
     public string outputGifName = "rad.gif";
     public int frameRate = 2; 
 
@@ -35,7 +35,7 @@ public IEnumerator DelayedGifCreation()
             Directory.CreateDirectory(outputFolder);
         }
 
-        string ffmpegPath = "ffmpeg";
+        string ffmpegPath = @"C:\ffmpeg\bin\ffmpeg.exe";
         string framePattern = Path.Combine(inputFolder, "photo%0d.png"); // Adjust pattern based on file names
         string outputGifPath = Path.Combine(outputFolder, outputGifName);
 

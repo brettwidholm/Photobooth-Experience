@@ -26,7 +26,7 @@ public class Webcam : MonoBehaviour
 
     public void Start()
     {
-        filePath = @"C:\Users\willi\Desktop\Class\CSCI495\CapstoneUnityProject\Photobooth-Experience\_PEmainFile\Assets\Photos";
+        filePath = @"C:\Users\holmeswj\Documents\GitHub\Photobooth-Experience\_PEmainFile\Assets\Photos";
         webcamTexture = new WebCamTexture();
         webby.texture = webcamTexture;
         webby.material.mainTexture = webcamTexture;

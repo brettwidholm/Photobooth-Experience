@@ -557,7 +557,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &333296597
 RectTransform:
   m_ObjectHideFlags: 0
@@ -783,7 +783,7 @@ MonoBehaviour:
   emailInputField: {fileID: 1132819600}
   confirmButton: {fileID: 452548403}
   emailDisplayText: {fileID: 1840476977}
-  gifFilePath: C:\Users\willi\Desktop\Class\CSCI495\CapstoneUnityProject\Photobooth-Experience\_PEmainFile\Assets\gif\rad.gif
+  gifFilePath: C:\Users\holmeswj\Documents\GitHub\Photobooth-Experience\_PEmainFile\Assets\gif\rad.gif
   invalidText: {fileID: 2009543013}
   confirmationText: {fileID: 1651779214}
   yesButton: {fileID: 91192125}
@@ -5955,7 +5955,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98a3de9f57fdf834c96ff3df4b7253c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  folderPath: C:\Users\willi\Desktop\Class\CSCI495\CapstoneUnityProject\Photobooth-Experience\_PEmainFile\Assets\Photos
+  folderPath: C:\Users\holmeswj\Documents\GitHub\Photobooth-Experience\_PEmainFile\Assets\Photos
   frameRate: 0.1
   targetWidth: 1500
   targetHeight: 1250
@@ -6686,8 +6686,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6950c25140298ae43aac2bb685956c52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputFolder: C:\Users\willi\Desktop\Class\CSCI495\CapstoneUnityProject\Photobooth-Experience\_PEmainFile\Assets\Photos
-  outputFolder: C:\Users\willi\Desktop\Class\CSCI495\CapstoneUnityProject\Photobooth-Experience\_PEmainFile\Assets\gif
+  inputFolder: C:\Users\holmeswj\Documents\GitHub\Photobooth-Experience\_PEmainFile\Assets\Photos
+  outputFolder: C:\Users\holmeswj\Documents\GitHub\Photobooth-Experience\_PEmainFile\Assets\gif
   outputGifName: rad.gif
   frameRate: 2
 --- !u!1 &1969412742

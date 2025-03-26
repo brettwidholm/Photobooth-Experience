@@ -15,7 +15,7 @@ public class EmailController : MonoBehaviour
     public Button confirmButton;
     public TextMeshProUGUI emailDisplayText;
 
-    public string gifFilePath = @"C:\Users\willi\Desktop\Class\CSCI495\CapstoneUnityProject\Photobooth-Experience\_PEmainFile\Assets\gif\rad.gif";
+    public string gifFilePath = @"C:\Users\holmeswj\Documents\GitHub\Photobooth-Experience\_PEmainFile\Assets\gif\rad.gif";
     private string userEmail = "";
 
     private string userName = "";
