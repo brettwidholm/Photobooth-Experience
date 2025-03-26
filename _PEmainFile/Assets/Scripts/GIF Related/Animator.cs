@@ -14,9 +14,10 @@ public class SpriteAnimator : MonoBehaviour
     public float targetWidth = 1500f;
     public float targetHeight = 1250f;
 
-    public void Start()
+       public void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        //spriteRenderer = GetComponent<SpriteRenderer>();
+        //WJH^
        // LoadSprites();
     }
 
@@ -34,6 +35,40 @@ public class SpriteAnimator : MonoBehaviour
         LockAspectRatio(spriteRenderer.sprite);
     }
 
+    public void LoadSprites()
+{
+    if (spriteRenderer == null)
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer == null)
+        {
+            Debug.LogError("No SpriteRenderer found on GameObject! Cannot load sprites.");
+            return;
+        }
+    }
+
+    if (!Directory.Exists(folderPath))
+    {
+        Debug.LogError("Folder not found: " + folderPath);
+        return;
+    }
+
+    string[] imageFiles = Directory.GetFiles(folderPath, "*.png");
+    frames = new Sprite[imageFiles.Length];
+
+    for (int i = 0; i < imageFiles.Length; i++)
+    {
+        byte[] imageData = File.ReadAllBytes(imageFiles[i]);
+        Texture2D texture = new Texture2D(2, 2);
+        texture.LoadImage(imageData);
+        frames[i] = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+    }
+
+    Debug.Log(frames.Length + " sprites loaded from " + folderPath);
+    LockAspectRatio(spriteRenderer.sprite);
+}
+
+/*
     public void LoadSprites()
     {
         if (!Directory.Exists(folderPath))
@@ -57,6 +92,7 @@ public class SpriteAnimator : MonoBehaviour
         Debug.Log(frames.Length + " sprites loaded from " + folderPath);
         LockAspectRatio(spriteRenderer.sprite);
     }
+*/
 
     public void LockAspectRatio(Sprite sprite){
  
