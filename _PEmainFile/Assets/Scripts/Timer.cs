@@ -26,9 +26,9 @@ public class Timer : MonoBehaviour
     {
         timerText.text = $"Timer: {programTime:F0}";
 
-        if (Input.GetMouseButtonDown(0)){
+        if (Input.GetMouseButtonDown(0) || Input.anyKeyDown){
             programTime = 20.0f; //if left click made reset timer 
-            Debug.Log("reset bc click");
+            Debug.Log("reset bc input");
         }
 
         // checks which screen is active by object name in hierarchy
