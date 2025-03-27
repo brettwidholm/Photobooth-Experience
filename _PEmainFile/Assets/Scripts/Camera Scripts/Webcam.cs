@@ -27,11 +27,35 @@ public class Webcam : MonoBehaviour
     public void Start()
     {
         filePath = @"C:\Users\holmeswj\Documents\GitHub\Photobooth-Experience\_PEmainFile\Assets\Photos";
+
+//FIX?
+    try
+    {
+        webcamTexture = new WebCamTexture("Surface Camera Front", 1280, 720, 30);
+        webby.texture = webcamTexture;
+        webby.material.mainTexture = webcamTexture;
+        Debug.Log("Using named camera: Front Camera");
+    }
+    catch
+    {
+        Debug.LogWarning("Preferred camera not found. Falling back to device list.");
+        TryAutoSelectCamera();
+    }
+
+    //TESTING:
+    WebCamDevice[] devices = WebCamTexture.devices;
+    for (int i = 0; i < devices.Length; i++)
+    {
+        Debug.Log($"[CAMERA {i}] Name: {devices[i].name} | Front-facing: {devices[i].isFrontFacing}");
+    }
+
+
+    /*
         webcamTexture = new WebCamTexture();
         webby.texture = webcamTexture;
         webby.material.mainTexture = webcamTexture;
        // webcamTexture.Play();
-
+    */
                 Debug.Log("GO GO GO!!!!");
         UpdateScreenReference(); // Find the active screen at startup
 
@@ -208,4 +232,22 @@ public class Webcam : MonoBehaviour
             messageText.transform.SetParent(currentScreen, false);
         }
     }
+
+    void TryAutoSelectCamera(){
+        WebCamDevice[] devices = WebCamTexture.devices;
+
+        for (int i = 0; i < devices.Length; i++)
+        {
+            Debug.Log($"[CAMERA {i}] Name: {devices[i].name} | Front-facing: {devices[i].isFrontFacing}");
+        }
+
+        int fallbackIndex = 0; // Start with the first, or read from file
+
+        webcamTexture = new WebCamTexture(devices[fallbackIndex].name, 1280, 720, 30);
+        webby.texture = webcamTexture;
+        webby.material.mainTexture = webcamTexture;
+
+        webcamTexture.Play();
+}
+
 }
