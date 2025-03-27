@@ -248,6 +248,21 @@ public class Webcam : MonoBehaviour
         webby.material.mainTexture = webcamTexture;
 
         webcamTexture.Play();
-}
+
+        // Rotate preview based on camera orientation
+        int rotationAngle = webcamTexture.videoRotationAngle;
+        webby.rectTransform.localEulerAngles = new Vector3(0, 0, -rotationAngle);
+        
+        // Flip vertically if mirrored
+        if (webcamTexture.videoVerticallyMirrored)
+        {
+            webby.rectTransform.localScale = new Vector3(1, -1, 1);
+        }
+        else
+        {
+            webby.rectTransform.localScale = new Vector3(1, 1, 1);
+        }
+
+    }
 
 }
