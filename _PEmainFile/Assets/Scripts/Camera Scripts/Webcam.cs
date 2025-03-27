@@ -34,6 +34,10 @@ public class Webcam : MonoBehaviour
         webcamTexture = new WebCamTexture("Surface Camera Front", 1280, 720, 30);
         webby.texture = webcamTexture;
         webby.material.mainTexture = webcamTexture;
+
+        webcamTexture.Play();
+        AdjustPreviewOrientation();
+
         Debug.Log("Using named camera: Front Camera");
     }
     catch
@@ -195,6 +199,32 @@ public class Webcam : MonoBehaviour
 
     public void TakePhoto()
     {
+        string newName = name + cnt + ".png";
+        cnt++;
+
+        int width = webcamTexture.width;
+        int height = webcamTexture.height;
+        Color[] pixels = webcamTexture.GetPixels();
+
+        // Create rotated texture (90° clockwise), reusing your original "photo" variable name
+        Texture2D photo = new Texture2D(height, width);
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                photo.SetPixel(height - y - 1, x, pixels[y * width + x]);
+            }
+        }
+
+        photo.Apply();
+
+        byte[] bytes = photo.EncodeToPNG();
+        savedPath = Path.Combine(filePath, newName);
+        File.WriteAllBytes(savedPath, bytes);
+
+        Debug.Log("Photo saved at: " + savedPath);
+
+        /*
         string newName = name + cnt;
         newName = newName + ".png";
         cnt++;
@@ -207,6 +237,7 @@ public class Webcam : MonoBehaviour
         File.WriteAllBytes(savedPath, bytes);
 
         Debug.Log("Photo saved at: " + savedPath);
+        */
     }
 
     public void OnDestroy()
@@ -249,20 +280,24 @@ public class Webcam : MonoBehaviour
 
         webcamTexture.Play();
 
-        // Rotate preview based on camera orientation
-        int rotationAngle = webcamTexture.videoRotationAngle;
-        webby.rectTransform.localEulerAngles = new Vector3(0, 0, -rotationAngle);
-        
-        // Flip vertically if mirrored
-        if (webcamTexture.videoVerticallyMirrored)
-        {
-            webby.rectTransform.localScale = new Vector3(1, -1, 1);
-        }
-        else
-        {
-            webby.rectTransform.localScale = new Vector3(1, 1, 1);
-        }
+        AdjustPreviewOrientation();
 
     }
+
+void AdjustPreviewOrientation()
+{
+    // Rotate 90° counter-clockwise
+    webby.rectTransform.localEulerAngles = new Vector3(0, 0, 90f);
+
+    // No flipping
+    webby.rectTransform.localScale = new Vector3(1, 1, 1);
+
+    Debug.Log("Rotation 90°, no flip");
+}
+
+
+
+
+
 
 }
