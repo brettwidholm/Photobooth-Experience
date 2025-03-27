@@ -317,7 +317,7 @@ public class ScreenControl : MonoBehaviour
     public void TouchKeyboard(){
         System.Diagnostics.Process.Start("tabtip.exe");
     //alt option?
-        System.Diagnostics.Process.Start("OSK.exe");
+        //System.Diagnostics.Process.Start("OSK.exe");
     }
 
 }
