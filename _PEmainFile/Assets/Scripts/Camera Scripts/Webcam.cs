@@ -37,6 +37,18 @@ public class Webcam : MonoBehaviour
 
         webcamTexture.Play();
         AdjustPreviewOrientation();
+        float aspectRatio = (float)webcamTexture.width / webcamTexture.height;
+
+if (aspectRatio > 1f)
+{
+    float offsetX = (aspectRatio - 1f) / 2f / aspectRatio;
+    webby.uvRect = new Rect(offsetX, 0f, 1f / aspectRatio, 1f);
+}
+else
+{
+    float offsetY = (1f / aspectRatio - 1f) / 2f;
+    webby.uvRect = new Rect(0f, offsetY, 1f, aspectRatio);
+}
 
         Debug.Log("Using named camera: Front Camera");
     }
@@ -218,12 +230,22 @@ public class Webcam : MonoBehaviour
 
         photo.Apply();
 
+        // Crop to center square
+    Texture2D square = CropToSquare(photo);
+
+    // Save to PNG
+    byte[] bytes = square.EncodeToPNG();
+    savedPath = Path.Combine(filePath, newName);
+    File.WriteAllBytes(savedPath, bytes);
+
+    Debug.Log("✅ Photo saved at: " + savedPath);
+        /*
         byte[] bytes = photo.EncodeToPNG();
         savedPath = Path.Combine(filePath, newName);
         File.WriteAllBytes(savedPath, bytes);
 
         Debug.Log("Photo saved at: " + savedPath);
-
+        */
         /*
         string newName = name + cnt;
         newName = newName + ".png";
@@ -281,6 +303,18 @@ public class Webcam : MonoBehaviour
         webcamTexture.Play();
 
         AdjustPreviewOrientation();
+        float aspectRatio = (float)webcamTexture.width / webcamTexture.height;
+
+if (aspectRatio > 1f)
+{
+    float offsetX = (aspectRatio - 1f) / 2f / aspectRatio;
+    webby.uvRect = new Rect(offsetX, 0f, 1f / aspectRatio, 1f);
+}
+else
+{
+    float offsetY = (1f / aspectRatio - 1f) / 2f;
+    webby.uvRect = new Rect(0f, offsetY, 1f, aspectRatio);
+}
 
     }
 
@@ -295,9 +329,18 @@ void AdjustPreviewOrientation()
     Debug.Log("Rotation 90°, no flip");
 }
 
+private Texture2D CropToSquare(Texture2D original)
+{
+    int size = Mathf.Min(original.width, original.height);
+    int x = (original.width - size) / 2;
+    int y = (original.height - size) / 2;
 
-
-
+    Color[] croppedPixels = original.GetPixels(x, y, size, size);
+    Texture2D square = new Texture2D(size, size);
+    square.SetPixels(croppedPixels);
+    square.Apply();
+    return square;
+}
 
 
 }
