@@ -38,7 +38,7 @@ public class Webcam : MonoBehaviour
         }
         else{
             for (int i = 0; i < devices.Length; i++){
-                if(devices[i].isFrontFacing){
+                if(devices[i].name.Contains("Front")){
                     Debug.Log($"[CAMERA {i}] Name: {devices[i].name} | Front-facing: {devices[i].isFrontFacing}");
                     webcamTexture = new WebCamTexture(devices[i].name, 1280, 720, 30);
                     break;
