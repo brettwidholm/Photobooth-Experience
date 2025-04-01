@@ -4,6 +4,7 @@ using TMPro;
 using System.Net;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
+using System.IO;
 
 public class EmailController : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class EmailController : MonoBehaviour
     public Button confirmButton;
     public TextMeshProUGUI emailDisplayText;
 
-    public string gifFilePath = @"C:\\Users\\holmeswj\\Documents\\GitHub\\Photobooth-Experience\\_PEmainFile\\Assets\\gif\\rad.gif";
+    public string gifFilePath = Path.Combine(Application.dataPath, "\\gif\\rad.gif"); // Path to the GIF file
     private string userEmail = "";
     private string userFirstName = "";
     private string userLastName = "";
@@ -148,6 +149,7 @@ public class EmailController : MonoBehaviour
 
     void SendEmail(string recipientEmail, string firstName, string lastName)
     {
+        yesButton.interactable = false;
         string senderEmail = "boothphoto57@gmail.com";
         string senderPassword = "msfu xycd qnwz hilv";
 
@@ -174,6 +176,7 @@ public class EmailController : MonoBehaviour
         {
             Debug.LogError("Failed to send email: " + e.Message);
         }
+        //yesButton.interactable = true;
     }
 
     void UpdateUI()

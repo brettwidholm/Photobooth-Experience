@@ -6,8 +6,8 @@ using System.Collections;
 //note, thank chat for this one :)
 public class GifGen : MonoBehaviour
 {
-    public string inputFolder =  @"C:\Users\holmeswj\Documents\GitHub\Photobooth-Experience\_PEmainFile\Assets\Photos";
-    public string outputFolder =  @"C:\Users\holmeswj\Documents\GitHub\Photobooth-Experience\_PEmainFile\Assets\gif";
+    public string inputFolder =  Path.Combine(Application.dataPath, "Photos");
+    public string outputFolder =  Path.Combine(Application.dataPath, "Photos\\gif");
     public string outputGifName = "rad.gif";
     public int frameRate = 2; 
 

@@ -26,12 +26,32 @@ public class Webcam : MonoBehaviour
 
     public void Start()
     {
-        filePath = @"C:\Users\holmeswj\Documents\GitHub\Photobooth-Experience\_PEmainFile\Assets\Photos";
+        filePath = Path.Combine(Application.dataPath, "Photos");
 
 //FIX?
     try
     {
-        webcamTexture = new WebCamTexture("Surface Camera Front", 1280, 720, 30);
+        WebCamDevice[] devices = WebCamTexture.devices;
+        if (devices.Length == 1){
+            webcamTexture = new WebCamTexture();
+            Debug.Log($"Only Camera Name: {devices[0].name} | Front-facing: {devices[0].isFrontFacing}");
+        }
+        else{
+            for (int i = 0; i < devices.Length; i++){
+                if(devices[i].isFrontFacing){
+                    Debug.Log($"[CAMERA {i}] Name: {devices[i].name} | Front-facing: {devices[i].isFrontFacing}");
+                    webcamTexture = new WebCamTexture(devices[i].name, 1280, 720, 30);
+                    break;
+                }
+            }
+        }
+        
+        //STANDARD LAPTOP WEBCAM CONFIG
+        //webcamTexture = new WebCamTexture();
+
+        //SURFACE CONFIG
+        //webcamTexture = new WebCamTexture("Surface Camera Front", 1280, 720, 30);
+
         webby.texture = webcamTexture;
         webby.material.mainTexture = webcamTexture;
 
@@ -49,29 +69,14 @@ public class Webcam : MonoBehaviour
             float offsetY = (1f / aspectRatio - 1f) / 2f;
             webby.uvRect = new Rect(0f, offsetY, 1f, aspectRatio);
         }
-
-                Debug.Log("Using named camera: Front Camera");
     }
     catch{
         Debug.LogWarning("Preferred camera not found. Falling back to device list.");
         TryAutoSelectCamera();
     }
 
-    //TESTING:
-    WebCamDevice[] devices = WebCamTexture.devices;
-    for (int i = 0; i < devices.Length; i++)
-    {
-        Debug.Log($"[CAMERA {i}] Name: {devices[i].name} | Front-facing: {devices[i].isFrontFacing}");
-    }
-
-
-    /*
-        webcamTexture = new WebCamTexture();
-        webby.texture = webcamTexture;
-        webby.material.mainTexture = webcamTexture;
-       // webcamTexture.Play();
-    */
-                Debug.Log("GO GO GO!!!!");
+   
+        Debug.Log("GO GO GO!!!!");
         UpdateScreenReference(); // Find the active screen at startup
 
         timerText.text = $"{programTime:F0}";
@@ -90,8 +95,6 @@ public class Webcam : MonoBehaviour
             state++;
             programTime = 5.0f;
         }
-
-
     }
 
     public void Photo1(){
@@ -104,8 +107,6 @@ public class Webcam : MonoBehaviour
             state++;
             programTime = 5.0f;
         }
-
-
     }
 
     public void Photo2(){
@@ -113,22 +114,15 @@ public class Webcam : MonoBehaviour
         //messageText.enabled = true;
         
         if(programTime <= 0.0f){
-            
            // messageText.text = "click";
             timerText.enabled = false;
             state++;
             programTime = 5.0f;
         }
-
-
-
-
     }
 
     public void Photo3(){
-       
-      //  messageText.enabled = true;
-        
+      //  messageText.enabled = true;    
         if(programTime <= 0){
       //      messageText.text = "click";
             timerText.enabled = false;
@@ -139,74 +133,59 @@ public class Webcam : MonoBehaviour
 
     public void Update()
     {
-        
-        
-
         if(!(screenControl.IsScreenActive("Photo Capture")) ){
             messageText.enabled = false;
             programTime = 5.0f;
-            if(screenControl.IsScreenActive("Tap to Begin Screen")){
-                webcamTexture.Play();
+        if(screenControl.IsScreenActive("Tap to Begin Screen")){
+            webcamTexture.Play();
             }
-            else{
-                webcamTexture.Stop(); //ask team do we really want camera off????
+        else{
+            webcamTexture.Stop(); //ask team do we really want camera off????
             }
             
         }
         else{
+            messageText.enabled = true;
+            if (state > 3){
+                screenControl.ShowScreen4();
+            }
+            
+            timerText.text = $"{programTime:F0}";
+            programTime -= Time.deltaTime;
+            
+            UpdateScreenReference();
+            UpdateTextPosition();
 
-        messageText.enabled = true;
-        if (state > 3){
-            screenControl.ShowScreen4();
-        }
-        
-        timerText.text = $"{programTime:F0}";
-        programTime -= Time.deltaTime;
-        
-        UpdateScreenReference();
-        UpdateTextPosition();
-
-        if(programTime <= 3.0f){
-            timerText.enabled = true;
-        }
-        else{
-            timerText.enabled = false;
-        }
-
-
-        if ((state == 0) && (programTime < 0.0f)){
-            screenControl.Flash();
-            Photo0();
-            TakePhoto(); //switch cases
-        }
-        else if ((state == 1) && (programTime < 0.0f)){
-            screenControl.Flash();
-            Photo1();
-            TakePhoto();
-        }
-        else if ((state == 2) && (programTime < 0.0f)){
-             screenControl.Flash();
-            Photo2();
-            TakePhoto();
-        }
-        else if ((state == 3) && (programTime < 0.0f)){
-             screenControl.Flash();
-            Photo3();
-            TakePhoto();
-        }
-        }
+            if(programTime <= 3.0f){
+                timerText.enabled = true;
+            }
+            else{
+                timerText.enabled = false;
+            }
 
 
+            if ((state == 0) && (programTime < 0.0f)){
+                screenControl.Flash();
+                Photo0();
+                TakePhoto(); //switch cases
+            }
+            else if ((state == 1) && (programTime < 0.0f)){
+                screenControl.Flash();
+                Photo1();
+                TakePhoto();
+            }
+            else if ((state == 2) && (programTime < 0.0f)){
+                screenControl.Flash();
+                Photo2();
+                TakePhoto();
+            }
+            else if ((state == 3) && (programTime < 0.0f)){
+                screenControl.Flash();
+                Photo3();
+                TakePhoto();
+            }
+        }
     }
-
- //   public void Update()
-   // {
-       // if
-     //       if (Input.GetKeyDown(KeyCode.Space))
-       //     {
-         //       TakePhoto();
-        //    }
-   // }
 
     public void TakePhoto()
     {
@@ -217,7 +196,7 @@ public class Webcam : MonoBehaviour
         int height = webcamTexture.height;
         Color[] pixels = webcamTexture.GetPixels();
 
-        // Create rotated texture (90° clockwise), reusing your original "photo" variable name
+        // Create rotated texture 90deg clockwise
         Texture2D photo = new Texture2D(height, width);
         for (int y = 0; y < height; y++)
         {
@@ -304,42 +283,42 @@ public class Webcam : MonoBehaviour
         AdjustPreviewOrientation();
         float aspectRatio = (float)webcamTexture.width / webcamTexture.height;
 
-if (aspectRatio > 1f)
-{
-    float offsetX = (aspectRatio - 1f) / 2f / aspectRatio;
-    webby.uvRect = new Rect(offsetX, 0f, 1f / aspectRatio, 1f);
-}
-else
-{
-    float offsetY = (1f / aspectRatio - 1f) / 2f;
-    webby.uvRect = new Rect(0f, offsetY, 1f, aspectRatio);
-}
+        if (aspectRatio > 1f)
+        {
+            float offsetX = (aspectRatio - 1f) / 2f / aspectRatio;
+            webby.uvRect = new Rect(offsetX, 0f, 1f / aspectRatio, 1f);
+        }
+        else
+        {
+            float offsetY = (1f / aspectRatio - 1f) / 2f;
+            webby.uvRect = new Rect(0f, offsetY, 1f, aspectRatio);
+        }
 
-    }
+            }
 
-void AdjustPreviewOrientation()
-{
-    // Rotate 90° counter-clockwise
-    webby.rectTransform.localEulerAngles = new Vector3(0, 0, 90f);
+        void AdjustPreviewOrientation()
+        {
+            // Rotate 90° counter-clockwise
+            webby.rectTransform.localEulerAngles = new Vector3(0, 0, 90f);
 
-    // No flipping
-    webby.rectTransform.localScale = new Vector3(1, 1, 1);
+            // No flipping
+            webby.rectTransform.localScale = new Vector3(1, 1, 1);
 
-    Debug.Log("Rotation 90°, no flip");
-}
+            Debug.Log("Rotation 90°, no flip");
+        }
 
-private Texture2D CropToSquare(Texture2D original)
-{
-    int size = Mathf.Min(original.width, original.height);
-    int x = (original.width - size) / 2;
-    int y = (original.height - size) / 2;
+        private Texture2D CropToSquare(Texture2D original)
+        {
+            int size = Mathf.Min(original.width, original.height);
+            int x = (original.width - size) / 2;
+            int y = (original.height - size) / 2;
 
-    Color[] croppedPixels = original.GetPixels(x, y, size, size);
-    Texture2D square = new Texture2D(size, size);
-    square.SetPixels(croppedPixels);
-    square.Apply();
-    return square;
-}
+            Color[] croppedPixels = original.GetPixels(x, y, size, size);
+            Texture2D square = new Texture2D(size, size);
+            square.SetPixels(croppedPixels);
+            square.Apply();
+            return square;
+        }
 
 
 }

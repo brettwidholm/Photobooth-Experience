@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SpriteAnimator : MonoBehaviour
 {
-    public string folderPath = @"C:\Users\holmeswj\Documents\GitHub\Photobooth-Experience\_PEmainFile\Assets\Photos"; // Fixed absolute path
+    public string folderPath = Path.Combine(Application.dataPath, "Photos"); // Fixed absolute path
     public float frameRate = 0.5f; // Speed of animation
     private Sprite[] frames;
     private SpriteRenderer spriteRenderer;
