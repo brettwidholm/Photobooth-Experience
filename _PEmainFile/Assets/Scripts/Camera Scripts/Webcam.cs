@@ -167,7 +167,6 @@ public class Webcam : MonoBehaviour
                 timerText.enabled = false;
             }
 
-
             if ((state == 0) && (programTime < 0.0f)){
                 screenControl.Flash();
                 Photo0();
@@ -193,7 +192,6 @@ public class Webcam : MonoBehaviour
 
     public void TakePhoto()
     {
-
         string newName = name + cnt + ".png";
         cnt++;
 
@@ -201,7 +199,7 @@ public class Webcam : MonoBehaviour
         int height = webcamTexture.height;
         Color[] pixels = webcamTexture.GetPixels();
 
-        // Create rotated texture 90deg clockwise
+        // Create rotated texture 90deg 
         Texture2D photo = new Texture2D(height, width);
         for (int y = 0; y < height; y++)
         {
@@ -214,35 +212,15 @@ public class Webcam : MonoBehaviour
         photo.Apply();
 
         // Crop to center square
-    Texture2D square = CropToSquare(photo);
+        Texture2D square = CropToSquare(photo);
 
-    // Save to PNG
-    byte[] bytes = square.EncodeToPNG();
-    savedPath = Path.Combine(filePath, newName);
-    File.WriteAllBytes(savedPath, bytes);
-
-    Debug.Log("✅ Photo saved at: " + savedPath);
-        /*
-        byte[] bytes = photo.EncodeToPNG();
+        // Save to PNG
+        byte[] bytes = square.EncodeToPNG();
         savedPath = Path.Combine(filePath, newName);
         File.WriteAllBytes(savedPath, bytes);
 
-        Debug.Log("Photo saved at: " + savedPath);
-        */
-        /*
-        string newName = name + cnt;
-        newName = newName + ".png";
-        cnt++;
-        Texture2D photo = new Texture2D(webcamTexture.width, webcamTexture.height);
-        photo.SetPixels(webcamTexture.GetPixels());
-        photo.Apply();
+        Debug.Log("✅ Photo saved at: " + savedPath);
 
-        byte[] bytes = photo.EncodeToPNG();
-        savedPath = Path.Combine(filePath, newName);
-        File.WriteAllBytes(savedPath, bytes);
-
-        Debug.Log("Photo saved at: " + savedPath);
-        */
     }
 
     public void OnDestroy()

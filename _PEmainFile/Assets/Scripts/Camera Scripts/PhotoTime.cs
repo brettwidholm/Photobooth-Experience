@@ -10,7 +10,6 @@ public class PhotoTime : MonoBehaviour
     public TextMeshProUGUI messageText;
     public ScreenControl screenControl; 
     private Transform currentScreen; 
-
     public Webcam webby;
 
     public void Start()
@@ -23,41 +22,29 @@ public class PhotoTime : MonoBehaviour
         messageText.text = "Get Ready";
         timerText.enabled = false;
         messageText.enabled = false;
-
     }
 
     public void Photo0(){
-        
         messageText.enabled = true;
-        
         if(programTime <= 0.0f){
             messageText.text = "click";
             timerText.enabled = false;
             state++;
             programTime = 5.0f;
         }
-
-
     }
 
     public void Photo1(){
        messageText.text = "Cool";
-   //     messageText.enabled = true;
-        
         if(programTime <= 0.0f){
             messageText.text = "click";
             timerText.enabled = false;
             state++;
             programTime = 5.0f;
         }
-
-
     }
-
     public void Photo2(){
-       messageText.text = "Nice";
-        //messageText.enabled = true;
-        
+       messageText.text = "Nice";        
         if(programTime <= 0.0f){
             
             messageText.text = "click";
@@ -65,12 +52,7 @@ public class PhotoTime : MonoBehaviour
             state++;
             programTime = 5.0f;
         }
-
-
-
-
     }
-
     public void Photo3(){
        messageText.text = "Rad";
       //  messageText.enabled = true;
@@ -81,10 +63,6 @@ public class PhotoTime : MonoBehaviour
             state++;
             programTime = 5.0f;
         }
-
-        
-
-
     }
     public void Update()
     {
@@ -105,7 +83,6 @@ public class PhotoTime : MonoBehaviour
             timerText.enabled = false;
         }
 
-
         if (state == 0){
             Photo0();
             webby.TakePhoto();
@@ -122,8 +99,6 @@ public class PhotoTime : MonoBehaviour
             Photo3();
             webby.TakePhoto();
         }
-
-
     }
 
     public void UpdateScreenReference(){
@@ -135,17 +110,6 @@ public class PhotoTime : MonoBehaviour
                 break;
             }
         }
-        /* //old method was redundant but leaving here just in case
-        if (screenControl.screen0.activeInHierarchy)
-            currentScreen = screenControl.screen0.transform;
-        else if (screenControl.screen1.activeInHierarchy)
-            currentScreen = screenControl.screen1.transform;
-        else if (screenControl.screen2.activeInHierarchy)
-            currentScreen = screenControl.screen2.transform;
-        else if (screenControl.screen3.activeInHierarchy)
-            currentScreen = screenControl.screen3.transform;
-        //will need all screens here, not ideal but will find a workaround later
-        */
     }
 
     void UpdateTextPosition(){

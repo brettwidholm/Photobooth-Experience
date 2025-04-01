@@ -85,7 +85,6 @@ public class ScreenControl : MonoBehaviour
 
     void Update()
     {
-
         if(flashOn){
             flashTime -= Time.deltaTime;
             Flash();
@@ -99,26 +98,24 @@ public class ScreenControl : MonoBehaviour
         }
 
         if(IsScreenActive("Tap to Begin Screen")){
-                if (Input.GetMouseButtonDown(0)){
-                    Debug.Log("we going to the next screen");
-                    ShowScreen3(); //go to photo capture screen
-                }
+            if (Input.GetMouseButtonDown(0)){
+                Debug.Log("we going to the next screen");
+                ShowScreen3(); //go to photo capture screen
+            }
         }
     }
 
     public void Flash(){
-        Debug.Log("in the cut");
+        //Debug.Log("in the cut");
         flashOn = true;
         flash.SetActive(true);
         if(flashTime < 0.0f){
-            
             flashOn = false;
             flash.SetActive(false);
             flashTime = 0.3f;
         }
 
     }
-
 
     public void ShowDevMode(){//Dev Mode
         transitionOverlay.FadeTransition(() => {
@@ -198,7 +195,6 @@ public class ScreenControl : MonoBehaviour
     }
 
     public void ShowScreen3(){//Photo Capture
-        //transitionOverlay.FadeTransition(() => {
             devMode.SetActive(false);
             screen0.SetActive(false);
             screen1.SetActive(false);
@@ -212,9 +208,6 @@ public class ScreenControl : MonoBehaviour
             gifPrev.SetActive(false);
             previewShareButton.SetActive(false);
 
-
-        //will need to make the photo capture sequence begin automatically
-    //});
         Debug.Log("Photo Capture is active!");
     }
 

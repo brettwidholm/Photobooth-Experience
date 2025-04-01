@@ -32,7 +32,7 @@ public class Timer : MonoBehaviour
 
         // checks which screen is active by object name in hierarchy
         if (screenControl.IsScreenActive("Start Screen") || screenControl.IsScreenActive("Photo Capture")){
-            programTime = 20.0f;   // keeps timer constant on whichever screens we need
+            programTime = 20.0f;   
         }
         else{
             programTime -= Time.deltaTime; // run on other screens
@@ -45,7 +45,6 @@ public class Timer : MonoBehaviour
 
         if (programTime <= 0.0f){
             Debug.Log("out of time... bye :(");
-            //screenControl.Showscreen0();
             resetScene.RestartScene();
         }
 
@@ -61,10 +60,8 @@ public class Timer : MonoBehaviour
     }
 
     void UpdateScreenReference(){
-        foreach (Transform screen in screenControl.transform)
-        {
-            if (screen.gameObject.activeInHierarchy)
-            {
+        foreach (Transform screen in screenControl.transform){
+            if (screen.gameObject.activeInHierarchy){
                 currentScreen = screen;
                 break;
             }
@@ -72,8 +69,7 @@ public class Timer : MonoBehaviour
     }
 
     void UpdateTextPosition(){
-        if (currentScreen != null)
-        {
+        if (currentScreen != null){
             timerText.transform.SetParent(currentScreen, false);
             warningText.transform.SetParent(currentScreen, false);
         }

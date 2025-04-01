@@ -9,18 +9,8 @@ public class SpriteAnimator : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private int currentFrame = 0;
     private float timer = 0f;
-
-    
     public float targetWidth = 1500f;
     public float targetHeight = 1500f;
-
-       public void Start()
-    {
-        
-        //spriteRenderer = GetComponent<SpriteRenderer>();
-        //WJH^
-       // LoadSprites();
-    }
 
     public void Update()
     {
@@ -37,63 +27,37 @@ public class SpriteAnimator : MonoBehaviour
     }
 
     public void LoadSprites()
-{
-    if (spriteRenderer == null)
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)
         {
-            Debug.LogError("No SpriteRenderer found on GameObject! Cannot load sprites.");
-            return;
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null)
+            {
+                Debug.LogError("No SpriteRenderer found on GameObject! Cannot load sprites.");
+                return;
+            }
         }
-    }
 
-    if (!Directory.Exists(folderPath))
-    {
-        Debug.LogError("Folder not found: " + folderPath);
-        return;
-    }
-
-    string[] imageFiles = Directory.GetFiles(folderPath, "*.png");
-    frames = new Sprite[imageFiles.Length];
-
-    for (int i = 0; i < imageFiles.Length; i++)
-    {
-        byte[] imageData = File.ReadAllBytes(imageFiles[i]);
-        Texture2D texture = new Texture2D(2, 2);
-        texture.LoadImage(imageData);
-        frames[i] = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-    }
-
-    Debug.Log(frames.Length + " sprites loaded from " + folderPath);
-    LockAspectRatio(spriteRenderer.sprite);
-}
-
-/*
-    public void LoadSprites()
-    {
         if (!Directory.Exists(folderPath))
         {
             Debug.LogError("Folder not found: " + folderPath);
             return;
         }
 
-        string[] imageFiles = Directory.GetFiles(folderPath, "*.png"); // Load only PNG images
+        string[] imageFiles = Directory.GetFiles(folderPath, "*.png");
         frames = new Sprite[imageFiles.Length];
 
         for (int i = 0; i < imageFiles.Length; i++)
         {
             byte[] imageData = File.ReadAllBytes(imageFiles[i]);
             Texture2D texture = new Texture2D(2, 2);
-            texture.LoadImage(imageData); // Convert image to texture
-
+            texture.LoadImage(imageData);
             frames[i] = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
         }
 
         Debug.Log(frames.Length + " sprites loaded from " + folderPath);
         LockAspectRatio(spriteRenderer.sprite);
     }
-*/
 
     public void LockAspectRatio(Sprite sprite){
  
@@ -111,4 +75,5 @@ public class SpriteAnimator : MonoBehaviour
         transform.localScale = new Vector3(scaleX, scaleY, 1f);
         
     }
+
 }
