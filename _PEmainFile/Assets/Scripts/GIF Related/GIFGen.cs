@@ -7,7 +7,7 @@ using System.Collections;
 public class GifGen : MonoBehaviour
 {
     public string inputFolder =  Path.Combine(Application.dataPath, "Photos");
-    public string outputFolder =  Path.Combine(Application.dataPath, "Photos\\gif");
+    public string outputFolder =  Path.Combine(Application.dataPath, "gif");
     public string outputGifName = "rad.gif";
     public int frameRate = 2; 
 
@@ -16,11 +16,6 @@ public IEnumerator DelayedGifCreation()
     yield return new WaitForSeconds(2f); // Wait for 2 seconds
     ConvertImagesToGif();
 }
-
-//public void Start()
-//{
-   // StartCoroutine(DelayedGifCreation());
-//}
 
     public void ConvertImagesToGif()
     {

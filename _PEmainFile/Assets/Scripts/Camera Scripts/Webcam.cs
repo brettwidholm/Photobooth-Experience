@@ -6,7 +6,7 @@ using TMPro;
 public class Webcam : MonoBehaviour
 {
     public RawImage webby;
-    public string filePath;
+    public string filePath = Path.Combine(Application.dataPath, "Photos");
 
     public string name = "photo";
 
@@ -26,7 +26,7 @@ public class Webcam : MonoBehaviour
 
     public void Start()
     {
-        filePath = Path.Combine(Application.dataPath, "Photos");
+        
 
 //FIX?
     try
@@ -51,11 +51,15 @@ public class Webcam : MonoBehaviour
 
         //SURFACE CONFIG
         //webcamTexture = new WebCamTexture("Surface Camera Front", 1280, 720, 30);
+        //Trying to make it detect whether rotation is needed
+
+        Debug.Log($"Camera Name: {webcamTexture.deviceName}  Default Rotation: {webcamTexture.videoRotationAngle}");
 
         webby.texture = webcamTexture;
         webby.material.mainTexture = webcamTexture;
 
         webcamTexture.Play();
+        
         AdjustPreviewOrientation();
         float aspectRatio = (float)webcamTexture.width / webcamTexture.height;
 
@@ -189,6 +193,15 @@ public class Webcam : MonoBehaviour
 
     public void TakePhoto()
     {
+
+        string newName = name + cnt;
+        newName = newName + ".png";
+        cnt++;
+        Texture2D photo = new Texture2D(webcamTexture.width, webcamTexture.height);
+        photo.SetPixels(webcamTexture.GetPixels());
+        photo.Apply();
+
+        /*
         string newName = name + cnt + ".png";
         cnt++;
 
@@ -207,7 +220,7 @@ public class Webcam : MonoBehaviour
         }
 
         photo.Apply();
-
+*/
         // Crop to center square
     Texture2D square = CropToSquare(photo);
 
@@ -298,6 +311,20 @@ public class Webcam : MonoBehaviour
 
         void AdjustPreviewOrientation()
         {
+            if(webcamTexture.videoRotationAngle == 0){
+                webby.rectTransform.localEulerAngles = new Vector3(0, 0, 0f);
+            }
+            else if(webcamTexture.videoRotationAngle == 90){
+                webby.rectTransform.localEulerAngles = new Vector3(0, 0, 90f);
+            }
+            else if(webcamTexture.videoRotationAngle == 180){
+                webby.rectTransform.localEulerAngles = new Vector3(0, 0, 180f);
+            }
+            else if(webcamTexture.videoRotationAngle == 270){
+                webby.rectTransform.localEulerAngles = new Vector3(0, 0, 270f);
+            }
+            Debug.Log($"Camera Name: {webcamTexture.deviceName}  New Rotation: {webcamTexture.videoRotationAngle}");
+/*
             // Rotate 90° counter-clockwise
             webby.rectTransform.localEulerAngles = new Vector3(0, 0, 90f);
 
@@ -305,6 +332,7 @@ public class Webcam : MonoBehaviour
             webby.rectTransform.localScale = new Vector3(1, 1, 1);
 
             Debug.Log("Rotation 90°, no flip");
+            */
         }
 
         private Texture2D CropToSquare(Texture2D original)

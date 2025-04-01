@@ -16,6 +16,7 @@ public class SpriteAnimator : MonoBehaviour
 
        public void Start()
     {
+        
         //spriteRenderer = GetComponent<SpriteRenderer>();
         //WJH^
        // LoadSprites();

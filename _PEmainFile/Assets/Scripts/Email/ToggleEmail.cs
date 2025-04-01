@@ -16,7 +16,7 @@ public class EmailController : MonoBehaviour
     public Button confirmButton;
     public TextMeshProUGUI emailDisplayText;
 
-    public string gifFilePath;// = Path.Combine(Application.dataPath, "\\gif\\rad.gif"); // Path to the GIF file
+    public string gifFilePath = Path.Combine(Application.dataPath, "gif\\rad.gif"); // Path to the GIF file
     private string userEmail = "";
     private string userFirstName = "";
     private string userLastName = "";
@@ -30,7 +30,7 @@ public class EmailController : MonoBehaviour
 
     void Start()
     {
-        gifFilePath = Path.Combine(Application.dataPath, "gif\\rad.gif"); // Path to the GIF file
+       
         spriteRenderer = GetComponent<SpriteRenderer>();
         mainCamera = Camera.main;
 
