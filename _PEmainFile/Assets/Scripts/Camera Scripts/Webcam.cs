@@ -194,14 +194,6 @@ public class Webcam : MonoBehaviour
     public void TakePhoto()
     {
 
-        string newName = name + cnt;
-        newName = newName + ".png";
-        cnt++;
-        Texture2D photo = new Texture2D(webcamTexture.width, webcamTexture.height);
-        photo.SetPixels(webcamTexture.GetPixels());
-        photo.Apply();
-
-        /*
         string newName = name + cnt + ".png";
         cnt++;
 
@@ -220,7 +212,7 @@ public class Webcam : MonoBehaviour
         }
 
         photo.Apply();
-*/
+
         // Crop to center square
     Texture2D square = CropToSquare(photo);
 
@@ -311,7 +303,14 @@ public class Webcam : MonoBehaviour
 
         void AdjustPreviewOrientation()
         {
-            if(webcamTexture.videoRotationAngle == 0){
+            if(webcamTexture.videoRotationAngle == 0 && webcamTexture.deviceName.Contains("Surface")){
+                // Rotate 90° counter-clockwise
+                webby.rectTransform.localEulerAngles = new Vector3(0, 0, 90f);
+                // No flipping
+                webby.rectTransform.localScale = new Vector3(1, 1, 1);
+                Debug.Log("Rotation 90°, no flip");
+            }
+            else if(webcamTexture.videoRotationAngle == 0){
                 webby.rectTransform.localEulerAngles = new Vector3(0, 0, 0f);
             }
             else if(webcamTexture.videoRotationAngle == 90){
@@ -325,13 +324,7 @@ public class Webcam : MonoBehaviour
             }
             Debug.Log($"Camera Name: {webcamTexture.deviceName}  New Rotation: {webcamTexture.videoRotationAngle}");
 /*
-            // Rotate 90° counter-clockwise
-            webby.rectTransform.localEulerAngles = new Vector3(0, 0, 90f);
 
-            // No flipping
-            webby.rectTransform.localScale = new Vector3(1, 1, 1);
-
-            Debug.Log("Rotation 90°, no flip");
             */
         }
 
