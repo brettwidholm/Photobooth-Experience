@@ -1,6 +1,8 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+
 public class ScreenControl : MonoBehaviour
 {
 
@@ -33,7 +35,7 @@ public class ScreenControl : MonoBehaviour
     public GifGen giffy; //object for generating the gif itself
      public GameObject gifPrev; //preview gif screen :)
      public SpriteAnimator loader; //loads gif to quasigif (takes images in folder and makes animation)
-
+    private Vector3 originalGifPrevScale;
 
     //-----------------------------------------
     //buttons and logos:
@@ -56,51 +58,52 @@ public class ScreenControl : MonoBehaviour
 
     void Start()
     {
-            devMode.SetActive(false);
-            screen0.SetActive(true);
-            screen1.SetActive(false);
-            screen2.SetActive(false);
-            screen3.SetActive(false);
-            screen4.SetActive(false);
-            screen5.SetActive(false);
-            screen6.SetActive(false);
-            screen7.SetActive(false);
-            websosa.SetActive(false);
-            flash.SetActive(false);
-            gifPrev.SetActive(false);
-            
-            
-            backButtonInstructions.SetActive(false); //sets all necessary button to be turned off
-            backButtonInfo.SetActive(false);
-            backButtonConfirm.SetActive(false);
-            previewShareButton.SetActive(false);
-            nextButtonInfo.SetActive(false);
-            sendEmailButton.SetActive(false);
-            emailEntryBox.SetActive(false);
-       // Showscreen0(); //starts only showing screen0
+        devMode.SetActive(false);
+        screen0.SetActive(true);
+        screen1.SetActive(false);
+        screen2.SetActive(false);
+        screen3.SetActive(false);
+        screen4.SetActive(false);
+        screen5.SetActive(false);
+        screen6.SetActive(false);
+        screen7.SetActive(false);
+        websosa.SetActive(false);
+        flash.SetActive(false);
+        gifPrev.SetActive(false);
+        
+        
+        backButtonInstructions.SetActive(false); //sets all necessary button to be turned off
+        backButtonInfo.SetActive(false);
+        backButtonConfirm.SetActive(false);
+        previewShareButton.SetActive(false);
+        nextButtonInfo.SetActive(false);
+        sendEmailButton.SetActive(false);
+        emailEntryBox.SetActive(false);
+        // Showscreen0(); //starts only showing screen0
+        
     }
 
     void Update()
     {
 
-    if(flashOn){
-        flashTime -= Time.deltaTime;
-        Flash();
-    }
+        if(flashOn){
+            flashTime -= Time.deltaTime;
+            Flash();
+        }
 
-    if(IsScreenActive("Start Screen")){
-        resetButton.gameObject.SetActive(false);
-     }
-     else{
-        resetButton.gameObject.SetActive(true);
-     }
+        if(IsScreenActive("Start Screen")){
+            resetButton.gameObject.SetActive(false);
+        }
+        else{
+            resetButton.gameObject.SetActive(true);
+        }
 
-     if(IsScreenActive("Tap to Begin Screen")){
-            if (Input.GetMouseButtonDown(0)){
-                Debug.Log("we going to the next screen");
-                ShowScreen3(); //go to photo capture screen
-            }
-     }
+        if(IsScreenActive("Tap to Begin Screen")){
+                if (Input.GetMouseButtonDown(0)){
+                    Debug.Log("we going to the next screen");
+                    ShowScreen3(); //go to photo capture screen
+                }
+        }
     }
 
     public void Flash(){
@@ -283,6 +286,12 @@ public class ScreenControl : MonoBehaviour
             backButtonConfirm.SetActive(true);
             sendEmailButton.SetActive(true);
             nextButtonInfo.SetActive(false);
+            /*
+            gifPrev.SetActive(true);
+            //temp shrink quasiGif for fun
+            originalGifPrevScale = gifPrev.transform.localScale;
+            gifPrev.transform.localScale = new Vector3(.5f,.5f,1f);
+            */
         });
         Debug.Log("Confirmation screen is active!");
     }
@@ -298,6 +307,7 @@ public class ScreenControl : MonoBehaviour
             screen6.SetActive(false);
             screen7.SetActive(true);
 
+            gifPrev.SetActive(false);
             backButtonConfirm.SetActive(false);
             sendEmailButton.SetActive(false);
         });
@@ -316,9 +326,8 @@ public class ScreenControl : MonoBehaviour
 
     public void TouchKeyboard(){
         System.Diagnostics.Process.Start("tabtip.exe");
-    //alt option?
-        //System.Diagnostics.Process.Start("OSK.exe");
     }
+
 
 }
 

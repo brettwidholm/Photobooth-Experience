@@ -26,13 +26,12 @@ public class Webcam : MonoBehaviour
 
     public void Start()
     {
-        filePath = @"/Users/justin/Desktop/_PEmainFile/Assets/Photos";   
-
+        filePath = @"C:\Users\holmeswj\Documents\GitHub\Photobooth-Experience\_PEmainFile\Assets\Photos";
 
 //FIX?
     try
     {
-        webcamTexture = new WebCamTexture();
+        webcamTexture = new WebCamTexture("Surface Camera Front", 1280, 720, 30);
         webby.texture = webcamTexture;
         webby.material.mainTexture = webcamTexture;
 
@@ -40,21 +39,20 @@ public class Webcam : MonoBehaviour
         AdjustPreviewOrientation();
         float aspectRatio = (float)webcamTexture.width / webcamTexture.height;
 
-if (aspectRatio > 1f)
-{
-    float offsetX = (aspectRatio - 1f) / 2f / aspectRatio;
-    webby.uvRect = new Rect(offsetX, 0f, 1f / aspectRatio, 1f);
-}
-else
-{
-    float offsetY = (1f / aspectRatio - 1f) / 2f;
-    webby.uvRect = new Rect(0f, offsetY, 1f, aspectRatio);
-}
+        if (aspectRatio > 1f)
+        {
+            float offsetX = (aspectRatio - 1f) / 2f / aspectRatio;
+            webby.uvRect = new Rect(offsetX, 0f, 1f / aspectRatio, 1f);
+        }
+        else
+        {
+            float offsetY = (1f / aspectRatio - 1f) / 2f;
+            webby.uvRect = new Rect(0f, offsetY, 1f, aspectRatio);
+        }
 
-        Debug.Log("Using named camera: Front Camera");
+                Debug.Log("Using named camera: Front Camera");
     }
-    catch
-    {
+    catch{
         Debug.LogWarning("Preferred camera not found. Falling back to device list.");
         TryAutoSelectCamera();
     }

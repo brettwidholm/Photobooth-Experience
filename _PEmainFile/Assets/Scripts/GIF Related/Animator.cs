@@ -4,7 +4,7 @@ using UnityEngine;
 public class SpriteAnimator : MonoBehaviour
 {
     public string folderPath = @"C:\Users\holmeswj\Documents\GitHub\Photobooth-Experience\_PEmainFile\Assets\Photos"; // Fixed absolute path
-    public float frameRate = 0.1f; // Speed of animation
+    public float frameRate = 0.5f; // Speed of animation
     private Sprite[] frames;
     private SpriteRenderer spriteRenderer;
     private int currentFrame = 0;
@@ -12,7 +12,7 @@ public class SpriteAnimator : MonoBehaviour
 
     
     public float targetWidth = 1500f;
-    public float targetHeight = 1250f;
+    public float targetHeight = 1500f;
 
        public void Start()
     {
