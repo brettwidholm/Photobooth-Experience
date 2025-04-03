@@ -285,7 +285,7 @@ public class Webcam : MonoBehaviour
                 // Rotate 90° counter-clockwise
                 webby.rectTransform.localEulerAngles = new Vector3(0, 0, 90f);
                 // No flipping
-                webby.rectTransform.localScale = new Vector3(1, 1, 1);
+                webby.rectTransform.localScale = new Vector3(1, -1, 1);
                 Debug.Log("Rotation 90°, no flip");
             }
             else if(webcamTexture.videoRotationAngle == 0){
