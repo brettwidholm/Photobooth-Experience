@@ -2,6 +2,9 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Runtime.InteropServices;
+using System;
+using System.Collections;
 
 public class ScreenControl : MonoBehaviour
 {
@@ -321,6 +324,52 @@ public class ScreenControl : MonoBehaviour
         System.Diagnostics.Process.Start("tabtip.exe");
     }
 
+    private const uint WM_SYSCOMMAND = 0x0112;
+    private const uint SC_CLOSE = 0xF060;
 
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+    [DllImport("user32.dll")]
+    private static extern bool PostMessage(IntPtr hWnd, uint Msg, uint wParam, int lParam);
+
+    public static void CloseTouchKeyboard()
+    {
+        IntPtr keyboardWnd = FindWindow("IPTip_Main_Window", null);
+        if (keyboardWnd != IntPtr.Zero)
+        {
+            PostMessage(keyboardWnd, WM_SYSCOMMAND, SC_CLOSE, 0);
+        }
+        else
+        {
+            UnityEngine.Debug.LogWarning("Touch keyboard window not found.");
+        }
+    }
+
+    public void DeselectCurrentInput()
+    {
+        StartCoroutine(WaitAndDeselect());
+    }
+
+    private IEnumerator WaitAndDeselect()
+    {
+        yield return null; // Wait a frame for Unity to process the end-edit event
+
+        var selected = EventSystem.current.currentSelectedGameObject;
+
+        // Even if another field is selected, still deselect THIS one
+        if (selected != null && selected.GetComponent<TMP_InputField>() != null)
+        {
+            // User is clicking into another field — don’t kill the keyboard
+            yield break;
+        }
+
+        // User pressed Return or clicked away
+        CloseTouchKeyboard();
+        EventSystem.current.SetSelectedGameObject(null);
+    }
+
+
+    
 }
 

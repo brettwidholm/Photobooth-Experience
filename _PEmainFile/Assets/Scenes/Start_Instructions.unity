@@ -785,7 +785,6 @@ MonoBehaviour:
   lastNameInputField: {fileID: 456852849}
   confirmButton: {fileID: 452548403}
   emailDisplayText: {fileID: 1840476977}
-  gifFilePath: C:/Users/holmeswj/Documents/GitHub/Photobooth-Experience/_PEmainFile/Assets\gif\rad.gif
   invalidText: {fileID: 2009543013}
   confirmationText: {fileID: 1651779214}
   yesButton: {fileID: 91192125}
@@ -1092,20 +1091,32 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
+  m_ContentType: 5
   m_InputType: 0
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 5
   m_RegexValue: 
   m_GlobalPointSize: 34
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1803259332}
+        m_TargetAssemblyTypeName: ScreenControl, Assembly-CSharp
+        m_MethodName: DeselectCurrentInput
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -1915,7 +1926,6 @@ MonoBehaviour:
   lastNameInputField: {fileID: 0}
   confirmButton: {fileID: 452548403}
   emailDisplayText: {fileID: 0}
-  gifFilePath: 
   invalidText: {fileID: 0}
   confirmationText: {fileID: 0}
   yesButton: {fileID: 91192125}
@@ -3908,20 +3918,32 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
+  m_ContentType: 6
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 7
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 7
   m_RegexValue: 
   m_GlobalPointSize: 34
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1803259332}
+        m_TargetAssemblyTypeName: ScreenControl, Assembly-CSharp
+        m_MethodName: DeselectCurrentInput
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -5144,7 +5166,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   webby: {fileID: 1820251355}
-  filePath: C:/Users/holmeswj/Documents/GitHub/Photobooth-Experience/_PEmainFile/Assets\Photos
   name: photo
   savedPath: 
   cnt: 0
@@ -5481,20 +5502,32 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
+  m_ContentType: 5
   m_InputType: 0
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 5
   m_RegexValue: 
   m_GlobalPointSize: 34
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1803259332}
+        m_TargetAssemblyTypeName: ScreenControl, Assembly-CSharp
+        m_MethodName: DeselectCurrentInput
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -6750,7 +6783,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98a3de9f57fdf834c96ff3df4b7253c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  folderPath: C:/Users/holmeswj/Documents/GitHub/Photobooth-Experience/_PEmainFile/Assets\Photos
   frameRate: 0.5
   targetWidth: 1500
   targetHeight: 1500
@@ -7360,8 +7392,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6950c25140298ae43aac2bb685956c52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputFolder: C:/Users/holmeswj/Documents/GitHub/Photobooth-Experience/_PEmainFile/Assets\Photos
-  outputFolder: C:/Users/holmeswj/Documents/GitHub/Photobooth-Experience/_PEmainFile/Assets\gif
   outputGifName: rad.gif
   frameRate: 2
 --- !u!1 &1969412742

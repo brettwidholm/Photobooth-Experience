@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SpriteAnimator : MonoBehaviour
 {
-    public string folderPath = Path.Combine(Application.dataPath, "Photos"); // Fixed absolute path
+    private string folderPath;
     public float frameRate = 0.5f; // Speed of animation
     private Sprite[] frames;
     private SpriteRenderer spriteRenderer;
@@ -11,6 +11,7 @@ public class SpriteAnimator : MonoBehaviour
     private float timer = 0f;
     public float targetWidth = 1500f;
     public float targetHeight = 1500f;
+
 
     public void Update()
     {
@@ -37,6 +38,8 @@ public class SpriteAnimator : MonoBehaviour
                 return;
             }
         }
+
+        folderPath = Path.Combine(Application.dataPath, "Photos");
 
         if (!Directory.Exists(folderPath))
         {

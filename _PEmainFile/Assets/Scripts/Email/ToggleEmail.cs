@@ -16,7 +16,7 @@ public class EmailController : MonoBehaviour
     public Button confirmButton;
     public TextMeshProUGUI emailDisplayText;
 
-    public string gifFilePath = Path.Combine(Application.dataPath, "gif\\rad.gif"); // Path to the GIF file
+    private string gifFilePath;
     private string userEmail = "";
     private string userFirstName = "";
     private string userLastName = "";
@@ -27,6 +27,11 @@ public class EmailController : MonoBehaviour
     public Button yesButton;
     public Button noButton;
     public Button startButton;
+
+    void Awake()
+    {
+        gifFilePath = Path.Combine(Application.dataPath, "gif\\rad.gif"); // Path to the GIF file
+    }
 
     void Start()
     {
@@ -159,8 +164,15 @@ public class EmailController : MonoBehaviour
             MailMessage mail = new MailMessage();
             mail.From = new MailAddress(senderEmail);
             mail.To.Add(recipientEmail);
-            mail.Subject = $"Hello, {firstName} {lastName}! Here is your GIF!";
-            mail.Body = "Here is your GIF! \n";
+
+            if (!(firstName == "" && lastName == "")){
+                mail.Subject = $"Hello, {firstName} {lastName}! Here is your GIF!";
+            }
+            else if(firstName != "" && lastName == ""){
+                mail.Subject = $"Hello, {firstName}! Here is your GIF!";
+            }
+
+            mail.Body = "Here is your GIF!\n";
             
             Attachment gifAttachment = new Attachment(gifFilePath);
             mail.Attachments.Add(gifAttachment);
