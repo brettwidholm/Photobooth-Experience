@@ -785,11 +785,13 @@ MonoBehaviour:
   lastNameInputField: {fileID: 456852849}
   confirmButton: {fileID: 452548403}
   emailDisplayText: {fileID: 1840476977}
+  gifFilePath: 
   invalidText: {fileID: 2009543013}
   confirmationText: {fileID: 1651779214}
   yesButton: {fileID: 91192125}
   noButton: {fileID: 1885771903}
   startButton: {fileID: 617433228}
+  getter: {fileID: 608491819}
 --- !u!4 &419478971
 Transform:
   m_ObjectHideFlags: 0
@@ -1758,6 +1760,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 600485553}
   m_CullTransparentMesh: 1
+--- !u!1 &608491818
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 608491820}
+  - component: {fileID: 608491819}
+  m_Layer: 0
+  m_Name: pather
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &608491819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608491818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e324ac1fde86ab6438949d5311b9c3ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputFolder: 
+  folderPath: 
+--- !u!4 &608491820
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608491818}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -17.138573, y: -11.770501, z: 7452.038}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &617433225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1926,11 +1974,13 @@ MonoBehaviour:
   lastNameInputField: {fileID: 0}
   confirmButton: {fileID: 452548403}
   emailDisplayText: {fileID: 0}
+  gifFilePath: 
   invalidText: {fileID: 0}
   confirmationText: {fileID: 0}
   yesButton: {fileID: 91192125}
   noButton: {fileID: 1885771903}
   startButton: {fileID: 0}
+  getter: {fileID: 0}
 --- !u!61 &617433232
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5175,6 +5225,7 @@ MonoBehaviour:
   timerText: {fileID: 1658471826}
   messageText: {fileID: 635044652}
   screenControl: {fileID: 1803259332}
+  getter: {fileID: 608491819}
 --- !u!4 &1338003119
 Transform:
   m_ObjectHideFlags: 0
@@ -6320,7 +6371,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -600}
+  m_AnchoredPosition: {x: 0, y: -700}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1651779214
@@ -6526,12 +6577,10 @@ RectTransform:
   - {fileID: 333296597}
   - {fileID: 1358171269}
   - {fileID: 1710131670}
-  - {fileID: 1803259333}
   - {fileID: 2065658860}
   - {fileID: 1820251357}
   - {fileID: 1470202695}
   - {fileID: 807192893}
-  - {fileID: 1752963445}
   - {fileID: 1501642772}
   - {fileID: 945002875}
   - {fileID: 1046144479}
@@ -6786,6 +6835,7 @@ MonoBehaviour:
   frameRate: 0.5
   targetWidth: 1500
   targetHeight: 1500
+  getter: {fileID: 608491819}
 --- !u!1 &1752963443
 GameObject:
   m_ObjectHideFlags: 0
@@ -6815,6 +6865,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6921995af503724094925d3ab220911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  getter: {fileID: 608491819}
 --- !u!4 &1752963445
 Transform:
   m_ObjectHideFlags: 0
@@ -6824,11 +6875,11 @@ Transform:
   m_GameObject: {fileID: 1752963443}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -101.53994, y: -108.08606, z: -2377.3257}
-  m_LocalScale: {x: 23.694456, y: 23.694456, z: 23.694456}
+  m_LocalPosition: {x: -4.2853885, y: -4.561661, z: -0.33258057}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1654256750}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1803259331
 GameObject:
@@ -6894,11 +6945,11 @@ Transform:
   m_GameObject: {fileID: 1803259331}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 100}
+  m_LocalScale: {x: 0.04220397, y: 0.04220397, z: 0.04220397}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1654256750}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1820251354
 GameObject:
@@ -7394,6 +7445,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outputGifName: rad.gif
   frameRate: 2
+  getter: {fileID: 608491819}
 --- !u!1 &1969412742
 GameObject:
   m_ObjectHideFlags: 0
@@ -9043,7 +9095,10 @@ SceneRoots:
   m_Roots:
   - {fileID: 1270492304}
   - {fileID: 1654256750}
+  - {fileID: 1803259333}
+  - {fileID: 1752963445}
   - {fileID: 1377466062}
   - {fileID: 1338003119}
   - {fileID: 1934581809}
   - {fileID: 419478971}
+  - {fileID: 608491820}

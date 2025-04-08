@@ -11,10 +11,12 @@ public class GifGen : MonoBehaviour
     public string outputGifName = "rad.gif";
     public int frameRate = 2;
 
-    void Awake()
+    public PathGetter getter;
+
+    void Start()
     {
-        inputFolder =  Path.Combine(Application.dataPath, "Photos");
-        outputFolder =  Path.Combine(Application.dataPath, "gif");
+        inputFolder =  Path.Combine(getter.getPath(), "Photos");
+        outputFolder =  Path.Combine(getter.getPath(), "gif");
     }
 
     public IEnumerator DelayedGifCreation()
@@ -30,12 +32,12 @@ public class GifGen : MonoBehaviour
             UnityEngine.Debug.LogError("Input folder does not exist!");
             return;
         }
-
+/*
         if (!Directory.Exists(outputFolder))
         {
             Directory.CreateDirectory(outputFolder);
         }
-
+*/
         string ffmpegPath = @"C:\ffmpeg\bin\ffmpeg.exe";
         string framePattern = Path.Combine(inputFolder, "photo%0d.png"); // Adjust pattern based on file names
         string outputGifPath = Path.Combine(outputFolder, outputGifName);

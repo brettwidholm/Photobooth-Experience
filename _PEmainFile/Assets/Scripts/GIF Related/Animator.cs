@@ -12,6 +12,8 @@ public class SpriteAnimator : MonoBehaviour
     public float targetWidth = 1500f;
     public float targetHeight = 1500f;
 
+    public PathGetter getter;
+
 
     public void Update()
     {
@@ -39,7 +41,7 @@ public class SpriteAnimator : MonoBehaviour
             }
         }
 
-        folderPath = Path.Combine(Application.dataPath, "Photos");
+        folderPath = Path.Combine(getter.getPath(), "Photos");
 
         if (!Directory.Exists(folderPath))
         {

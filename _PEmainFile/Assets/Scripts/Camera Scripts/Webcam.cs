@@ -24,9 +24,12 @@ public class Webcam : MonoBehaviour
     public ScreenControl screenControl; 
     private Transform currentScreen; 
 
+    public PathGetter getter;
+
     void Awake()
     {
-        filePath = Path.Combine(Application.dataPath, "Photos");
+        
+
 
         try
         {
@@ -58,7 +61,7 @@ public class Webcam : MonoBehaviour
             webby.material.mainTexture = webcamTexture;
 
             webcamTexture.Play();
-            
+            //
             AdjustPreviewOrientation();
             float aspectRatio = (float)webcamTexture.width / webcamTexture.height;
 
@@ -81,6 +84,8 @@ public class Webcam : MonoBehaviour
 
     public void Start()
     {
+        filePath = Path.Combine(getter.getPath(), "Photos");
+        Debug.Log("File path: " + filePath);
         Debug.Log("GO GO GO!!!!");
         UpdateScreenReference(); // Find the active screen at startup
 
@@ -330,7 +335,7 @@ public class Webcam : MonoBehaviour
             {
                 previewRotationAngle = 90;
                 webby.rectTransform.localEulerAngles = new Vector3(0, 0, 90f);
-                webby.rectTransform.localScale = new Vector3(1, 1, 1);
+                webby.rectTransform.localScale = new Vector3(1, -1, 1);
                 Debug.Log("Surface cam: forcing 90° rotation");
             }
             else

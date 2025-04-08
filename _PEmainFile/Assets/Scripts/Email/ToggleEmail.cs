@@ -16,7 +16,7 @@ public class EmailController : MonoBehaviour
     public Button confirmButton;
     public TextMeshProUGUI emailDisplayText;
 
-    private string gifFilePath;
+    public string gifFilePath;
     private string userEmail = "";
     private string userFirstName = "";
     private string userLastName = "";
@@ -28,21 +28,14 @@ public class EmailController : MonoBehaviour
     public Button noButton;
     public Button startButton;
 
-    void Awake()
-    {
-        gifFilePath = Path.Combine(Application.dataPath, "gif\\rad.gif"); // Path to the GIF file
-    }
+    public PathGetter getter;
+
 
     void Start()
     {
-       
+       gifFilePath = Path.Combine(getter.getPath(), "gif\\rad.gif"); // Path to the GIF file
         spriteRenderer = GetComponent<SpriteRenderer>();
         mainCamera = Camera.main;
-
-        if (mainCamera == null)
-        {
-            Debug.LogError("Main Camera is not assigned.");
-        }
 
         startButton.onClick.AddListener(OnStartButtonClick);
         confirmButton.onClick.AddListener(OnConfirmButtonClick);
@@ -51,7 +44,7 @@ public class EmailController : MonoBehaviour
 
         emailInputField.onValueChanged.AddListener(delegate { ValidateEmail(); });
         confirmButton.interactable = false;
-        
+       
         UpdateUI();
     }
 
@@ -103,7 +96,7 @@ public class EmailController : MonoBehaviour
         confirmationText.text = $"Name: {userFirstName} {userLastName}\nEmail: {userEmail}";
         yesButton.gameObject.SetActive(true);
         noButton.gameObject.SetActive(true);
-        
+       
         emailInputField.gameObject.SetActive(false);
         firstNameInputField.gameObject.SetActive(false);
         lastNameInputField.gameObject.SetActive(false);
@@ -119,10 +112,6 @@ public class EmailController : MonoBehaviour
 
     void OnNoButtonClick()
 {
-    // Clear the input fields
-    emailInputField.text = "";
-    firstNameInputField.text = "";
-    lastNameInputField.text = "";
 
     // Reset the counter and update the UI to go back to the input fields
     counter = 1;
@@ -132,12 +121,12 @@ public class EmailController : MonoBehaviour
     firstNameInputField.gameObject.SetActive(true);
     lastNameInputField.gameObject.SetActive(true);
     confirmButton.gameObject.SetActive(true);
-    
+   
     // Hide the confirmation text and buttons
     confirmationText.gameObject.SetActive(false);
     yesButton.gameObject.SetActive(false);
     noButton.gameObject.SetActive(false);
-    
+   
     UpdateUI();
 }
 
@@ -152,7 +141,41 @@ public class EmailController : MonoBehaviour
     {
         confirmButton.interactable = IsValidEmail(emailInputField.text.Trim());
     }
+  void SendEmail(string recipientEmail, string firstName, string lastName)
+    {
+        string senderEmail = "boothphoto57@gmail.com";
+        string senderPassword = "msfu xycd qnwz hilv";
 
+        try
+        {
+            MailMessage mail = new MailMessage();
+            mail.From = new MailAddress(senderEmail);
+            mail.To.Add(recipientEmail);
+            if (firstName == "" && lastName == ""){
+                mail.Subject = $"Hello! Here is your GIF!";
+            }
+            else{
+            mail.Subject = $"Hello, {firstName} {lastName}! Here is your GIF!";
+            }
+            mail.Body = "Thank you for participating at our event, enjoy! \n";
+           
+            Attachment gifAttachment = new Attachment(gifFilePath);
+            mail.Attachments.Add(gifAttachment);
+
+            SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
+            smtpServer.Port = 587;
+            smtpServer.Credentials = new NetworkCredential(senderEmail, senderPassword) as ICredentialsByHost;
+            smtpServer.EnableSsl = true;
+           
+            smtpServer.Send(mail);
+            Debug.Log("Email sent successfully to " + recipientEmail);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Failed to send email: " + e.Message);
+        }
+    }
+    /*
     void SendEmail(string recipientEmail, string firstName, string lastName)
     {
         yesButton.interactable = false;
@@ -173,7 +196,7 @@ public class EmailController : MonoBehaviour
             }
 
             mail.Body = "Here is your GIF!\n";
-            
+           
             Attachment gifAttachment = new Attachment(gifFilePath);
             mail.Attachments.Add(gifAttachment);
 
@@ -181,7 +204,7 @@ public class EmailController : MonoBehaviour
             smtpServer.Port = 587;
             smtpServer.Credentials = new NetworkCredential(senderEmail, senderPassword) as ICredentialsByHost;
             smtpServer.EnableSsl = true;
-            
+           
             smtpServer.Send(mail);
             Debug.Log("Email sent successfully to " + recipientEmail);
         }
@@ -191,10 +214,9 @@ public class EmailController : MonoBehaviour
         }
         //yesButton.interactable = true;
     }
-
+*/
     void UpdateUI()
     {
-        spriteRenderer.enabled = (counter == 0);
         emailInputField.gameObject.SetActive(counter == 1);
         firstNameInputField.gameObject.SetActive(counter == 1);
         lastNameInputField.gameObject.SetActive(counter == 1);

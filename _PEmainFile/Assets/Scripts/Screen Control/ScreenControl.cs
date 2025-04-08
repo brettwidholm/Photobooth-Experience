@@ -282,6 +282,7 @@ public class ScreenControl : MonoBehaviour
             backButtonConfirm.SetActive(true);
             sendEmailButton.SetActive(true);
             nextButtonInfo.SetActive(false);
+            gifPrev.SetActive(true);
             /*
             gifPrev.SetActive(true);
             //temp shrink quasiGif for fun
