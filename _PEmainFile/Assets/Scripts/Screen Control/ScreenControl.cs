@@ -20,6 +20,7 @@ public class ScreenControl : MonoBehaviour
     public GameObject screen5; //Info Screen
     public GameObject screen6; //Confirmation Screen
     public GameObject screen7; //Success Screen
+    public GameObject loadingScreen; //Loading screen
 
     public TransitionOverlay transitionOverlay; //fade to white
     
@@ -73,6 +74,7 @@ public class ScreenControl : MonoBehaviour
         websosa.SetActive(false);
         flash.SetActive(false);
         gifPrev.SetActive(false);
+        loadingScreen.SetActive(false);
         
         
         backButtonInstructions.SetActive(false); //sets all necessary button to be turned off
@@ -309,6 +311,23 @@ public class ScreenControl : MonoBehaviour
             sendEmailButton.SetActive(false);
         });
         Debug.Log("Success screen is active!");
+    }
+
+    public void showloadingScreen() {
+        devMode.SetActive(false);
+          screen0.SetActive(false);
+            screen1.SetActive(false);
+            screen2.SetActive(false);
+            screen3.SetActive(false);
+            screen4.SetActive(false);
+            screen5.SetActive(false);
+            screen6.SetActive(false);
+            screen7.SetActive(false);
+            loadingScreen.SetActive(true);
+            gifPrev.SetActive(false);
+            backButtonConfirm.SetActive(false);
+            sendEmailButton.SetActive(false);
+        
     }
 
     public bool IsScreenActive(string screenName){
