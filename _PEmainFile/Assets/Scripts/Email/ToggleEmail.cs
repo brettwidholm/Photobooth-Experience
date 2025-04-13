@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Net.Mime;
 
 public class EmailController : MonoBehaviour
 {
@@ -30,10 +31,9 @@ public class EmailController : MonoBehaviour
 
     public PathGetter getter;
 
-
     void Start()
     {
-       gifFilePath = Path.Combine(getter.getPath(), "gif\\rad.gif"); // Path to the GIF file
+        gifFilePath = Path.Combine(getter.getPath(), "gif\\rad.gif");
         spriteRenderer = GetComponent<SpriteRenderer>();
         mainCamera = Camera.main;
 
@@ -44,7 +44,7 @@ public class EmailController : MonoBehaviour
 
         emailInputField.onValueChanged.AddListener(delegate { ValidateEmail(); });
         confirmButton.interactable = false;
-       
+
         UpdateUI();
     }
 
@@ -96,7 +96,7 @@ public class EmailController : MonoBehaviour
         confirmationText.text = $"Name: {userFirstName} {userLastName}\nEmail: {userEmail}";
         yesButton.gameObject.SetActive(true);
         noButton.gameObject.SetActive(true);
-       
+
         emailInputField.gameObject.SetActive(false);
         firstNameInputField.gameObject.SetActive(false);
         lastNameInputField.gameObject.SetActive(false);
@@ -111,25 +111,19 @@ public class EmailController : MonoBehaviour
     }
 
     void OnNoButtonClick()
-{
+    {
+        counter = 1;
+        emailInputField.gameObject.SetActive(true);
+        firstNameInputField.gameObject.SetActive(true);
+        lastNameInputField.gameObject.SetActive(true);
+        confirmButton.gameObject.SetActive(true);
 
-    // Reset the counter and update the UI to go back to the input fields
-    counter = 1;
+        confirmationText.gameObject.SetActive(false);
+        yesButton.gameObject.SetActive(false);
+        noButton.gameObject.SetActive(false);
 
-    // Ensure the input fields are re-enabled and cleared
-    emailInputField.gameObject.SetActive(true);
-    firstNameInputField.gameObject.SetActive(true);
-    lastNameInputField.gameObject.SetActive(true);
-    confirmButton.gameObject.SetActive(true);
-   
-    // Hide the confirmation text and buttons
-    confirmationText.gameObject.SetActive(false);
-    yesButton.gameObject.SetActive(false);
-    noButton.gameObject.SetActive(false);
-   
-    UpdateUI();
-}
-
+        UpdateUI();
+    }
 
     bool IsValidEmail(string email)
     {
@@ -141,44 +135,9 @@ public class EmailController : MonoBehaviour
     {
         confirmButton.interactable = IsValidEmail(emailInputField.text.Trim());
     }
-  void SendEmail(string recipientEmail, string firstName, string lastName)
-    {
-        string senderEmail = "boothphoto57@gmail.com";
-        string senderPassword = "msfu xycd qnwz hilv";
 
-        try
-        {
-            MailMessage mail = new MailMessage();
-            mail.From = new MailAddress(senderEmail);
-            mail.To.Add(recipientEmail);
-            if (firstName == "" && lastName == ""){
-                mail.Subject = $"Hello! Here is your GIF!";
-            }
-            else{
-            mail.Subject = $"Hello, {firstName} {lastName}! Here is your GIF!";
-            }
-            mail.Body = "Thank you for participating at our event, enjoy! \n";
-           
-            Attachment gifAttachment = new Attachment(gifFilePath);
-            mail.Attachments.Add(gifAttachment);
-
-            SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
-            smtpServer.Port = 587;
-            smtpServer.Credentials = new NetworkCredential(senderEmail, senderPassword) as ICredentialsByHost;
-            smtpServer.EnableSsl = true;
-           
-            smtpServer.Send(mail);
-            Debug.Log("Email sent successfully to " + recipientEmail);
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError("Failed to send email: " + e.Message);
-        }
-    }
-    /*
     void SendEmail(string recipientEmail, string firstName, string lastName)
     {
-        yesButton.interactable = false;
         string senderEmail = "boothphoto57@gmail.com";
         string senderPassword = "msfu xycd qnwz hilv";
 
@@ -188,15 +147,13 @@ public class EmailController : MonoBehaviour
             mail.From = new MailAddress(senderEmail);
             mail.To.Add(recipientEmail);
 
-            if (!(firstName == "" && lastName == "")){
-                mail.Subject = $"Hello, {firstName} {lastName}! Here is your GIF!";
-            }
-            else if(firstName != "" && lastName == ""){
-                mail.Subject = $"Hello, {firstName}! Here is your GIF!";
-            }
+            mail.Subject = string.IsNullOrWhiteSpace(firstName) && string.IsNullOrWhiteSpace(lastName)
+                ? "Your College of Charleston GIF!"
+                : $"Hi {firstName} {lastName}, here’s your College of Charleston GIF!";
 
-            mail.Body = "Here is your GIF!\n";
-           
+            mail.IsBodyHtml = true;
+            mail.AlternateViews.Add(EmailTemplate.GetHtmlBody(firstName, lastName, gifFilePath));
+
             Attachment gifAttachment = new Attachment(gifFilePath);
             mail.Attachments.Add(gifAttachment);
 
@@ -204,7 +161,7 @@ public class EmailController : MonoBehaviour
             smtpServer.Port = 587;
             smtpServer.Credentials = new NetworkCredential(senderEmail, senderPassword) as ICredentialsByHost;
             smtpServer.EnableSsl = true;
-           
+
             smtpServer.Send(mail);
             Debug.Log("Email sent successfully to " + recipientEmail);
         }
@@ -212,9 +169,8 @@ public class EmailController : MonoBehaviour
         {
             Debug.LogError("Failed to send email: " + e.Message);
         }
-        //yesButton.interactable = true;
     }
-*/
+
     void UpdateUI()
     {
         emailInputField.gameObject.SetActive(counter == 1);
@@ -242,5 +198,31 @@ public class EmailController : MonoBehaviour
         lastNameInputField.text = "";
         counter = 1;
         UpdateUI();
+    }
+}
+
+public static class EmailTemplate
+{
+    public static AlternateView GetHtmlBody(string firstName, string lastName, string gifPath)
+    {
+        LinkedResource logo = new LinkedResource("Assets/Logos/CofC.png", MediaTypeNames.Image.Jpeg)
+        {
+            ContentId = "cofcLogo"
+        };
+
+        string html = $@"
+        <body style='background-color:white; font-family: Arial, sans-serif;'>
+            <div style='text-align: center; margin-top: 30px;'>
+                <img src='cid:cofcLogo' width='150' />
+                <h2>College of Charleston</h2>
+                <p style='font-size: 18px;'>Hey {(string.IsNullOrWhiteSpace(firstName) ? "there" : firstName)}, here's your personalized event GIF!</p>
+                <p style='font-size: 16px;'>Thanks for stopping by – we hope you had fun!</p>
+                <p style='font-size: 16px;'>Don't forget to tag us with <strong>#CougarPride</strong> when you share your GIF.</p>
+            </div>
+        </body>";
+
+        AlternateView avHtml = AlternateView.CreateAlternateViewFromString(html, null, MediaTypeNames.Text.Html);
+        avHtml.LinkedResources.Add(logo);
+        return avHtml;
     }
 }
