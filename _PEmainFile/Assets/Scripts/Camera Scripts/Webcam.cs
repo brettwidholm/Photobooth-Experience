@@ -26,8 +26,6 @@ public class Webcam : MonoBehaviour
     private Transform currentScreen; 
 
     public PathGetter getter;
-    private bool hasTakenFinalPhoto = false;
-
 
     void Awake()
     {
@@ -47,33 +45,6 @@ public class Webcam : MonoBehaviour
                     }
                 }
             }
-            //STANDARD LAPTOP WEBCAM CONFIG
-            //webcamTexture = new WebCamTexture();
-
-            //SURFACE CONFIG
-            //webcamTexture = new WebCamTexture("Surface Camera Front", 1280, 720, 30);
-            //Trying to make it detect whether rotation is needed
-
-            /* Debug.Log($"Camera Name: {webcamTexture.deviceName}  Default Rotation: {webcamTexture.videoRotationAngle}");
-
-            webby.texture = webcamTexture;
-            webby.material.mainTexture = webcamTexture;
-
-            webcamTexture.Play();
-            //
-            AdjustPreviewOrientation();
-            float aspectRatio = (float)webcamTexture.width / webcamTexture.height;
-
-            if (aspectRatio > 1f)
-            {
-                float offsetX = (aspectRatio - 1f) / 2f / aspectRatio;
-                webby.uvRect = new Rect(offsetX, 0f, 1f / aspectRatio, 1f);
-            }
-            else
-            {
-                float offsetY = (1f / aspectRatio - 1f) / 2f;
-                webby.uvRect = new Rect(0f, offsetY, 1f, aspectRatio);
-            } */
         }
         catch{
             Debug.LogWarning("Preferred camera not found. Falling back to device list.");
@@ -145,27 +116,15 @@ public class Webcam : MonoBehaviour
         if(!(screenControl.IsScreenActive("Photo Capture")) ){
             messageText.enabled = false;
             programTime = 5.0f;
-
-        /* if(screenControl.IsScreenActive("Tap to Begin Screen")){
-            webcamTexture.Play();
-            }
-        else{
-            webcamTexture.Stop(); //ask team do we really want camera off????
-            } */
-            
         }
         else{
             messageText.enabled = true;
-            /* if (state > 3){
-                screenControl.ShowScreen4();
-                Debug.Log("Screen 4 activated via webcam:/.");
-            } */
-                    if (state > 3)
-                        {
-                            StartCoroutine(TriggerScreen4WithLoading());
-                            enabled = false; // disable further Update loop once done
-                             return;// exit early
-                        }
+            /* if (state > 3)
+                {
+                    StartCoroutine(TriggerScreen4WithLoading());
+                    enabled = false; // disable further Update loop once done
+                    return;// exit early
+                } */
             
             timerText.text = $"{programTime:F0}";
             programTime -= Time.deltaTime;
@@ -195,11 +154,12 @@ public class Webcam : MonoBehaviour
                 Photo2();
                 TakePhoto();
             }
-            else if ((state == 3) && (programTime < 0.0f) && !hasTakenFinalPhoto){
-                hasTakenFinalPhoto = true;  // ✅ Prevent re-trigger
+            else if ((state == 3) && (programTime < 0.0f)){
                 screenControl.Flash();
                 Photo3();
                 TakePhoto();
+
+                StartCoroutine(TriggerScreen4WithLoading());
             }
 
         }
@@ -257,19 +217,6 @@ public class Webcam : MonoBehaviour
 
         photo.Apply();
 
-/*
-        // Create rotated texture 90deg 
-        Texture2D photo = new Texture2D(height, width);
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                photo.SetPixel(height - y - 1, x, pixels[y * width + x]);
-            }
-        }
-
-        photo.Apply();
-*/
         // Crop to center square
         Texture2D square = CropToSquare(photo);
 
@@ -400,6 +347,7 @@ public class Webcam : MonoBehaviour
         screenControl.loader.LoadSprites();
         screenControl.RunWithLoadingScreen(() => screenControl.ShowScreen4(), null, 3.0f);
         StopWebcamFeed(); // Stop the webcam feed after taking the last photo
+        screenControl.gifPrev.SetActive(true); // Show the GIF preview screen
 
 }
 }

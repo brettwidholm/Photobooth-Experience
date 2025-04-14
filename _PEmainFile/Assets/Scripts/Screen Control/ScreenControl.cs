@@ -112,7 +112,7 @@ public class ScreenControl : MonoBehaviour
         }
     }
 
-    public void Flash(){
+/*     public void Flash(){
         //Debug.Log("in the cut");
         flashOn = true;
         flash.SetActive(true);
@@ -121,9 +121,19 @@ public class ScreenControl : MonoBehaviour
             flash.SetActive(false);
             flashTime = 0.3f;
         }
-        
+    } */
+    public void Flash()
+{
+    StartCoroutine(FlashRoutine());
+}
 
-    }
+private IEnumerator FlashRoutine()
+{
+    flash.SetActive(true);
+    yield return new WaitForSeconds(flashTime);
+    flash.SetActive(false);
+}
+
 
     public void ShowDevMode(){//Dev Mode
         transitionOverlay.FadeTransition(() => {
@@ -236,6 +246,7 @@ public class ScreenControl : MonoBehaviour
         loader.LoadSprites(); */
             
         transitionOverlay.FadeTransition(() => {
+            gifPrev.SetActive(true);
             devMode.SetActive(false);
             screen0.SetActive(false);
             screen1.SetActive(false);
@@ -250,7 +261,7 @@ public class ScreenControl : MonoBehaviour
 
             loadingScreen.SetActive(false);
             Debug.Log("Loading screen deactivated");
-            gifPrev.SetActive(true);
+            
 
             emailEntryBox.SetActive(false);
             previewShareButton.SetActive(true);
@@ -303,12 +314,7 @@ public class ScreenControl : MonoBehaviour
             sendEmailButton.SetActive(true);
             nextButtonInfo.SetActive(false);
             gifPrev.SetActive(true);
-            /*
-            gifPrev.SetActive(true);
-            //temp shrink quasiGif for fun
-            originalGifPrevScale = gifPrev.transform.localScale;
-            gifPrev.transform.localScale = new Vector3(.5f,.5f,1f);
-            */
+            
         });
         Debug.Log("Confirmation screen is active!");
     }
@@ -331,23 +337,6 @@ public class ScreenControl : MonoBehaviour
         Debug.Log("Success screen is active!");
     }
 
-    /* public void showloadingScreen() {
-            loadingScreen.SetActive(true);
-            Debug.Log("Loading screen active!");
-            devMode.SetActive(false);
-            screen0.SetActive(false);
-            screen1.SetActive(false);
-            screen2.SetActive(false);
-            screen3.SetActive(false);
-            screen4.SetActive(false);
-            screen5.SetActive(false);
-            screen6.SetActive(false);
-            screen7.SetActive(false);
-            gifPrev.SetActive(false);
-            backButtonConfirm.SetActive(false);
-            sendEmailButton.SetActive(false);
-    
-    } */
     public void showloadingScreen(Action onShown = null)
 {
     //loadingBar?.ResetBar(); // reset bar to 0 before screen is active
@@ -434,28 +423,11 @@ public class ScreenControl : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
     }
 
-
-    
     public void RunWithLoadingScreen(Action onComplete, Action onStart = null, float delay = 1f)
     {
         StartCoroutine(HandleWithLoadingScreen(onComplete, onStart, delay));
     }
 
-    /* IEnumerator HandleWithLoadingScreen(Action action, Action onComplete = null, float delay = 1f)
-    {
-        showloadingScreen();
-        loadingBar?.IncreaseLoading(1f);
-
-        yield return new WaitForSeconds(delay);
-
-        loadingBar?.CompleteLoading();
-        //loadingScreen.SetActive(false);
-
-        yield return new WaitForEndOfFrame();
-
-        action?.Invoke();
-        onComplete?.Invoke();
-    } */
     IEnumerator HandleWithLoadingScreen(Action actionAfter, Action onComplete = null, float delay = 1f)
     {
         bool screenReady = false;
