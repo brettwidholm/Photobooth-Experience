@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using TMPro;
+using System.Collections;
 
 public class Webcam : MonoBehaviour
 {
@@ -25,6 +26,8 @@ public class Webcam : MonoBehaviour
     private Transform currentScreen; 
 
     public PathGetter getter;
+    private bool hasTakenFinalPhoto = false;
+
 
     void Awake()
     {
@@ -153,9 +156,16 @@ public class Webcam : MonoBehaviour
         }
         else{
             messageText.enabled = true;
-            if (state > 3){
+            /* if (state > 3){
                 screenControl.ShowScreen4();
-            }
+                Debug.Log("Screen 4 activated via webcam:/.");
+            } */
+                    if (state > 3)
+                        {
+                            StartCoroutine(TriggerScreen4WithLoading());
+                            enabled = false; // disable further Update loop once done
+                             return;// exit early
+                        }
             
             timerText.text = $"{programTime:F0}";
             programTime -= Time.deltaTime;
@@ -185,11 +195,13 @@ public class Webcam : MonoBehaviour
                 Photo2();
                 TakePhoto();
             }
-            else if ((state == 3) && (programTime < 0.0f)){
+            else if ((state == 3) && (programTime < 0.0f) && !hasTakenFinalPhoto){
+                hasTakenFinalPhoto = true;  // ✅ Prevent re-trigger
                 screenControl.Flash();
                 Photo3();
                 TakePhoto();
             }
+
         }
     }
 
@@ -370,9 +382,24 @@ public class Webcam : MonoBehaviour
 {
     if (webcamTexture != null && webcamTexture.isPlaying)
     {
+        
+        screenControl.websosa.SetActive(false); // Hide the webcam feed
         webcamTexture.Stop();
         Debug.Log("✅ Webcam feed stopped manually.");
     }
+
+}
+
+    private IEnumerator TriggerScreen4WithLoading()
+{
+    Debug.Log("Triggering Screen 4 with loading screen");
+    yield return null; // optional small delay to let last photo process
+
+    
+        screenControl.giffy.ConvertImagesToGif();
+        screenControl.loader.LoadSprites();
+        screenControl.RunWithLoadingScreen(() => screenControl.ShowScreen4(), null, 3.0f);
+        StopWebcamFeed(); // Stop the webcam feed after taking the last photo
 
 }
 }

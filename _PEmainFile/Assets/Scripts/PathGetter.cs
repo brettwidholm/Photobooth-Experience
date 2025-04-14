@@ -1,6 +1,6 @@
-using UnityEngine;using System.Diagnostics;
-using System.IO;
 using UnityEngine;
+using System.Diagnostics;
+using System.IO;
 using System.Collections;
 public class PathGetter : MonoBehaviour
 {

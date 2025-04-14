@@ -9,7 +9,6 @@ using System.IO;
 public class EmailController : MonoBehaviour
 {
     private int counter = 0;
-    private SpriteRenderer spriteRenderer;
     public TMP_InputField emailInputField;
     public TMP_InputField firstNameInputField;
     public TMP_InputField lastNameInputField;
@@ -20,7 +19,6 @@ public class EmailController : MonoBehaviour
     private string userEmail = "";
     private string userFirstName = "";
     private string userLastName = "";
-    private Camera mainCamera;
 
     public TextMeshProUGUI invalidText;
     public TextMeshProUGUI confirmationText;
@@ -34,8 +32,6 @@ public class EmailController : MonoBehaviour
     void Start()
     {
        gifFilePath = Path.Combine(getter.getPath(), "gif\\rad.gif"); // Path to the GIF file
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        mainCamera = Camera.main;
 
         startButton.onClick.AddListener(OnStartButtonClick);
         confirmButton.onClick.AddListener(OnConfirmButtonClick);

@@ -121,6 +121,7 @@ public class ScreenControl : MonoBehaviour
             flash.SetActive(false);
             flashTime = 0.3f;
         }
+        
 
     }
 
@@ -231,8 +232,8 @@ public class ScreenControl : MonoBehaviour
 
     public void ShowScreen4(){//Preview GIF Screen
         
-        giffy.ConvertImagesToGif();
-        loader.LoadSprites();
+        /* giffy.ConvertImagesToGif();
+        loader.LoadSprites(); */
             
         transitionOverlay.FadeTransition(() => {
             devMode.SetActive(false);
@@ -245,6 +246,10 @@ public class ScreenControl : MonoBehaviour
             screen6.SetActive(false);
             screen7.SetActive(false);
             websosa.SetActive(false);
+            
+
+            loadingScreen.SetActive(false);
+            Debug.Log("Loading screen deactivated");
             gifPrev.SetActive(true);
 
             emailEntryBox.SetActive(false);
@@ -481,6 +486,12 @@ public class ScreenControl : MonoBehaviour
         RunWithLoadingScreen(() => ShowScreen2(), null, 3.0f);
     }
 
-    
+/*     public void ShowScreen4_WithLoading()
+    {
+        giffy.ConvertImagesToGif();
+        loader.LoadSprites();
+        RunWithLoadingScreen(() => ShowScreen4(), null, 3.0f);
+    }
+     */
 }
 

@@ -2,6 +2,8 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
+using System.Collections; // ✅ THIS is required for IEnumerator
+
 public class PhotoTime : MonoBehaviour
 {
     public int state = 0;
@@ -64,11 +66,15 @@ public class PhotoTime : MonoBehaviour
             programTime = 5.0f;
         }
     }
-    public void Update()
+   /*  public void Update()
     {
-        if (state > 3){
-            screenControl.ShowScreen4();
-        }
+        if (state > 3)
+{
+    StartCoroutine(TriggerScreen4WithLoading());
+    enabled = false; // disable further Update loop once done
+    return; // exit early
+}
+
         
         timerText.text = $"{programTime:F0}";
         programTime -= Time.deltaTime;
@@ -100,6 +106,9 @@ public class PhotoTime : MonoBehaviour
             webby.TakePhoto();
         }
     }
+ */
+
+
 
     public void UpdateScreenReference(){
         foreach (Transform screen in screenControl.transform)
