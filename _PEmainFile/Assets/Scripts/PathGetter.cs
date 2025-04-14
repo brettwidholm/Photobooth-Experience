@@ -1,6 +1,6 @@
-using UnityEngine;using System.Diagnostics;
-using System.IO;
 using UnityEngine;
+using System.Diagnostics;
+using System.IO;
 using System.Collections;
 public class PathGetter : MonoBehaviour
 {
@@ -9,7 +9,6 @@ public class PathGetter : MonoBehaviour
     private string photo;
     private string gif;
     public string folderPath;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Awake()
     {

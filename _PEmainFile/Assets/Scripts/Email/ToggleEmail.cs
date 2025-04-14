@@ -34,8 +34,6 @@ public class EmailController : MonoBehaviour
     void Start()
     {
         gifFilePath = Path.Combine(getter.getPath(), "gif\\rad.gif");
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        mainCamera = Camera.main;
 
         startButton.onClick.AddListener(OnStartButtonClick);
         confirmButton.onClick.AddListener(OnConfirmButtonClick);
@@ -137,6 +135,56 @@ public class EmailController : MonoBehaviour
     }
 
     void SendEmail(string recipientEmail, string firstName, string lastName)
+{
+    string senderEmail = "boothphoto57@gmail.com";
+    string senderPassword = "msfu xycd qnwz hilv";
+
+    try
+    {
+        using (MailMessage mail = new MailMessage())
+        {
+            mail.From = new MailAddress(senderEmail);
+            mail.To.Add(recipientEmail);
+
+            // Set the subject
+            mail.Subject = string.IsNullOrWhiteSpace(firstName) && string.IsNullOrWhiteSpace(lastName)
+                ? "Your College of Charleston GIF!"
+                : $"Hi {firstName} {lastName}, here’s your College of Charleston GIF!";
+
+            // Set plain text fallback
+            mail.Body = "Hey there, here's your personalized event GIF! Thanks for stopping by – we hope you had fun!";
+            mail.IsBodyHtml = true;
+
+            // Add the HTML body
+            AlternateView htmlBody = EmailTemplate.GetHtmlBody(firstName, lastName, gifFilePath);
+            mail.AlternateViews.Add(htmlBody);
+
+            // Add the GIF attachment
+            using (Attachment gifAttachment = new Attachment(gifFilePath))
+            {
+                mail.Attachments.Add(gifAttachment);
+
+                // Configure the SMTP client
+                using (SmtpClient smtpServer = new SmtpClient("smtp.gmail.com"))
+                {
+                    smtpServer.Port = 587;
+                    smtpServer.Credentials = new NetworkCredential(senderEmail, senderPassword) as ICredentialsByHost;
+                    smtpServer.EnableSsl = true;
+
+                    // Send the email
+                    smtpServer.Send(mail);
+                    Debug.Log("Email sent successfully to " + recipientEmail);
+                }
+            }
+        }
+    }
+    catch (System.Exception e)
+    {
+        Debug.LogError("Failed to send email: " + e.Message);
+    }
+}
+/*
+    void SendEmail(string recipientEmail, string firstName, string lastName)
     {
         string senderEmail = "boothphoto57@gmail.com";
         string senderPassword = "msfu xycd qnwz hilv";
@@ -170,6 +218,7 @@ public class EmailController : MonoBehaviour
             Debug.LogError("Failed to send email: " + e.Message);
         }
     }
+    */
 
     void UpdateUI()
     {
@@ -217,7 +266,7 @@ public static class EmailTemplate
                 <h2>College of Charleston</h2>
                 <p style='font-size: 18px;'>Hey {(string.IsNullOrWhiteSpace(firstName) ? "there" : firstName)}, here's your personalized event GIF!</p>
                 <p style='font-size: 16px;'>Thanks for stopping by – we hope you had fun!</p>
-                <p style='font-size: 16px;'>Don't forget to tag us with <strong>#CougarPride</strong> when you share your GIF.</p>
+                <p style='font-size: 16px;'>Do not forget to tag us with <strong>#CougarPride</strong> when you share your GIF.</p>
             </div>
         </body>";
 

@@ -8,7 +8,7 @@ public class Webcam : MonoBehaviour
     public RawImage webby;
     private string filePath; 
 
-    public string name = "photo";
+    public new string name = "photo";
 
     public string savedPath;
     
