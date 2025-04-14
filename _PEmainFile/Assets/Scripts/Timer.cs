@@ -13,7 +13,7 @@ public class Timer : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("GO GO GO!!!!");
+        
         UpdateScreenReference(); // Find the active screen at startup
 
         timerText.text = $"Timer: {programTime:F0}";

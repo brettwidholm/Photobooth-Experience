@@ -8,7 +8,7 @@ public class Webcam : MonoBehaviour
     public RawImage webby;
     private string filePath; 
 
-    public string name = "photo";
+    public new string name = "photo";
 
     public string savedPath;
     
@@ -28,9 +28,6 @@ public class Webcam : MonoBehaviour
 
     void Awake()
     {
-        
-
-
         try
         {
             WebCamDevice[] devices = WebCamTexture.devices;
@@ -47,7 +44,6 @@ public class Webcam : MonoBehaviour
                     }
                 }
             }
-            
             //STANDARD LAPTOP WEBCAM CONFIG
             //webcamTexture = new WebCamTexture();
 
@@ -55,7 +51,7 @@ public class Webcam : MonoBehaviour
             //webcamTexture = new WebCamTexture("Surface Camera Front", 1280, 720, 30);
             //Trying to make it detect whether rotation is needed
 
-            Debug.Log($"Camera Name: {webcamTexture.deviceName}  Default Rotation: {webcamTexture.videoRotationAngle}");
+            /* Debug.Log($"Camera Name: {webcamTexture.deviceName}  Default Rotation: {webcamTexture.videoRotationAngle}");
 
             webby.texture = webcamTexture;
             webby.material.mainTexture = webcamTexture;
@@ -74,7 +70,7 @@ public class Webcam : MonoBehaviour
             {
                 float offsetY = (1f / aspectRatio - 1f) / 2f;
                 webby.uvRect = new Rect(0f, offsetY, 1f, aspectRatio);
-            }
+            } */
         }
         catch{
             Debug.LogWarning("Preferred camera not found. Falling back to device list.");
@@ -86,7 +82,7 @@ public class Webcam : MonoBehaviour
     {
         filePath = Path.Combine(getter.getPath(), "Photos");
         Debug.Log("File path: " + filePath);
-        Debug.Log("GO GO GO!!!!");
+        
         UpdateScreenReference(); // Find the active screen at startup
 
         timerText.text = $"{programTime:F0}";
@@ -146,12 +142,13 @@ public class Webcam : MonoBehaviour
         if(!(screenControl.IsScreenActive("Photo Capture")) ){
             messageText.enabled = false;
             programTime = 5.0f;
-        if(screenControl.IsScreenActive("Tap to Begin Screen")){
+
+        /* if(screenControl.IsScreenActive("Tap to Begin Screen")){
             webcamTexture.Play();
             }
         else{
             webcamTexture.Stop(); //ask team do we really want camera off????
-            }
+            } */
             
         }
         else{
@@ -308,26 +305,10 @@ public class Webcam : MonoBehaviour
         int fallbackIndex = 0; // Start with the first, or read from file
 
         webcamTexture = new WebCamTexture(devices[fallbackIndex].name, 1280, 720, 30);
-        webby.texture = webcamTexture;
-        webby.material.mainTexture = webcamTexture;
+        StartWebcamFeed(); // Start the webcam feed with the selected camera
+        Debug.Log($"Fallback camera selected: {devices[fallbackIndex].name}");
 
-        webcamTexture.Play();
-
-        AdjustPreviewOrientation();
-        float aspectRatio = (float)webcamTexture.width / webcamTexture.height;
-
-        if (aspectRatio > 1f)
-        {
-            float offsetX = (aspectRatio - 1f) / 2f / aspectRatio;
-            webby.uvRect = new Rect(offsetX, 0f, 1f / aspectRatio, 1f);
-        }
-        else
-        {
-            float offsetY = (1f / aspectRatio - 1f) / 2f;
-            webby.uvRect = new Rect(0f, offsetY, 1f, aspectRatio);
-        }
-
-            }
+    }
 
         void AdjustPreviewOrientation()
         {
@@ -361,5 +342,37 @@ public class Webcam : MonoBehaviour
             return square;
         }
 
+    public void StartWebcamFeed()
+{
+        Debug.Log($"Camera Name: {webcamTexture.deviceName}  Default Rotation: {webcamTexture.videoRotationAngle}");
 
+            webby.texture = webcamTexture;
+            webby.material.mainTexture = webcamTexture;
+
+            webcamTexture.Play();
+            //
+            AdjustPreviewOrientation();
+            float aspectRatio = (float)webcamTexture.width / webcamTexture.height;
+
+            if (aspectRatio > 1f)
+            {
+                float offsetX = (aspectRatio - 1f) / 2f / aspectRatio;
+                webby.uvRect = new Rect(offsetX, 0f, 1f / aspectRatio, 1f);
+            }
+            else
+            {
+                float offsetY = (1f / aspectRatio - 1f) / 2f;
+                webby.uvRect = new Rect(0f, offsetY, 1f, aspectRatio);
+            }
+
+}
+    public void StopWebcamFeed()
+{
+    if (webcamTexture != null && webcamTexture.isPlaying)
+    {
+        webcamTexture.Stop();
+        Debug.Log("✅ Webcam feed stopped manually.");
+    }
+
+}
 }

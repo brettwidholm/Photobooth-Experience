@@ -21,6 +21,7 @@ public class ScreenControl : MonoBehaviour
     public GameObject screen6; //Confirmation Screen
     public GameObject screen7; //Success Screen
     public GameObject loadingScreen; //Loading screen
+    public LoadingBarScript loadingBar;
 
     public TransitionOverlay transitionOverlay; //fade to white
     
@@ -29,6 +30,7 @@ public class ScreenControl : MonoBehaviour
     //webcam related:
     //-------------------------------------------------
     public GameObject websosa; //webcam
+    public Webcam webcamScript;
     public GameObject flash;  //camera flash
     public bool flashOn = false;
     public float flashTime = 0.3f;
@@ -181,23 +183,34 @@ public class ScreenControl : MonoBehaviour
         Debug.Log("instructions screen is active!");
     }
 
-    public void ShowScreen2(){//Tap to begin screen
-        transitionOverlay.FadeTransition(() => {
-            devMode.SetActive(false);
-            screen0.SetActive(false);
-            screen1.SetActive(false);
-            screen2.SetActive(true);
-            screen3.SetActive(false);
-            screen4.SetActive(false);
-            screen5.SetActive(false);
-            screen6.SetActive(false);
-            screen7.SetActive(false);
-            websosa.SetActive(true);
+        public void ShowScreen2()
+    {
+            // Any setup logic before camera activation can go here
+            Debug.Log("showscreen2() called");
+            
+            transitionOverlay.FadeTransition(() => {
+                websosa.SetActive(true);
+                
+                devMode.SetActive(false);
+                screen0.SetActive(false);
+                screen1.SetActive(false);
+                screen2.SetActive(true);
 
-            backButtonInstructions.SetActive(false);
-    });
-        Debug.Log("tap to begin screen is active!");
-    }
+            loadingScreen.SetActive(false);
+            Debug.Log("Loading screen deactivated");
+
+                screen3.SetActive(false);
+                screen4.SetActive(false);
+                screen5.SetActive(false);
+                screen6.SetActive(false);
+                screen7.SetActive(false);
+
+                backButtonInstructions.SetActive(false);
+            });
+
+            Debug.Log("tap to begin screen is active!");
+        }
+    
 
     public void ShowScreen3(){//Photo Capture
             devMode.SetActive(false);
@@ -219,7 +232,7 @@ public class ScreenControl : MonoBehaviour
     public void ShowScreen4(){//Preview GIF Screen
         
         giffy.ConvertImagesToGif();
-                    loader.LoadSprites();
+        loader.LoadSprites();
             
         transitionOverlay.FadeTransition(() => {
             devMode.SetActive(false);
@@ -313,9 +326,11 @@ public class ScreenControl : MonoBehaviour
         Debug.Log("Success screen is active!");
     }
 
-    public void showloadingScreen() {
-        devMode.SetActive(false);
-          screen0.SetActive(false);
+    /* public void showloadingScreen() {
+            loadingScreen.SetActive(true);
+            Debug.Log("Loading screen active!");
+            devMode.SetActive(false);
+            screen0.SetActive(false);
             screen1.SetActive(false);
             screen2.SetActive(false);
             screen3.SetActive(false);
@@ -323,12 +338,37 @@ public class ScreenControl : MonoBehaviour
             screen5.SetActive(false);
             screen6.SetActive(false);
             screen7.SetActive(false);
-            loadingScreen.SetActive(true);
             gifPrev.SetActive(false);
             backButtonConfirm.SetActive(false);
             sendEmailButton.SetActive(false);
-        
-    }
+    
+    } */
+    public void showloadingScreen(Action onShown = null)
+{
+    //loadingBar?.ResetBar(); // reset bar to 0 before screen is active
+
+    transitionOverlay.FadeTransition(() =>
+    {
+        loadingScreen.SetActive(true);
+
+        // Deactivate other screens
+        devMode.SetActive(false);
+        screen0.SetActive(false);
+        screen1.SetActive(false);
+        screen2.SetActive(false);
+        screen3.SetActive(false);
+        screen4.SetActive(false);
+        screen5.SetActive(false);
+        screen6.SetActive(false);
+        screen7.SetActive(false);
+        gifPrev.SetActive(false);
+        backButtonConfirm.SetActive(false);
+        sendEmailButton.SetActive(false);
+
+        onShown?.Invoke(); // kick off the rest AFTER fade and loading screen is visible
+    });
+}
+
 
     public bool IsScreenActive(string screenName){
         GameObject screen = GameObject.Find(screenName);
@@ -389,6 +429,57 @@ public class ScreenControl : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
     }
 
+
+    
+    public void RunWithLoadingScreen(Action onComplete, Action onStart = null, float delay = 1f)
+    {
+        StartCoroutine(HandleWithLoadingScreen(onComplete, onStart, delay));
+    }
+
+    /* IEnumerator HandleWithLoadingScreen(Action action, Action onComplete = null, float delay = 1f)
+    {
+        showloadingScreen();
+        loadingBar?.IncreaseLoading(1f);
+
+        yield return new WaitForSeconds(delay);
+
+        loadingBar?.CompleteLoading();
+        //loadingScreen.SetActive(false);
+
+        yield return new WaitForEndOfFrame();
+
+        action?.Invoke();
+        onComplete?.Invoke();
+    } */
+    IEnumerator HandleWithLoadingScreen(Action actionAfter, Action onComplete = null, float delay = 1f)
+    {
+        bool screenReady = false;
+
+        showloadingScreen(() => {
+            screenReady = true;
+        });
+
+        yield return new WaitUntil(() => screenReady); // wait for fade to complete
+
+        loadingBar?.IncreaseLoading(1f); // now it's safe to animate
+
+        yield return new WaitForSeconds(delay); // let loading bar run
+
+        //loadingBar?.CompleteLoading(); // force fill if needed
+        //loadingScreen.SetActive(false);
+        yield return new WaitForEndOfFrame();
+
+        actionAfter?.Invoke();
+        onComplete?.Invoke();
+    }
+
+
+        // Call this from Button in Inspector to go to Screen2 with a loading screen
+    public void ShowScreen2_WithLoading()
+    {
+        webcamScript.StartWebcamFeed();
+        RunWithLoadingScreen(() => ShowScreen2(), null, 3.0f);
+    }
 
     
 }

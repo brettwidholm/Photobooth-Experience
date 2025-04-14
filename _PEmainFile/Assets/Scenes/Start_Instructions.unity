@@ -874,11 +874,11 @@ GameObject:
   - component: {fileID: 351474931}
   m_Layer: 5
   m_Name: Loading Screen
-  m_TagString: CANVAS
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &351474930
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1579,23 +1579,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1803259332}
         m_TargetAssemblyTypeName: ScreenControl, Assembly-CSharp
-        m_MethodName: ShowScreen2
+        m_MethodName: ShowScreen2_WithLoading
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ScreenControl, Assembly-CSharp
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -6976,8 +6964,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 556950882}
   - {fileID: 351474930}
+  - {fileID: 556950882}
   - {fileID: 4650439982792784914}
   - {fileID: 1047170502}
   - {fileID: 1899984156}
@@ -7330,8 +7318,10 @@ MonoBehaviour:
   screen6: {fileID: 333296596}
   screen7: {fileID: 1358171268}
   loadingScreen: {fileID: 351474929}
+  loadingBar: {fileID: 1804832948}
   transitionOverlay: {fileID: 807192890}
   websosa: {fileID: 1820251354}
+  webcamScript: {fileID: 1338003118}
   flash: {fileID: 600485553}
   flashOn: 0
   flashTime: 0.3
@@ -7414,6 +7404,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6919049510745679445, guid: 00b8852cead8c475cbc43dfda1d244f6, type: 3}
+      propertyPath: slider
+      value: 
+      objectReference: {fileID: 1804832949}
     - target: {fileID: 7115139949250195562, guid: 00b8852cead8c475cbc43dfda1d244f6, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -7496,11 +7490,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7839435722405261754, guid: 00b8852cead8c475cbc43dfda1d244f6, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7839435722405261754, guid: 00b8852cead8c475cbc43dfda1d244f6, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8757096481617235650, guid: 00b8852cead8c475cbc43dfda1d244f6, type: 3}
       propertyPath: m_Sprite
@@ -7520,6 +7514,28 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7115139949250195562, guid: 00b8852cead8c475cbc43dfda1d244f6, type: 3}
   m_PrefabInstance: {fileID: 1804832946}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1804832948 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6919049510745679445, guid: 00b8852cead8c475cbc43dfda1d244f6, type: 3}
+  m_PrefabInstance: {fileID: 1804832946}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2e4f2426e459450498c235a35cf78d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1804832949 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5688766674612328508, guid: 00b8852cead8c475cbc43dfda1d244f6, type: 3}
+  m_PrefabInstance: {fileID: 1804832946}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1820251354
 GameObject:
   m_ObjectHideFlags: 0

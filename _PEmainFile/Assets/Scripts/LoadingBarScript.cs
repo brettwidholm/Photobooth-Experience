@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class LoadingBarScript : MonoBehaviour
 {
-    private Slider slider;
+    public Slider slider;
 
     public float loadingDone = 0.0005f;
     private float loadProgress = 0;
@@ -33,6 +33,18 @@ public class LoadingBarScript : MonoBehaviour
     // loading progress
     public void IncreaseLoading (float newProgress)
     {
-       loadProgress = slider.value + newProgress;
+       //loadProgress = slider.value + newProgress;
+       loadProgress = Mathf.Clamp(slider.value + newProgress, 0f, 1f);
     }
+/*     public void CompleteLoading()
+{
+    slider.value = 1f;
+}
+
+    public void ResetBar()
+{
+    slider.value = 0;
+    //loadProgress = 0;
+}
+ */
 }
