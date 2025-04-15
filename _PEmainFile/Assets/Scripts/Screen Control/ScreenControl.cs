@@ -20,6 +20,7 @@ public class ScreenControl : MonoBehaviour
     public GameObject screen5; //Info Screen
     public GameObject screen6; //Confirmation Screen
     public GameObject screen7; //Success Screen
+    public GameObject screen8; //privacy policy
     public GameObject loadingScreen; //Loading screen
     public LoadingBarScript loadingBar;
 
@@ -164,6 +165,7 @@ private IEnumerator FlashRoutine()
             flash.SetActive(false);
             gifPrev.SetActive(false);
             emailEntryBox.SetActive(false);
+            screen8.SetActive(false);
 
             backButtonInstructions.SetActive(false); //sets all necessary button to be turned off
             backButtonInfo.SetActive(false);
@@ -193,6 +195,26 @@ private IEnumerator FlashRoutine()
         });
         Debug.Log("instructions screen is active!");
     }
+
+    public void Showscreen8(){//Privacy Policy
+        transitionOverlay.FadeTransition(() => {
+            devMode.SetActive(false);
+            screen0.SetActive(false);
+            screen1.SetActive(false);
+            screen2.SetActive(false);
+            screen3.SetActive(false);
+            screen4.SetActive(false);
+            screen5.SetActive(false);
+            screen6.SetActive(false);
+            screen7.SetActive(false);
+            screen8.SetActive(true);
+            websosa.SetActive(false);
+
+            backButtonInstructions.SetActive(true);
+        });
+        Debug.Log("Privacy Policy screen is active!");
+    }
+
 
         public void ShowScreen2()
     {
