@@ -24,6 +24,8 @@ public class ScreenControl : MonoBehaviour
     public GameObject loadingScreen; //Loading screen
     public LoadingBarScript loadingBar;
 
+    public GameObject framesScreen; //frames Screen
+
     public TransitionOverlay transitionOverlay; //fade to white
     public GameObject timerPanel;
     
@@ -66,6 +68,9 @@ public class ScreenControl : MonoBehaviour
     public GameObject firstNameEntryBox; 
     public GameObject lastNameEntryBox; 
 
+    public GameObject forwardFrame; //button for frames selction
+    public GameObject backFrame; //button for frames selction
+
    
 
     void Start()
@@ -92,6 +97,10 @@ public class ScreenControl : MonoBehaviour
         nextButtonInfo.SetActive(false);
         sendEmailButton.SetActive(false);
         emailEntryBox.SetActive(false);
+
+        framesScreen.SetActive(false); //frames Screen
+        forwardFrame.SetActive(false);
+        backFrame.SetActive(false);
         // Showscreen0(); //starts only showing screen0
         
     }
@@ -152,6 +161,11 @@ private IEnumerator FlashRoutine()
             screen5.SetActive(false);
             screen6.SetActive(false);
             screen7.SetActive(false);
+
+            
+            framesScreen.SetActive(false); //frames Screen
+            forwardFrame.SetActive(false);
+            backFrame.SetActive(false);
         });
         Debug.Log("Dev mode is active!");
     }
@@ -179,6 +193,10 @@ private IEnumerator FlashRoutine()
             nextButtonInfo.SetActive(false);
             sendEmailButton.SetActive(false);
             emailEntryBox.SetActive(false);
+
+            framesScreen.SetActive(false); //frames Screen
+            forwardFrame.SetActive(false);
+            backFrame.SetActive(false);
         });
         Debug.Log("Start screen is active!");
     }
@@ -198,6 +216,10 @@ private IEnumerator FlashRoutine()
             
 
             backButtonInstructions.SetActive(true);
+
+            framesScreen.SetActive(false); //frames Screen
+            forwardFrame.SetActive(false);
+            backFrame.SetActive(false);
         });
         Debug.Log("instructions screen is active!");
     }
@@ -217,8 +239,40 @@ private IEnumerator FlashRoutine()
             websosa.SetActive(false);
 
             backButtonInstructions.SetActive(true);
+
+            framesScreen.SetActive(false); //frames Screen
+            forwardFrame.SetActive(false);
+            backFrame.SetActive(false);
         });
         Debug.Log("Privacy Policy screen is active!");
+    }
+
+        public void ShowFramesScreen(){
+            transitionOverlay.FadeTransition(() => {
+                screen0.SetActive(false);
+                screen1.SetActive(false);
+                screen2.SetActive(false);
+                screen3.SetActive(false);
+                screen4.SetActive(false);
+                screen5.SetActive(false);
+                screen6.SetActive(false);
+                screen7.SetActive(false);
+
+                backButtonInstructions.SetActive(false);
+
+                framesScreen.SetActive(true);
+
+                forwardFrame.SetActive(true);
+                backFrame.SetActive(true);
+     //           frame1Selec.SetActive(true);
+     //           frame2Selec.SetActive(true);
+    //            frame3Selec.SetActive(true);
+  //              frame4Selec.SetActive(true);
+            });
+            Debug.Log("SWAMP IZZO");
+            Debug.Log("CARTI");
+            Debug.Log("HE'S COMIN");
+            Debug.Log("I AM THE MUSIC");
     }
 
 
@@ -245,6 +299,10 @@ private IEnumerator FlashRoutine()
                 screen7.SetActive(false);
 
                 backButtonInstructions.SetActive(false);
+
+                framesScreen.SetActive(false); //frames Screen
+                forwardFrame.SetActive(false);
+                backFrame.SetActive(false);
             });
 
             Debug.Log("tap to begin screen is active!");
@@ -378,6 +436,7 @@ public void showloadingScreen(Action onShown = null, bool useFade = true)
         loadingScreen.SetActive(true);
 
          // Hide reset button on loading screen
+        
         devMode.SetActive(false);
         screen0.SetActive(false);
         screen1.SetActive(false);
@@ -390,6 +449,11 @@ public void showloadingScreen(Action onShown = null, bool useFade = true)
         gifPrev.SetActive(false);
         backButtonConfirm.SetActive(false);
         sendEmailButton.SetActive(false);
+
+        backButtonConfirm.SetActive(false);
+        nextButtonInfo.SetActive(false);
+        framesScreen.SetActive(false);
+
 
         onShown?.Invoke();
     };

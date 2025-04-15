@@ -27,6 +27,15 @@ public class Webcam : MonoBehaviour
 
     public PathGetter getter;
 
+    Texture2D frame;
+
+    public bool frameExist = false;
+
+    public Clicker1 c1;
+    public Clicker2 c2;
+    public Clicker3 c3;
+    public Clicker4 c4;
+
     void Awake()
     {
         try
@@ -68,6 +77,13 @@ public class Webcam : MonoBehaviour
         public void Photo0(){
         messageText.text = "Cool";
         messageText.enabled = true;
+
+        if(!(c1.getCurrentFrame().Equals("None"))){
+            frameExist = true;
+            frame = LoadTexture(c1.getCurrentFrame());
+
+
+        }
         
         if(programTime <= 0.0f){
           //  messageText.text = "click";
@@ -80,6 +96,13 @@ public class Webcam : MonoBehaviour
     public void Photo1(){
        messageText.text = "Nice";
    //     messageText.enabled = true;
+
+        if(!(c2.getCurrentFrame().Equals("None"))){
+            frameExist = true;
+            frame = LoadTexture(c2.getCurrentFrame());
+
+
+        }
         
         if(programTime <= 0.0f){
      //       messageText.text = "click";
@@ -92,6 +115,12 @@ public class Webcam : MonoBehaviour
     public void Photo2(){
        messageText.text = "Rad";
         //messageText.enabled = true;
+        if(!(c3.getCurrentFrame().Equals("None"))){
+            frameExist = true;
+            frame = LoadTexture(c3.getCurrentFrame());
+
+
+        }
         
         if(programTime <= 0.0f){
            // messageText.text = "click";
@@ -102,6 +131,13 @@ public class Webcam : MonoBehaviour
     }
 
     public void Photo3(){
+
+        if(!(c4.getCurrentFrame().Equals("None"))){
+            frameExist = true;
+            frame = LoadTexture(c4.getCurrentFrame());
+
+
+        }
       //  messageText.enabled = true;    
         if(programTime <= 0){
       //      messageText.text = "click";
@@ -110,7 +146,6 @@ public class Webcam : MonoBehaviour
             programTime = 5.0f;
         }
     }
-
     public void Update()
     {
         if(!(screenControl.IsScreenActive("Photo Capture")) ){
@@ -217,15 +252,48 @@ public class Webcam : MonoBehaviour
 
         photo.Apply();
 
+/*
+        // Create rotated texture 90deg 
+        Texture2D photo = new Texture2D(height, width);
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                photo.SetPixel(height - y - 1, x, pixels[y * width + x]);
+            }
+        }
+
+        photo.Apply();
+*/
         // Crop to center square
         Texture2D square = CropToSquare(photo);
 
-        // Save to PNG
-        byte[] bytes = square.EncodeToPNG();
-        savedPath = Path.Combine(filePath, newName);
-        File.WriteAllBytes(savedPath, bytes);
+        if(frameExist){
+            Texture2D finalPhoto = ApplyCircularMask(square);
+            Texture2D finalphotofr = MergeImages(finalPhoto, frame);
+            
+            byte[] bytes = finalphotofr.EncodeToPNG();
+            savedPath = Path.Combine(filePath, newName);
+            File.WriteAllBytes(savedPath, bytes);
 
-        Debug.Log("✅ Photo saved at: " + savedPath);
+            Debug.Log("✅ Photo saved at: " + savedPath);
+
+        }
+        else{
+            byte[] bytes = square.EncodeToPNG();
+            savedPath = Path.Combine(filePath, newName);
+            File.WriteAllBytes(savedPath, bytes);
+
+            Debug.Log("✅ Photo saved at: " + savedPath);
+
+        }
+
+        frameExist = false;
+
+        
+
+        // Save to PNG
+
 
     }
 
@@ -300,6 +368,96 @@ public class Webcam : MonoBehaviour
             square.Apply();
             return square;
         }
+
+public Texture2D ApplyCircularMask(Texture2D source)
+{
+    int width = source.width;  // 1500
+    int height = source.height; // 1500
+    Texture2D result = new Texture2D(width, height, TextureFormat.RGBA32, false);
+
+    int centerX = width / 2;
+    int centerY = height / 2;
+    int radius = (width - 200) / 2; // Main visible radius
+    int featherWidth = 50; // Width of the feathered edge
+
+    float maxDistance = radius + featherWidth;
+
+    for (int x = 0; x < width; x++)
+    {
+        for (int y = 0; y < height; y++)
+        {
+            float dx = x - centerX;
+            float dy = y - centerY;
+            float distance = Mathf.Sqrt(dx * dx + dy * dy);
+
+            Color pixel = source.GetPixel(x, y);
+
+            if (distance > maxDistance)
+            {
+                // Fully transparent
+                pixel.a = 0;
+            }
+            else if (distance > radius)
+            {
+                // Feather alpha based on distance
+                float t = (distance - radius) / featherWidth; // 0 to 1
+                pixel.a *= 1 - t;
+            }
+
+            result.SetPixel(x, y, pixel);
+        }
+    }
+
+    result.Apply();
+    return result;
+}
+
+
+    Texture2D LoadTexture(string path)
+{
+    byte[] fileData = File.ReadAllBytes(path);
+    Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+    texture.LoadImage(fileData);
+    return texture;
+}
+
+Texture2D MergeImages(Texture2D foreground, Texture2D background)
+{
+    int width = foreground.width;
+    int height = foreground.height;
+
+    // Create a RenderTexture for resizing
+    RenderTexture rt = new RenderTexture(width, height, 32);
+    RenderTexture.active = rt;
+    Graphics.Blit(background, rt);
+
+    // Convert RenderTexture back to Texture2D
+    Texture2D resizedBackground = new Texture2D(width, height, TextureFormat.RGBA32, false);
+    resizedBackground.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+    resizedBackground.Apply();
+
+    RenderTexture.active = null;
+    rt.Release();
+
+    // Create final merged image
+    Texture2D result = new Texture2D(width, height, TextureFormat.RGBA32, false);
+
+    for (int x = 0; x < width; x++)
+    {
+        for (int y = 0; y < height; y++)
+        {
+            Color fgPixel = foreground.GetPixel(x, y);
+            Color bgPixel = resizedBackground.GetPixel(x, y);
+
+            // Blend: Use the foreground pixel if not transparent, otherwise use background
+            Color finalPixel = Color.Lerp(bgPixel, fgPixel, fgPixel.a);
+            result.SetPixel(x, y, finalPixel);
+        }
+    }
+
+    result.Apply();
+    return result;
+}
 
     public void StartWebcamFeed()
 {

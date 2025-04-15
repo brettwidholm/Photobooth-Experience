@@ -2,6 +2,7 @@ using UnityEngine;
 
 public static class State
 {
+
     private static int state = 0;
 
     public static void IncrementState()
@@ -20,6 +21,11 @@ public static class State
     public static void StateReset()
     {
         state = 0; //resets state to 0
+    }
+
+    public static void setState(int a)
+    {
+        state = a; //resets state to a
     }
 
     public static int GetState()
