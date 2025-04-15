@@ -98,7 +98,7 @@ public class ScreenControl : MonoBehaviour
             Flash();
         }
 
-        if(IsScreenActive("Start Screen")){
+        if(IsScreenActive("Start Screen") || IsScreenActive("Loading Screen")){
             resetButton.gameObject.SetActive(false);
         }
         else{
@@ -363,10 +363,12 @@ public void showloadingScreen(Action onShown = null, bool useFade = true)
 {
     Action activate = () =>
     {
-        loadingBar?.ResetBar(); // ✅ Reset bar before it becomes visible
+        websosa.SetActive(false);
 
+        loadingBar?.ResetBar(); //  Reset bar before it becomes visible
         loadingScreen.SetActive(true);
 
+         // Hide reset button on loading screen
         devMode.SetActive(false);
         screen0.SetActive(false);
         screen1.SetActive(false);

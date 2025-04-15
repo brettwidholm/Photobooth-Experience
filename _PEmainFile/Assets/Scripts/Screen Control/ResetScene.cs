@@ -18,7 +18,8 @@ public class ResetScene : MonoBehaviour
 } */
 
 public void RestartScene()
-{
+{   
+   
     screenControl.RunWithLoadingScreen(
         onComplete: () => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex),
         onStart: () =>
