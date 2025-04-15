@@ -16,9 +16,11 @@ public class FrameLoaderUI : MonoBehaviour
     public Clicker3 c3; //frame3
     public Clicker4 c4; //frame4
 
+    public PathGetter getter;
+
     void Start()
     {
-        folderPath = @"C:\Users\yosha\OneDrive\Documents\GitHub\Photobooth-Experience\_PEmainFile\Assets\Frames";
+        folderPath = Path.Combine(getter.getPath(), "Frames");
 
         if (rawImage == null)
             rawImage = GetComponent<RawImage>();

@@ -859,6 +859,7 @@ MonoBehaviour:
   c2: {fileID: 408142172}
   c3: {fileID: 1135387732}
   c4: {fileID: 884154904}
+  getter: {fileID: 608491819}
 --- !u!4 &187591589
 Transform:
   m_ObjectHideFlags: 0
