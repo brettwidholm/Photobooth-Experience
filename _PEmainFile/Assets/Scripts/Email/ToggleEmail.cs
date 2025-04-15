@@ -5,10 +5,14 @@ using System.Net;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Net.Mime;
+using System.Collections;
 
 public class EmailController : MonoBehaviour
 {
     private int counter = 0;
+    public bool isSendingEmail = false;
+
     public TMP_InputField emailInputField;
     public TMP_InputField firstNameInputField;
     public TMP_InputField lastNameInputField;
@@ -27,22 +31,24 @@ public class EmailController : MonoBehaviour
     public Button startButton;
 
     public PathGetter getter;
+    public ScreenControl screenControl;
 
 
-    void Start()
-    {
-       gifFilePath = Path.Combine(getter.getPath(), "gif\\rad.gif"); // Path to the GIF file
+void Start(){
 
-        startButton.onClick.AddListener(OnStartButtonClick);
-        confirmButton.onClick.AddListener(OnConfirmButtonClick);
-        yesButton.onClick.AddListener(OnYesButtonClick);
-        noButton.onClick.AddListener(OnNoButtonClick);
+    UnityMainThreadDispatcher.Init();
 
-        emailInputField.onValueChanged.AddListener(delegate { ValidateEmail(); });
-        confirmButton.interactable = false;
-       
-        UpdateUI();
-    }
+    // Now it's safe to access references
+    gifFilePath = Path.Combine(getter.getPath(), "gif\\rad.gif");
+    startButton.onClick.AddListener(OnStartButtonClick);
+    confirmButton.onClick.AddListener(OnConfirmButtonClick);
+    yesButton.onClick.AddListener(OnYesButtonClick);
+    noButton.onClick.AddListener(OnNoButtonClick);
+    emailInputField.onValueChanged.AddListener(delegate { ValidateEmail(); });
+
+    confirmButton.interactable = false;
+    UpdateUI();
+}
 
     void Update()
     {
@@ -137,80 +143,85 @@ public class EmailController : MonoBehaviour
     {
         confirmButton.interactable = IsValidEmail(emailInputField.text.Trim());
     }
-  void SendEmail(string recipientEmail, string firstName, string lastName)
+public void SendEmail(string recipientEmail, string firstName, string lastName)
+{
+    
+    if (isSendingEmail) return;
+
+    isSendingEmail = true;
+
+    screenControl.RunWithLoadingScreen(
+    onComplete: () =>
     {
-        string senderEmail = "boothphoto57@gmail.com";
-        string senderPassword = "msfu xycd qnwz hilv";
-
-        try
-        {
-            MailMessage mail = new MailMessage();
-            mail.From = new MailAddress(senderEmail);
-            mail.To.Add(recipientEmail);
-            if (firstName == "" && lastName == ""){
-                mail.Subject = $"Hello! Here is your GIF!";
-            }
-            else{
-            mail.Subject = $"Hello, {firstName} {lastName}! Here is your GIF!";
-            }
-            mail.Body = "Thank you for participating at our event, enjoy! \n";
-           
-            Attachment gifAttachment = new Attachment(gifFilePath);
-            mail.Attachments.Add(gifAttachment);
-
-            SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
-            smtpServer.Port = 587;
-            smtpServer.Credentials = new NetworkCredential(senderEmail, senderPassword) as ICredentialsByHost;
-            smtpServer.EnableSsl = true;
-           
-            smtpServer.Send(mail);
-            Debug.Log("Email sent successfully to " + recipientEmail);
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError("Failed to send email: " + e.Message);
-        }
-    }
-    /*
-    void SendEmail(string recipientEmail, string firstName, string lastName)
+        screenControl.loadingBar?.CompleteLoading();
+        screenControl.StartCoroutine(WaitThenShowSuccess());
+        isSendingEmail = false;
+    },
+    onStart: () =>
     {
-        yesButton.interactable = false;
-        string senderEmail = "boothphoto57@gmail.com";
-        string senderPassword = "msfu xycd qnwz hilv";
-
-        try
+        // NO manual showloadingScreen here!
+        // Just start your email thread.
+        System.Threading.Thread emailThread = new System.Threading.Thread(() =>
         {
-            MailMessage mail = new MailMessage();
-            mail.From = new MailAddress(senderEmail);
-            mail.To.Add(recipientEmail);
+            string senderEmail = "boothphoto57@gmail.com";
+            string senderPassword = "msfu xycd qnwz hilv";
 
-            if (!(firstName == "" && lastName == "")){
-                mail.Subject = $"Hello, {firstName} {lastName}! Here is your GIF!";
+            try
+            {
+                using (MailMessage mail = new MailMessage())
+                using (Attachment gifAttachment = new Attachment(gifFilePath))
+                {
+                    mail.From = new MailAddress(senderEmail);
+                    mail.To.Add(recipientEmail);
+
+                     // Set the subject
+                    mail.Subject = string.IsNullOrWhiteSpace(firstName) && string.IsNullOrWhiteSpace(lastName)
+                        ? "Your College of Charleston GIF!"
+                        : $"Hi {firstName} {lastName}, here’s your College of Charleston GIF!";
+
+                    // Set plain text fallback
+                    mail.Body = "Hey there, here's your personalized event GIF! Thanks for stopping by – we hope you had fun!";
+                    mail.IsBodyHtml = true;
+
+                    // Add the HTML body
+                    AlternateView htmlBody = EmailTemplate.GetHtmlBody(firstName, lastName, gifFilePath);
+                    mail.AlternateViews.Add(htmlBody);
+                    mail.Attachments.Add(gifAttachment);
+                    using (SmtpClient smtpServer = new SmtpClient("smtp.gmail.com"))
+                    {
+                        smtpServer.Port = 587;
+                        smtpServer.Credentials = new NetworkCredential(senderEmail, senderPassword);
+                        smtpServer.EnableSsl = true;
+                        smtpServer.Send(mail);
+                    }
+                }
+
+                UnityMainThreadDispatcher.Enqueue(() =>
+                {
+                    Debug.Log("✅ Email sent successfully to " + recipientEmail);
+                });
             }
-            else if(firstName != "" && lastName == ""){
-                mail.Subject = $"Hello, {firstName}! Here is your GIF!";
+            catch (System.Exception e)
+            {
+                UnityMainThreadDispatcher.Enqueue(() =>
+                {
+                    Debug.LogError("❌ Failed to send email: " + e.Message);
+                });
             }
+        });
 
-            mail.Body = "Here is your GIF!\n";
-           
-            Attachment gifAttachment = new Attachment(gifFilePath);
-            mail.Attachments.Add(gifAttachment);
+        emailThread.Start();
+    },
+    delay: 2.0f // optional for feel
+);
 
-            SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
-            smtpServer.Port = 587;
-            smtpServer.Credentials = new NetworkCredential(senderEmail, senderPassword) as ICredentialsByHost;
-            smtpServer.EnableSsl = true;
-           
-            smtpServer.Send(mail);
-            Debug.Log("Email sent successfully to " + recipientEmail);
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError("Failed to send email: " + e.Message);
-        }
-        //yesButton.interactable = true;
-    }
-*/
+}
+private IEnumerator WaitThenShowSuccess()
+{
+    yield return new WaitForSeconds(0.5f); // slight delay to let the bar visually "complete"
+    screenControl.ShowScreen7(); // success screen
+}
+
     void UpdateUI()
     {
         emailInputField.gameObject.SetActive(counter == 1);
@@ -238,5 +249,31 @@ public class EmailController : MonoBehaviour
         lastNameInputField.text = "";
         counter = 1;
         UpdateUI();
+    }
+
+    public static class EmailTemplate
+    {
+        public static AlternateView GetHtmlBody(string firstName, string lastName, string gifPath)
+        {
+            LinkedResource logo = new LinkedResource("Assets/Logos/CofC.png", MediaTypeNames.Image.Jpeg)
+            {
+                ContentId = "cofcLogo"
+            };
+
+            string html = $@"
+            <body style='background-color:white; font-family: Arial, sans-serif;'>
+                <div style='text-align: center; margin-top: 30px;'>
+                    <img src='cid:cofcLogo' width='150' />
+                    <h2>College of Charleston</h2>
+                    <p style='font-size: 18px;'>Hey {(string.IsNullOrWhiteSpace(firstName) ? "there" : firstName)}, here's your personalized event GIF!</p>
+                    <p style='font-size: 16px;'>Thanks for stopping by – we hope you had fun!</p>
+                    <p style='font-size: 16px;'>Do not forget to tag us with <strong>#CougarPride</strong> when you share your GIF.</p>
+                </div>
+            </body>";
+
+            AlternateView avHtml = AlternateView.CreateAlternateViewFromString(html, null, MediaTypeNames.Text.Html);
+            avHtml.LinkedResources.Add(logo);
+            return avHtml;
+        }
     }
 }

@@ -36,7 +36,7 @@ public class LoadingBarScript : MonoBehaviour
        //loadProgress = slider.value + newProgress;
        loadProgress = Mathf.Clamp(slider.value + newProgress, 0f, 1f);
     }
-/*     public void CompleteLoading()
+    public void CompleteLoading()
 {
     slider.value = 1f;
 }
@@ -46,5 +46,5 @@ public class LoadingBarScript : MonoBehaviour
     slider.value = 0;
     //loadProgress = 0;
 }
- */
+
 }

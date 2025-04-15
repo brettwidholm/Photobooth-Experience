@@ -336,8 +336,30 @@ public class Webcam : MonoBehaviour
     }
 
 }
+private IEnumerator TriggerScreen4WithLoading()
+{
+    Debug.Log("Triggering Screen 4 with loading screen");
 
-    private IEnumerator TriggerScreen4WithLoading()
+    yield return new WaitForEndOfFrame(); // render flash first
+    screenControl.flash.SetActive(false);
+
+    yield return new WaitForSeconds(0.1f); // tiny delay for comfort
+    StopWebcamFeed();
+
+    // Show loading screen immediately   
+    screenControl.RunWithLoadingScreen(
+        onComplete: () => screenControl.ShowScreen4(),
+        onStart: () => {
+            screenControl.giffy.ConvertImagesToGif();
+            screenControl.loader.LoadSprites();
+        },
+        delay: 3.0f
+    );
+}
+
+
+
+/*     private IEnumerator TriggerScreen4WithLoading()
 {
     Debug.Log("Triggering Screen 4 with loading screen");
     yield return null; // optional small delay to let last photo process
@@ -347,7 +369,7 @@ public class Webcam : MonoBehaviour
         screenControl.loader.LoadSprites();
         screenControl.RunWithLoadingScreen(() => screenControl.ShowScreen4(), null, 3.0f);
         StopWebcamFeed(); // Stop the webcam feed after taking the last photo
-        screenControl.gifPrev.SetActive(true); // Show the GIF preview screen
+        //screenControl.gifPrev.SetActive(true); // Show the GIF preview screen
 
-}
+} */
 }

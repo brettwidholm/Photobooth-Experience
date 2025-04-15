@@ -329,6 +329,7 @@ private IEnumerator FlashRoutine()
             screen5.SetActive(false);
             screen6.SetActive(false);
             screen7.SetActive(true);
+            loadingScreen.SetActive(false);
 
             gifPrev.SetActive(false);
             backButtonConfirm.SetActive(false);
@@ -336,8 +337,42 @@ private IEnumerator FlashRoutine()
         });
         Debug.Log("Success screen is active!");
     }
+public void showloadingScreen(Action onShown = null, bool useFade = true)
+{
+    Action activate = () =>
+    {
+        loadingBar?.ResetBar(); // ✅ Reset bar before it becomes visible
 
-    public void showloadingScreen(Action onShown = null)
+        loadingScreen.SetActive(true);
+
+        devMode.SetActive(false);
+        screen0.SetActive(false);
+        screen1.SetActive(false);
+        screen2.SetActive(false);
+        screen3.SetActive(false);
+        screen4.SetActive(false);
+        screen5.SetActive(false);
+        screen6.SetActive(false);
+        screen7.SetActive(false);
+        gifPrev.SetActive(false);
+        backButtonConfirm.SetActive(false);
+        sendEmailButton.SetActive(false);
+
+        onShown?.Invoke();
+    };
+
+    if (useFade)
+    {
+        transitionOverlay.FadeTransition(activate);
+    }
+    else
+    {
+        activate.Invoke();
+    }
+}
+
+
+/*     public void showloadingScreen(Action onShown = null)
 {
     //loadingBar?.ResetBar(); // reset bar to 0 before screen is active
 
@@ -361,7 +396,7 @@ private IEnumerator FlashRoutine()
 
         onShown?.Invoke(); // kick off the rest AFTER fade and loading screen is visible
     });
-}
+} */
 
 
     public bool IsScreenActive(string screenName){

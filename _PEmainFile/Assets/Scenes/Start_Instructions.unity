@@ -967,6 +967,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 364fb12355b28564e970aaf3ca3a5e4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isSendingEmail: 0
   emailInputField: {fileID: 1132819600}
   firstNameInputField: {fileID: 1369796780}
   lastNameInputField: {fileID: 456852849}
@@ -979,6 +980,7 @@ MonoBehaviour:
   noButton: {fileID: 1885771903}
   startButton: {fileID: 617433228}
   getter: {fileID: 608491819}
+  screenControl: {fileID: 1803259332}
 --- !u!4 &419478971
 Transform:
   m_ObjectHideFlags: 0
@@ -2105,9 +2107,8 @@ GameObject:
   - component: {fileID: 617433228}
   - component: {fileID: 617433227}
   - component: {fileID: 617433232}
-  - component: {fileID: 617433231}
   m_Layer: 5
-  m_Name: ShareButton
+  m_Name: RecieveGifButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2242,30 +2243,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 617433225}
   m_CullTransparentMesh: 1
---- !u!114 &617433231
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 617433225}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 364fb12355b28564e970aaf3ca3a5e4a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  emailInputField: {fileID: 0}
-  firstNameInputField: {fileID: 0}
-  lastNameInputField: {fileID: 0}
-  confirmButton: {fileID: 452548403}
-  emailDisplayText: {fileID: 0}
-  gifFilePath: 
-  invalidText: {fileID: 0}
-  confirmationText: {fileID: 0}
-  yesButton: {fileID: 91192125}
-  noButton: {fileID: 1885771903}
-  startButton: {fileID: 0}
-  getter: {fileID: 0}
 --- !u!61 &617433232
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7264,6 +7241,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   getter: {fileID: 608491819}
+  emailController: {fileID: 419478970}
+  screenControl: {fileID: 1803259332}
 --- !u!4 &1752963445
 Transform:
   m_ObjectHideFlags: 0
