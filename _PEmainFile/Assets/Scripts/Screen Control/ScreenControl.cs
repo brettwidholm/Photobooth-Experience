@@ -25,6 +25,7 @@ public class ScreenControl : MonoBehaviour
     public LoadingBarScript loadingBar;
 
     public TransitionOverlay transitionOverlay; //fade to white
+    public GameObject timerPanel;
     
     
     //-------------------------------------------------
@@ -62,6 +63,8 @@ public class ScreenControl : MonoBehaviour
     public GameObject sendEmailButton; //send button for email
     
     public GameObject emailEntryBox; //the box to enter email
+    
+   
 
     void Start()
     {
@@ -98,7 +101,7 @@ public class ScreenControl : MonoBehaviour
             Flash();
         }
 
-        if(IsScreenActive("Start Screen") || IsScreenActive("Loading Screen")){
+        if(IsScreenActive("Start Screen") || IsScreenActive("Loading Screen") || IsScreenActive("Privacy Policy") || IsScreenActive("DevMode") || IsScreenActive("Instructions Screen")){
             resetButton.gameObject.SetActive(false);
         }
         else{
@@ -135,7 +138,7 @@ private IEnumerator FlashRoutine()
     flash.SetActive(false);
 }
 
-
+ 
     public void ShowDevMode(){//Dev Mode
         transitionOverlay.FadeTransition(() => {
             devMode.SetActive(true);
@@ -190,6 +193,7 @@ private IEnumerator FlashRoutine()
             screen6.SetActive(false);
             screen7.SetActive(false);
             websosa.SetActive(false);
+            
 
             backButtonInstructions.SetActive(true);
         });

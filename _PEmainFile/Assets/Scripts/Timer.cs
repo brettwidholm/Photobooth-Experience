@@ -20,6 +20,7 @@ public class Timer : MonoBehaviour
         warningText.text = "TOUCH THE SCREEN";
         timerText.enabled = false;
         warningText.enabled = false;
+        screenControl.timerPanel.SetActive(false); // Hide the timer panel at the start
     }
 
     void Update()
@@ -31,7 +32,7 @@ public class Timer : MonoBehaviour
         }
 
         // checks which screen is active by object name in hierarchy
-        if (screenControl.IsScreenActive("Start Screen") || screenControl.IsScreenActive("Photo Capture")){
+        if (screenControl.IsScreenActive("Start Screen") || screenControl.IsScreenActive("Photo Capture") || screenControl.IsScreenActive("Loading Screen")){
             programTime = 20.0f;   
         }
         else{
@@ -50,10 +51,12 @@ public class Timer : MonoBehaviour
 
         // Show warning when time is ≤ 5s
         if (programTime <= 5.0f){
+            screenControl.timerPanel.SetActive(true); // Show the timer panel
             timerText.enabled = true;
             warningText.enabled = true;
         }
         else{
+            screenControl.timerPanel.SetActive(false); // Hide the timer panel
             timerText.enabled = false;
             warningText.enabled = false;
         }
