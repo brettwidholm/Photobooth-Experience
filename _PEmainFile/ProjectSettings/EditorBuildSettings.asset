@@ -8,7 +8,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/WilliamsToggleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Start_Instructions.unity
     guid: 34e9ea0346b1d8744bce93714c1a157a
   m_configObjects:

@@ -63,7 +63,9 @@ public class ScreenControl : MonoBehaviour
     public GameObject sendEmailButton; //send button for email
     
     public GameObject emailEntryBox; //the box to enter email
-    
+    public GameObject firstNameEntryBox; 
+    public GameObject lastNameEntryBox; 
+
    
 
     void Start()
@@ -315,6 +317,9 @@ private IEnumerator FlashRoutine()
             gifPrev.SetActive(false);
 
             emailEntryBox.SetActive(true);
+            firstNameEntryBox.SetActive(true);
+            lastNameEntryBox.SetActive(true);
+            
             previewShareButton.SetActive(false);
             backButtonInfo.SetActive(true);
             sendEmailButton.SetActive(false);

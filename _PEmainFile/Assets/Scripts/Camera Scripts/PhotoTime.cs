@@ -1,3 +1,4 @@
+/*
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
@@ -21,7 +22,7 @@ public class PhotoTime : MonoBehaviour
         UpdateScreenReference(); // Find the active screen at startup
 
         timerText.text = $"{programTime:F0}";
-        messageText.text = "Get Ready";
+        messageText.text = "Ready";
         timerText.enabled = false;
         messageText.enabled = false;
     }
@@ -37,7 +38,7 @@ public class PhotoTime : MonoBehaviour
     }
 
     public void Photo1(){
-       messageText.text = "Cool";
+       messageText.text = "Set";
         if(programTime <= 0.0f){
             messageText.text = "click";
             timerText.enabled = false;
@@ -46,7 +47,7 @@ public class PhotoTime : MonoBehaviour
         }
     }
     public void Photo2(){
-       messageText.text = "Nice";        
+       messageText.text = "Pose";        
         if(programTime <= 0.0f){
             
             messageText.text = "click";
@@ -110,6 +111,7 @@ public class PhotoTime : MonoBehaviour
 
 
 
+/* 
     public void UpdateScreenReference(){
         foreach (Transform screen in screenControl.transform)
         {
@@ -129,3 +131,4 @@ public class PhotoTime : MonoBehaviour
         }
     }
 }
+ */

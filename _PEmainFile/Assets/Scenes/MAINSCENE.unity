@@ -8799,6 +8799,8 @@ MonoBehaviour:
   nextButtonInfo: {fileID: 452548400}
   sendEmailButton: {fileID: 91192122}
   emailEntryBox: {fileID: 1132819596}
+  firstNameEntryBox: {fileID: 1369796778}
+  lastNameEntryBox: {fileID: 456852845}
 --- !u!4 &1803259333
 Transform:
   m_ObjectHideFlags: 0
