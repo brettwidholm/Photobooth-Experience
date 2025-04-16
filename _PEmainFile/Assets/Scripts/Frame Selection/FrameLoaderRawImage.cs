@@ -45,7 +45,7 @@ public class FrameLoaderUI : MonoBehaviour
     {
         if (Directory.Exists(folderPath))
         {
-            string none = @"C:\Users\yosha\OneDrive\Documents\GitHub\Photobooth-Experience\_PEmainFile\Assets\Logos\none.jpg";
+            string none = getter.getPath() + @"\Logos\none.jpg";
             imagePaths.Add(none);
             string[] files = Directory.GetFiles(folderPath);
             foreach (string file in files)
