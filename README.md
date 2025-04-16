@@ -1,16 +1,16 @@
-# 📸 CofC Photo Booth
+#  CofC Photo Booth
 
 > A touchscreen-enabled Unity app that captures event photos, creates animated GIFs, and emails them to users. Built by CofC student developers for real-world events. 
 
 ---
 
-## 🧭 Overview
+##  Overview
 
 This interactive photo booth app runs as a standalone Windows `.exe`. It guides users through a 4-photo sequence, builds an animated GIF, previews it on screen, and sends the final GIF via email. Everything is managed through a friendly on-screen UI — no keyboard or mouse required.
 
 ---
 
-## 🖥️ Requirements
+##  Requirements
 
 - A **Microsoft Surface**
 - **Windows 10/11**
@@ -19,7 +19,7 @@ This interactive photo booth app runs as a standalone Windows `.exe`. It guides 
 
 ---
 
-## 📂 File Storage
+##  File Storage
 
 The app writes temporary images and GIF files to your local filesystem.
 
@@ -29,11 +29,11 @@ The app writes temporary images and GIF files to your local filesystem.
 | GIF       | `%AppData%/../LocalLow/CSCI495-COFC/Cofc-Photobooth/gif/rad.gif` | Final animated output      |
 | Logo      | `StreamingAssets/CofC.png`                                       | Embedded in the email HTML |
 
-**⚠️ Reset deletes all saved photos and GIFs.**
+** Reset deletes all saved photos and GIFs.**
 
 ---
 
-## ✉️ Email Functionality
+##  Email Functionality
 
 - Uses Gmail SMTP (`smtp.gmail.com`)
 - Sends `rad.gif` as an attachment
@@ -43,7 +43,7 @@ The app writes temporary images and GIF files to your local filesystem.
 
 ---
 
-## 🧑‍🎨 What You Can Customize
+##  What You Can Customize
 
 Your team can update the following content without editing code:
 
@@ -53,11 +53,11 @@ Your team can update the following content without editing code:
 | Frame overlays      | Add/remove files in `%AppData%/../LocalLow/CSCI495-COFC/Cofc-Photobooth/Frames` |
 | UI text             | Edit TextMeshPro fields in Unity                                                |
 | Loading bar visuals | Replace sprites or adjust `LoadingBarScript.cs`                                 |
-| Email message       | Edit `EmailController > EmailTemplate.GetHtmlBody()`                            |
+| Email message       | Edit `ToggleEmail.cs > EmailTemplate.GetHtmlBody()`                             |
 
 ---
 
-## 🚀 How to Run
+##  How to Run
 
 ### Option 1 – From Unity (for devs)
 
@@ -74,7 +74,7 @@ Your team can update the following content without editing code:
 
 ---
 
-## 🛠️ Setup Notes
+##  Setup Notes
 
 - **App password** is required for Gmail SMTP
 - No external Python scripts required
@@ -83,18 +83,17 @@ Your team can update the following content without editing code:
 
 ---
 
-## ⚠️ Known Issues
+##  Known Issues
 
-| Problem | Fix |
-|--------|------|
-| GIF preview shows blank | Delay screen load until `LoadSprites()` completes |
-| Reset throws error after email | Make sure email finishes sending before reset |
-| Loading screen freezes near end | Normal — email is blocking, handled by thread |
-| Touch selects wrong button on screen change | Use `EventSystem.current.SetSelectedGameObject(null)` |
+| Problem                                     | Fix                                                   |
+| ------------------------------------------- | ----------------------------------------------------- |
+| GIF preview shows blank                     | Delay screen load until `LoadSprites()` completes     |
+| Reset throws error after email              | Make sure email finishes sending before reset         |
+| Loading screen freezes near end             | Normal — email is blocking, handled by thread         |
 
 ---
 
-## 🧪 Developer Notes
+##  Developer Notes
 
 - All screens controlled by `ScreenControl.cs`
 - Screens are turned on/off using `ShowScreenX()` methods
@@ -107,7 +106,7 @@ Your team can update the following content without editing code:
 
 ---
 
-## 👤 Author & Credits
+##  Author & Credits
 
 - **Developers**: [Briana Addison, Sophia Butcher, William Holmes, Justin Luft, Brett Widholm]
 - **Client**: College of Charleston Department of Computer Science
