@@ -9,6 +9,7 @@ public class PathGetter : MonoBehaviour
     private string photo;
     private string gif;
     public string folderPath;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Awake()
     {

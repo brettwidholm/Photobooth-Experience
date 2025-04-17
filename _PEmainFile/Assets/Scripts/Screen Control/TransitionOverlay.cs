@@ -31,7 +31,6 @@ public class TransitionOverlay : MonoBehaviour
 
         // Execute midpoint action (switch screens here)
         onFadeMiddle?.Invoke();
-
         // Fade out overlay (alpha 1 to 0)
         yield return Fade(1f, 0f);
     }

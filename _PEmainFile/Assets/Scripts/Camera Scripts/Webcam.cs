@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using TMPro;
+using System.Collections;
 
 public class Webcam : MonoBehaviour
 {
@@ -26,11 +27,17 @@ public class Webcam : MonoBehaviour
 
     public PathGetter getter;
 
+    Texture2D frame;
+
+    public bool frameExist = false;
+
+    public Clicker1 c1;
+    public Clicker2 c2;
+    public Clicker3 c3;
+    public Clicker4 c4;
+
     void Awake()
     {
-        
-
-
         try
         {
             WebCamDevice[] devices = WebCamTexture.devices;
@@ -47,34 +54,6 @@ public class Webcam : MonoBehaviour
                     }
                 }
             }
-            
-            //STANDARD LAPTOP WEBCAM CONFIG
-            //webcamTexture = new WebCamTexture();
-
-            //SURFACE CONFIG
-            //webcamTexture = new WebCamTexture("Surface Camera Front", 1280, 720, 30);
-            //Trying to make it detect whether rotation is needed
-
-            Debug.Log($"Camera Name: {webcamTexture.deviceName}  Default Rotation: {webcamTexture.videoRotationAngle}");
-
-            webby.texture = webcamTexture;
-            webby.material.mainTexture = webcamTexture;
-
-            webcamTexture.Play();
-            //
-            AdjustPreviewOrientation();
-            float aspectRatio = (float)webcamTexture.width / webcamTexture.height;
-
-            if (aspectRatio > 1f)
-            {
-                float offsetX = (aspectRatio - 1f) / 2f / aspectRatio;
-                webby.uvRect = new Rect(offsetX, 0f, 1f / aspectRatio, 1f);
-            }
-            else
-            {
-                float offsetY = (1f / aspectRatio - 1f) / 2f;
-                webby.uvRect = new Rect(0f, offsetY, 1f, aspectRatio);
-            }
         }
         catch{
             Debug.LogWarning("Preferred camera not found. Falling back to device list.");
@@ -86,7 +65,7 @@ public class Webcam : MonoBehaviour
     {
         filePath = Path.Combine(getter.getPath(), "Photos");
         Debug.Log("File path: " + filePath);
-        Debug.Log("GO GO GO!!!!");
+        
         UpdateScreenReference(); // Find the active screen at startup
 
         timerText.text = $"{programTime:F0}";
@@ -98,6 +77,13 @@ public class Webcam : MonoBehaviour
         public void Photo0(){
         messageText.text = "Cool";
         messageText.enabled = true;
+
+        if(!(c1.getCurrentFrame().Equals("None"))){
+            frameExist = true;
+            frame = LoadTexture(c1.getCurrentFrame());
+
+
+        }
         
         if(programTime <= 0.0f){
           //  messageText.text = "click";
@@ -110,6 +96,13 @@ public class Webcam : MonoBehaviour
     public void Photo1(){
        messageText.text = "Nice";
    //     messageText.enabled = true;
+
+        if(!(c2.getCurrentFrame().Equals("None"))){
+            frameExist = true;
+            frame = LoadTexture(c2.getCurrentFrame());
+
+
+        }
         
         if(programTime <= 0.0f){
      //       messageText.text = "click";
@@ -122,6 +115,12 @@ public class Webcam : MonoBehaviour
     public void Photo2(){
        messageText.text = "Rad";
         //messageText.enabled = true;
+        if(!(c3.getCurrentFrame().Equals("None"))){
+            frameExist = true;
+            frame = LoadTexture(c3.getCurrentFrame());
+
+
+        }
         
         if(programTime <= 0.0f){
            // messageText.text = "click";
@@ -132,6 +131,13 @@ public class Webcam : MonoBehaviour
     }
 
     public void Photo3(){
+
+        if(!(c4.getCurrentFrame().Equals("None"))){
+            frameExist = true;
+            frame = LoadTexture(c4.getCurrentFrame());
+
+
+        }
       //  messageText.enabled = true;    
         if(programTime <= 0){
       //      messageText.text = "click";
@@ -140,25 +146,20 @@ public class Webcam : MonoBehaviour
             programTime = 5.0f;
         }
     }
-
     public void Update()
     {
         if(!(screenControl.IsScreenActive("Photo Capture")) ){
             messageText.enabled = false;
             programTime = 5.0f;
-        if(screenControl.IsScreenActive("Tap to Begin Screen")){
-            webcamTexture.Play();
-            }
-        else{
-            webcamTexture.Stop(); //ask team do we really want camera off????
-            }
-            
         }
         else{
             messageText.enabled = true;
-            if (state > 3){
-                screenControl.ShowScreen4();
-            }
+            /* if (state > 3)
+                {
+                    StartCoroutine(TriggerScreen4WithLoading());
+                    enabled = false; // disable further Update loop once done
+                    return;// exit early
+                } */
             
             timerText.text = $"{programTime:F0}";
             programTime -= Time.deltaTime;
@@ -192,7 +193,10 @@ public class Webcam : MonoBehaviour
                 screenControl.Flash();
                 Photo3();
                 TakePhoto();
+
+                StartCoroutine(TriggerScreen4WithLoading());
             }
+
         }
     }
 
@@ -264,12 +268,32 @@ public class Webcam : MonoBehaviour
         // Crop to center square
         Texture2D square = CropToSquare(photo);
 
-        // Save to PNG
-        byte[] bytes = square.EncodeToPNG();
-        savedPath = Path.Combine(filePath, newName);
-        File.WriteAllBytes(savedPath, bytes);
+        if(frameExist){
+            Texture2D finalPhoto = ApplyCircularMask(square);
+            Texture2D finalphotofr = MergeImages(finalPhoto, frame);
+            
+            byte[] bytes = finalphotofr.EncodeToPNG();
+            savedPath = Path.Combine(filePath, newName);
+            File.WriteAllBytes(savedPath, bytes);
 
-        Debug.Log("✅ Photo saved at: " + savedPath);
+            Debug.Log("✅ Photo saved at: " + savedPath);
+
+        }
+        else{
+            byte[] bytes = square.EncodeToPNG();
+            savedPath = Path.Combine(filePath, newName);
+            File.WriteAllBytes(savedPath, bytes);
+
+            Debug.Log("✅ Photo saved at: " + savedPath);
+
+        }
+
+        frameExist = false;
+
+        
+
+        // Save to PNG
+
 
     }
 
@@ -308,26 +332,10 @@ public class Webcam : MonoBehaviour
         int fallbackIndex = 0; // Start with the first, or read from file
 
         webcamTexture = new WebCamTexture(devices[fallbackIndex].name, 1280, 720, 30);
-        webby.texture = webcamTexture;
-        webby.material.mainTexture = webcamTexture;
+        StartWebcamFeed(); // Start the webcam feed with the selected camera
+        Debug.Log($"Fallback camera selected: {devices[fallbackIndex].name}");
 
-        webcamTexture.Play();
-
-        AdjustPreviewOrientation();
-        float aspectRatio = (float)webcamTexture.width / webcamTexture.height;
-
-        if (aspectRatio > 1f)
-        {
-            float offsetX = (aspectRatio - 1f) / 2f / aspectRatio;
-            webby.uvRect = new Rect(offsetX, 0f, 1f / aspectRatio, 1f);
-        }
-        else
-        {
-            float offsetY = (1f / aspectRatio - 1f) / 2f;
-            webby.uvRect = new Rect(0f, offsetY, 1f, aspectRatio);
-        }
-
-            }
+    }
 
         void AdjustPreviewOrientation()
         {
@@ -361,5 +369,165 @@ public class Webcam : MonoBehaviour
             return square;
         }
 
+public Texture2D ApplyCircularMask(Texture2D source)
+{
+    int width = source.width;  // 1500
+    int height = source.height; // 1500
+    Texture2D result = new Texture2D(width, height, TextureFormat.RGBA32, false);
 
+    int centerX = width / 2;
+    int centerY = height / 2;
+    int radius = (width - 200) / 2; // Main visible radius
+    int featherWidth = 50; // Width of the feathered edge
+
+    float maxDistance = radius + featherWidth;
+
+    for (int x = 0; x < width; x++)
+    {
+        for (int y = 0; y < height; y++)
+        {
+            float dx = x - centerX;
+            float dy = y - centerY;
+            float distance = Mathf.Sqrt(dx * dx + dy * dy);
+
+            Color pixel = source.GetPixel(x, y);
+
+            if (distance > maxDistance)
+            {
+                // Fully transparent
+                pixel.a = 0;
+            }
+            else if (distance > radius)
+            {
+                // Feather alpha based on distance
+                float t = (distance - radius) / featherWidth; // 0 to 1
+                pixel.a *= 1 - t;
+            }
+
+            result.SetPixel(x, y, pixel);
+        }
+    }
+
+    result.Apply();
+    return result;
+}
+
+
+    Texture2D LoadTexture(string path)
+{
+    byte[] fileData = File.ReadAllBytes(path);
+    Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+    texture.LoadImage(fileData);
+    return texture;
+}
+
+Texture2D MergeImages(Texture2D foreground, Texture2D background)
+{
+    int width = foreground.width;
+    int height = foreground.height;
+
+    // Create a RenderTexture for resizing
+    RenderTexture rt = new RenderTexture(width, height, 32);
+    RenderTexture.active = rt;
+    Graphics.Blit(background, rt);
+
+    // Convert RenderTexture back to Texture2D
+    Texture2D resizedBackground = new Texture2D(width, height, TextureFormat.RGBA32, false);
+    resizedBackground.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+    resizedBackground.Apply();
+
+    RenderTexture.active = null;
+    rt.Release();
+
+    // Create final merged image
+    Texture2D result = new Texture2D(width, height, TextureFormat.RGBA32, false);
+
+    for (int x = 0; x < width; x++)
+    {
+        for (int y = 0; y < height; y++)
+        {
+            Color fgPixel = foreground.GetPixel(x, y);
+            Color bgPixel = resizedBackground.GetPixel(x, y);
+
+            // Blend: Use the foreground pixel if not transparent, otherwise use background
+            Color finalPixel = Color.Lerp(bgPixel, fgPixel, fgPixel.a);
+            result.SetPixel(x, y, finalPixel);
+        }
+    }
+
+    result.Apply();
+    return result;
+}
+
+    public void StartWebcamFeed()
+{
+        Debug.Log($"Camera Name: {webcamTexture.deviceName}  Default Rotation: {webcamTexture.videoRotationAngle}");
+
+            webby.texture = webcamTexture;
+            webby.material.mainTexture = webcamTexture;
+
+            webcamTexture.Play();
+            //
+            AdjustPreviewOrientation();
+            float aspectRatio = (float)webcamTexture.width / webcamTexture.height;
+
+            if (aspectRatio > 1f)
+            {
+                float offsetX = (aspectRatio - 1f) / 2f / aspectRatio;
+                webby.uvRect = new Rect(offsetX, 0f, 1f / aspectRatio, 1f);
+            }
+            else
+            {
+                float offsetY = (1f / aspectRatio - 1f) / 2f;
+                webby.uvRect = new Rect(0f, offsetY, 1f, aspectRatio);
+            }
+
+}
+    public void StopWebcamFeed()
+{
+    if (webcamTexture != null && webcamTexture.isPlaying)
+    {
+        
+        screenControl.websosa.SetActive(false); // Hide the webcam feed
+        webcamTexture.Stop();
+        Debug.Log("✅ Webcam feed stopped manually.");
+    }
+
+}
+private IEnumerator TriggerScreen4WithLoading()
+{
+    Debug.Log("Triggering Screen 4 with loading screen");
+
+    yield return new WaitForEndOfFrame(); // render flash first
+    screenControl.flash.SetActive(false);
+
+    yield return new WaitForSeconds(0.1f); // tiny delay for comfort
+    StopWebcamFeed();
+
+    // Show loading screen immediately   
+    screenControl.RunWithLoadingScreen(
+        onComplete: () => screenControl.ShowScreen4(),
+        onStart: () => {
+            screenControl.giffy.ConvertImagesToGif();
+            screenControl.loader.LoadSprites();
+        },
+        delay: 3.0f
+    );
+}
+
+
+
+/*     private IEnumerator TriggerScreen4WithLoading()
+{
+    Debug.Log("Triggering Screen 4 with loading screen");
+    yield return null; // optional small delay to let last photo process
+
+    
+        screenControl.giffy.ConvertImagesToGif();
+        screenControl.loader.LoadSprites();
+        screenControl.RunWithLoadingScreen(() => screenControl.ShowScreen4(), null, 3.0f);
+        StopWebcamFeed(); // Stop the webcam feed after taking the last photo
+        //screenControl.gifPrev.SetActive(true); // Show the GIF preview screen
+
+} */
 }

@@ -11,6 +11,8 @@ public class ScreenControl : MonoBehaviour
 
     //screens/transitions:
     //-------------------------------------
+    public GameObject backButtonPrivacyEmail; // new back button for returning to email input
+    private bool cameFromEmailScreen = false;
     public GameObject devMode; //dev mode screen
     public GameObject screen0; //Start Screen
     public GameObject screen1; //Instructions Screen
@@ -20,15 +22,21 @@ public class ScreenControl : MonoBehaviour
     public GameObject screen5; //Info Screen
     public GameObject screen6; //Confirmation Screen
     public GameObject screen7; //Success Screen
-    public GameObject screen8;
+    public GameObject screen8; //privacy policy
+    public GameObject loadingScreen; //Loading screen
+    public LoadingBarScript loadingBar;
+
+    public GameObject framesScreen; //frames Screen
 
     public TransitionOverlay transitionOverlay; //fade to white
+    public GameObject timerPanel;
     
     
     //-------------------------------------------------
     //webcam related:
     //-------------------------------------------------
     public GameObject websosa; //webcam
+    public Webcam webcamScript;
     public GameObject flash;  //camera flash
     public bool flashOn = false;
     public float flashTime = 0.3f;
@@ -59,6 +67,13 @@ public class ScreenControl : MonoBehaviour
     public GameObject sendEmailButton; //send button for email
     
     public GameObject emailEntryBox; //the box to enter email
+    public GameObject firstNameEntryBox; 
+    public GameObject lastNameEntryBox; 
+
+    public GameObject forwardFrame; //button for frames selction
+    public GameObject backFrame; //button for frames selction
+
+   
 
     void Start()
     {
@@ -71,10 +86,10 @@ public class ScreenControl : MonoBehaviour
         screen5.SetActive(false);
         screen6.SetActive(false);
         screen7.SetActive(false);
-        screen8.SetActive(false);
         websosa.SetActive(false);
         flash.SetActive(false);
         gifPrev.SetActive(false);
+        loadingScreen.SetActive(false);
         
         
         backButtonInstructions.SetActive(false); //sets all necessary button to be turned off
@@ -84,6 +99,10 @@ public class ScreenControl : MonoBehaviour
         nextButtonInfo.SetActive(false);
         sendEmailButton.SetActive(false);
         emailEntryBox.SetActive(false);
+
+        framesScreen.SetActive(false); //frames Screen
+        forwardFrame.SetActive(false);
+        backFrame.SetActive(false);
         // Showscreen0(); //starts only showing screen0
         
     }
@@ -95,7 +114,7 @@ public class ScreenControl : MonoBehaviour
             Flash();
         }
 
-        if(IsScreenActive("Start Screen")){
+        if(IsScreenActive("Start Screen") || IsScreenActive("Loading Screen") || IsScreenActive("Privacy Policy") || IsScreenActive("DevMode") || IsScreenActive("Instructions Screen")){
             resetButton.gameObject.SetActive(false);
         }
         else{
@@ -110,7 +129,7 @@ public class ScreenControl : MonoBehaviour
         }
     }
 
-    public void Flash(){
+/*     public void Flash(){
         //Debug.Log("in the cut");
         flashOn = true;
         flash.SetActive(true);
@@ -119,9 +138,20 @@ public class ScreenControl : MonoBehaviour
             flash.SetActive(false);
             flashTime = 0.3f;
         }
+    } */
+    public void Flash()
+{
+    StartCoroutine(FlashRoutine());
+}
 
-    }
+private IEnumerator FlashRoutine()
+{
+    flash.SetActive(true);
+    yield return new WaitForSeconds(flashTime);
+    flash.SetActive(false);
+}
 
+ 
     public void ShowDevMode(){//Dev Mode
         transitionOverlay.FadeTransition(() => {
             devMode.SetActive(true);
@@ -133,7 +163,11 @@ public class ScreenControl : MonoBehaviour
             screen5.SetActive(false);
             screen6.SetActive(false);
             screen7.SetActive(false);
-            screen8.SetActive(false);
+
+            
+            framesScreen.SetActive(false); //frames Screen
+            forwardFrame.SetActive(false);
+            backFrame.SetActive(false);
         });
         Debug.Log("Dev mode is active!");
     }
@@ -148,11 +182,11 @@ public class ScreenControl : MonoBehaviour
             screen5.SetActive(false);
             screen6.SetActive(false);
             screen7.SetActive(false);
-            screen8.SetActive(false);
             websosa.SetActive(false);
             flash.SetActive(false);
             gifPrev.SetActive(false);
             emailEntryBox.SetActive(false);
+            screen8.SetActive(false);
 
             backButtonInstructions.SetActive(false); //sets all necessary button to be turned off
             backButtonInfo.SetActive(false);
@@ -161,6 +195,10 @@ public class ScreenControl : MonoBehaviour
             nextButtonInfo.SetActive(false);
             sendEmailButton.SetActive(false);
             emailEntryBox.SetActive(false);
+
+            framesScreen.SetActive(false); //frames Screen
+            forwardFrame.SetActive(false);
+            backFrame.SetActive(false);
         });
         Debug.Log("Start screen is active!");
     }
@@ -176,50 +214,132 @@ public class ScreenControl : MonoBehaviour
             screen5.SetActive(false);
             screen6.SetActive(false);
             screen7.SetActive(false);
-            screen8.SetActive(false);
             websosa.SetActive(false);
+            
 
             backButtonInstructions.SetActive(true);
+
+            framesScreen.SetActive(false); //frames Screen
+            forwardFrame.SetActive(false);
+            backFrame.SetActive(false);
         });
         Debug.Log("instructions screen is active!");
     }
-    public void Showscreen8(){//Privacy Policy
-        transitionOverlay.FadeTransition(() => {
-            devMode.SetActive(false);
-            screen0.SetActive(false);
-            screen1.SetActive(false);
-            screen2.SetActive(false);
-            screen3.SetActive(false);
-            screen4.SetActive(false);
-            screen5.SetActive(false);
-            screen6.SetActive(false);
-            screen7.SetActive(false);
-            screen8.SetActive(true);
-            websosa.SetActive(false);
 
+    // Replace your Showscreen8() with this version:
+public void Showscreen8(bool fromEmailScreen = false)
+{
+    cameFromEmailScreen = fromEmailScreen;
+
+    transitionOverlay.FadeTransition(() => {
+        devMode.SetActive(false);
+        screen0.SetActive(false);
+        screen1.SetActive(false);
+        screen2.SetActive(false);
+        screen3.SetActive(false);
+        screen4.SetActive(false);
+        screen5.SetActive(false);
+        screen6.SetActive(false);
+        screen7.SetActive(false);
+        screen8.SetActive(true);
+        websosa.SetActive(false);
+
+        // Hide all back buttons first
+        backButtonInstructions.SetActive(false);
+        backButtonConfirm.SetActive(false);
+        backButtonInfo.SetActive(false);
+        sendEmailButton.SetActive(false);
+        backButtonPrivacyEmail.SetActive(false);
+
+        if (fromEmailScreen)
+        {
+            // Show the back-to-email button
+            backButtonPrivacyEmail.SetActive(true);
+            backButtonPrivacyEmail.GetComponent<Button>().onClick.RemoveAllListeners();
+            backButtonPrivacyEmail.GetComponent<Button>().onClick.AddListener(() => ShowScreen5());
+        }
+        else
+        {
+            // Show the original back-to-start button
             backButtonInstructions.SetActive(true);
-        });
-        Debug.Log("Privacy Policy screen is active!");
-    }
+        }
 
-    public void ShowScreen2(){//Tap to begin screen
-        transitionOverlay.FadeTransition(() => {
-            devMode.SetActive(false);
-            screen0.SetActive(false);
-            screen1.SetActive(false);
-            screen2.SetActive(true);
-            screen3.SetActive(false);
-            screen4.SetActive(false);
-            screen5.SetActive(false);
-            screen6.SetActive(false);
-            screen7.SetActive(false);
-            screen8.SetActive(false);
-            websosa.SetActive(true);
-
-            backButtonInstructions.SetActive(false);
+        framesScreen.SetActive(false);
+        forwardFrame.SetActive(false);
+        backFrame.SetActive(false);
     });
-        Debug.Log("tap to begin screen is active!");
+
+    Debug.Log("Privacy Policy screen is active!");
+}
+
+
+// Add this new method to be called from EmailController:
+public void ShowPrivacyPolicyFromEmail()
+{
+    Showscreen8(fromEmailScreen: true);
+}
+
+        public void ShowFramesScreen(){
+            transitionOverlay.FadeTransition(() => {
+                screen0.SetActive(false);
+                screen1.SetActive(false);
+                screen2.SetActive(false);
+                screen3.SetActive(false);
+                screen4.SetActive(false);
+                screen5.SetActive(false);
+                screen6.SetActive(false);
+                screen7.SetActive(false);
+
+                backButtonInstructions.SetActive(false);
+
+                framesScreen.SetActive(true);
+
+                forwardFrame.SetActive(true);
+                backFrame.SetActive(true);
+     //           frame1Selec.SetActive(true);
+     //           frame2Selec.SetActive(true);
+    //            frame3Selec.SetActive(true);
+  //              frame4Selec.SetActive(true);
+            });
+            Debug.Log("SWAMP IZZO");
+            Debug.Log("CARTI");
+            Debug.Log("HE'S COMIN");
+            Debug.Log("I AM THE MUSIC");
     }
+
+
+        public void ShowScreen2()
+    {
+            // Any setup logic before camera activation can go here
+            Debug.Log("showscreen2() called");
+            
+            transitionOverlay.FadeTransition(() => {
+                websosa.SetActive(true);
+                
+                devMode.SetActive(false);
+                screen0.SetActive(false);
+                screen1.SetActive(false);
+                screen2.SetActive(true);
+
+            loadingScreen.SetActive(false);
+            Debug.Log("Loading screen deactivated");
+
+                screen3.SetActive(false);
+                screen4.SetActive(false);
+                screen5.SetActive(false);
+                screen6.SetActive(false);
+                screen7.SetActive(false);
+
+                backButtonInstructions.SetActive(false);
+
+                framesScreen.SetActive(false); //frames Screen
+                forwardFrame.SetActive(false);
+                backFrame.SetActive(false);
+            });
+
+            Debug.Log("tap to begin screen is active!");
+        }
+    
 
     public void ShowScreen3(){//Photo Capture
             devMode.SetActive(false);
@@ -231,7 +351,6 @@ public class ScreenControl : MonoBehaviour
             screen5.SetActive(false);
             screen6.SetActive(false);
             screen7.SetActive(false);
-            screen8.SetActive(false);
             websosa.SetActive(true);
             gifPrev.SetActive(false);
             previewShareButton.SetActive(false);
@@ -241,10 +360,11 @@ public class ScreenControl : MonoBehaviour
 
     public void ShowScreen4(){//Preview GIF Screen
         
-        giffy.ConvertImagesToGif();
-                    loader.LoadSprites();
+        /* giffy.ConvertImagesToGif();
+        loader.LoadSprites(); */
             
         transitionOverlay.FadeTransition(() => {
+            gifPrev.SetActive(true);
             devMode.SetActive(false);
             screen0.SetActive(false);
             screen1.SetActive(false);
@@ -254,9 +374,12 @@ public class ScreenControl : MonoBehaviour
             screen5.SetActive(false);
             screen6.SetActive(false);
             screen7.SetActive(false);
-            screen8.SetActive(false);
             websosa.SetActive(false);
-            gifPrev.SetActive(true);
+            
+
+            loadingScreen.SetActive(false);
+            Debug.Log("Loading screen deactivated");
+            
 
             emailEntryBox.SetActive(false);
             previewShareButton.SetActive(true);
@@ -281,10 +404,12 @@ public class ScreenControl : MonoBehaviour
             screen5.SetActive(true);
             screen6.SetActive(false);
             screen7.SetActive(false);
-            screen8.SetActive(false);
             gifPrev.SetActive(false);
 
             emailEntryBox.SetActive(true);
+            firstNameEntryBox.SetActive(true);
+            lastNameEntryBox.SetActive(true);
+            
             previewShareButton.SetActive(false);
             backButtonInfo.SetActive(true);
             sendEmailButton.SetActive(false);
@@ -304,19 +429,13 @@ public class ScreenControl : MonoBehaviour
             screen5.SetActive(false);
             screen6.SetActive(true);
             screen7.SetActive(false);
-            screen8.SetActive(false);
 
             emailEntryBox.SetActive(false);
             backButtonConfirm.SetActive(true);
             sendEmailButton.SetActive(true);
             nextButtonInfo.SetActive(false);
             gifPrev.SetActive(true);
-            /*
-            gifPrev.SetActive(true);
-            //temp shrink quasiGif for fun
-            originalGifPrevScale = gifPrev.transform.localScale;
-            gifPrev.transform.localScale = new Vector3(.5f,.5f,1f);
-            */
+            
         });
         Debug.Log("Confirmation screen is active!");
     }
@@ -331,7 +450,7 @@ public class ScreenControl : MonoBehaviour
             screen5.SetActive(false);
             screen6.SetActive(false);
             screen7.SetActive(true);
-            screen8.SetActive(false);
+            loadingScreen.SetActive(false);
 
             gifPrev.SetActive(false);
             backButtonConfirm.SetActive(false);
@@ -339,6 +458,75 @@ public class ScreenControl : MonoBehaviour
         });
         Debug.Log("Success screen is active!");
     }
+public void showloadingScreen(Action onShown = null, bool useFade = true)
+{
+    Action activate = () =>
+    {
+        websosa.SetActive(false);
+
+        loadingBar?.ResetBar(); //  Reset bar before it becomes visible
+        loadingScreen.SetActive(true);
+
+         // Hide reset button on loading screen
+        
+        devMode.SetActive(false);
+        screen0.SetActive(false);
+        screen1.SetActive(false);
+        screen2.SetActive(false);
+        screen3.SetActive(false);
+        screen4.SetActive(false);
+        screen5.SetActive(false);
+        screen6.SetActive(false);
+        screen7.SetActive(false);
+        gifPrev.SetActive(false);
+        backButtonConfirm.SetActive(false);
+        sendEmailButton.SetActive(false);
+
+        backButtonConfirm.SetActive(false);
+        nextButtonInfo.SetActive(false);
+        framesScreen.SetActive(false);
+
+
+        onShown?.Invoke();
+    };
+
+    if (useFade)
+    {
+        transitionOverlay.FadeTransition(activate);
+    }
+    else
+    {
+        activate.Invoke();
+    }
+}
+
+
+/*     public void showloadingScreen(Action onShown = null)
+{
+    //loadingBar?.ResetBar(); // reset bar to 0 before screen is active
+
+    transitionOverlay.FadeTransition(() =>
+    {
+        loadingScreen.SetActive(true);
+
+        // Deactivate other screens
+        devMode.SetActive(false);
+        screen0.SetActive(false);
+        screen1.SetActive(false);
+        screen2.SetActive(false);
+        screen3.SetActive(false);
+        screen4.SetActive(false);
+        screen5.SetActive(false);
+        screen6.SetActive(false);
+        screen7.SetActive(false);
+        gifPrev.SetActive(false);
+        backButtonConfirm.SetActive(false);
+        sendEmailButton.SetActive(false);
+
+        onShown?.Invoke(); // kick off the rest AFTER fade and loading screen is visible
+    });
+} */
+
 
     public bool IsScreenActive(string screenName){
         GameObject screen = GameObject.Find(screenName);
@@ -399,7 +587,47 @@ public class ScreenControl : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
     }
 
+    public void RunWithLoadingScreen(Action onComplete, Action onStart = null, float delay = 1f)
+    {
+        StartCoroutine(HandleWithLoadingScreen(onComplete, onStart, delay));
+    }
 
-    
+    IEnumerator HandleWithLoadingScreen(Action actionAfter, Action onComplete = null, float delay = 1f)
+    {
+        bool screenReady = false;
+
+        showloadingScreen(() => {
+            screenReady = true;
+        });
+
+        yield return new WaitUntil(() => screenReady); // wait for fade to complete
+
+        loadingBar?.IncreaseLoading(1f); // now it's safe to animate
+
+        yield return new WaitForSeconds(delay); // let loading bar run
+
+        //loadingBar?.CompleteLoading(); // force fill if needed
+        //loadingScreen.SetActive(false);
+        yield return new WaitForEndOfFrame();
+
+        actionAfter?.Invoke();
+        onComplete?.Invoke();
+    }
+
+
+        // Call this from Button in Inspector to go to Screen2 with a loading screen
+    public void ShowScreen2_WithLoading()
+    {
+        webcamScript.StartWebcamFeed();
+        RunWithLoadingScreen(() => ShowScreen2(), null, 3.0f);
+    }
+
+/*     public void ShowScreen4_WithLoading()
+    {
+        giffy.ConvertImagesToGif();
+        loader.LoadSprites();
+        RunWithLoadingScreen(() => ShowScreen4(), null, 3.0f);
+    }
+     */
 }
 

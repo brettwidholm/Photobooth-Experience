@@ -1,6 +1,9 @@
+/*
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+
+using System.Collections; // ✅ THIS is required for IEnumerator
 
 public class PhotoTime : MonoBehaviour
 {
@@ -19,7 +22,7 @@ public class PhotoTime : MonoBehaviour
         UpdateScreenReference(); // Find the active screen at startup
 
         timerText.text = $"{programTime:F0}";
-        messageText.text = "Get Ready";
+        messageText.text = "Ready";
         timerText.enabled = false;
         messageText.enabled = false;
     }
@@ -35,7 +38,7 @@ public class PhotoTime : MonoBehaviour
     }
 
     public void Photo1(){
-       messageText.text = "Cool";
+       messageText.text = "Set";
         if(programTime <= 0.0f){
             messageText.text = "click";
             timerText.enabled = false;
@@ -44,7 +47,7 @@ public class PhotoTime : MonoBehaviour
         }
     }
     public void Photo2(){
-       messageText.text = "Nice";        
+       messageText.text = "Pose";        
         if(programTime <= 0.0f){
             
             messageText.text = "click";
@@ -64,11 +67,15 @@ public class PhotoTime : MonoBehaviour
             programTime = 5.0f;
         }
     }
-    public void Update()
+   /*  public void Update()
     {
-        if (state > 3){
-            screenControl.ShowScreen4();
-        }
+        if (state > 3)
+{
+    StartCoroutine(TriggerScreen4WithLoading());
+    enabled = false; // disable further Update loop once done
+    return; // exit early
+}
+
         
         timerText.text = $"{programTime:F0}";
         programTime -= Time.deltaTime;
@@ -100,7 +107,11 @@ public class PhotoTime : MonoBehaviour
             webby.TakePhoto();
         }
     }
+ */
 
+
+
+/* 
     public void UpdateScreenReference(){
         foreach (Transform screen in screenControl.transform)
         {
@@ -120,3 +131,4 @@ public class PhotoTime : MonoBehaviour
         }
     }
 }
+ */

@@ -64,9 +64,14 @@ public class GifGen : MonoBehaviour
         string error = process.StandardError.ReadToEnd();
         process.WaitForExit();
 
-        if (!string.IsNullOrEmpty(error))
-            UnityEngine.Debug.LogError("FFmpeg Error: " + error);
-        else
-            UnityEngine.Debug.Log("FFmpeg Output: " + output);
+        // Only log as error if process failed
+    if (process.ExitCode != 0)
+    {
+        UnityEngine.Debug.LogError($"❌ FFmpeg exited with code {process.ExitCode}");
+    }
+    else
+    {
+        UnityEngine.Debug.Log("✅ FFmpeg completed successfully");
+    }
     }
 }
