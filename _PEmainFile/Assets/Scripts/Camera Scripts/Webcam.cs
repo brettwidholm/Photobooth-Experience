@@ -76,7 +76,7 @@ public class Webcam : MonoBehaviour
     }
 
         public void Photo0(){
-        messageText.text = "Cool";
+        messageText.text = "Ready";
         messageText.enabled = true;
 
         if(!(c1.getCurrentFrame().Equals("None"))){
@@ -103,7 +103,7 @@ public class Webcam : MonoBehaviour
     }
 
     public void Photo1(){
-       messageText.text = "Nice";
+       messageText.text = "Set";
    //     messageText.enabled = true;
 
         if(!(c2.getCurrentFrame().Equals("None"))){
@@ -127,7 +127,7 @@ public class Webcam : MonoBehaviour
     }
 
     public void Photo2(){
-       messageText.text = "Rad";
+       messageText.text = "Pose";
         //messageText.enabled = true;
         if(!(c3.getCurrentFrame().Equals("None"))){
             if(!(c3.getCurrentFrame().Contains("COFCBorders"))){

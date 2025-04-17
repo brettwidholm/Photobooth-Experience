@@ -349,9 +349,7 @@ private IEnumerator FlashRoutine()
             websosa.SetActive(false);
             
 
-            loadingScreen.SetActive(false);
-           UnityEngine.Debug.Log("Loading screen deactivated");
-            
+            loadingScreen.SetActive(false);            
 
             emailEntryBox.SetActive(false);
             previewShareButton.SetActive(true);

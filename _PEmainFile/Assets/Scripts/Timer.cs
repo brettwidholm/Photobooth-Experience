@@ -52,7 +52,7 @@ public class Timer : MonoBehaviour
         // Show warning when time is ≤ 5s
         if (programTime <= 5.0f){
             screenControl.timerPanel.SetActive(true); // Show the timer panel
-            screenControl.gifPrev.SetActive(false); // Hide the websosa panel
+            screenControl.gifPrev.SetActive(false); // Hide the animated panel
             timerText.enabled = true;
             warningText.enabled = true;
         }
