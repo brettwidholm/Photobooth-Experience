@@ -7,6 +7,8 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.Net.Mime;
 using System.Collections;
+using System.Diagnostics;
+using System.Linq;
 
 public class EmailController : MonoBehaviour
 {
@@ -32,6 +34,7 @@ public class EmailController : MonoBehaviour
 
     public PathGetter getter;
     public ScreenControl screenControl;
+ 
 
 
 void Start(){
@@ -48,6 +51,7 @@ void Start(){
 
     confirmButton.interactable = false;
     UpdateUI();
+
 }
 
     void Update()
@@ -198,14 +202,14 @@ public void SendEmail(string recipientEmail, string firstName, string lastName)
 
                 UnityMainThreadDispatcher.Enqueue(() =>
                 {
-                    Debug.Log("✅ Email sent successfully to " + recipientEmail);
+                   UnityEngine.Debug.Log("✅ Email sent successfully to " + recipientEmail);
                 });
             }
             catch (System.Exception e)
             {
                 UnityMainThreadDispatcher.Enqueue(() =>
                 {
-                    Debug.LogError("❌ Failed to send email: " + e.Message);
+                   UnityEngine.Debug.LogError("❌ Failed to send email: " + e.Message);
                 });
             }
         });

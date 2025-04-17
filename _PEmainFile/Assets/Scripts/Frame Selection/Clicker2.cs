@@ -18,7 +18,7 @@ public class Clicker2 : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.LogWarning("2 is clicked");
+        Debug.Log("2 is clicked");
    //     selected = true;
         frame.color = Color.green;
         ClickChecker.setSelected(2);

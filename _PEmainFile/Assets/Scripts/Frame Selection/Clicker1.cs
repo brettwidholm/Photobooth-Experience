@@ -20,7 +20,7 @@ public class Clicker1 : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.LogWarning("1 is clicked");
+        Debug.Log("1 is clicked");
    //     selected = true;
         frame.color = Color.green;
         ClickChecker.setSelected(1);

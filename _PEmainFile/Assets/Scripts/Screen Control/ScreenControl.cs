@@ -5,6 +5,10 @@ using UnityEngine.EventSystems;
 using System.Runtime.InteropServices;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+
 
 public class ScreenControl : MonoBehaviour
 {
@@ -70,8 +74,8 @@ public class ScreenControl : MonoBehaviour
 
     public GameObject forwardFrame; //button for frames selction
     public GameObject backFrame; //button for frames selction
-
-   
+    
+    public VirtualKeyboardInjector virtualKeyboardInjector; //injects the virtual keyboard for touch devices NOT IN USE
 
     void Start()
     {
@@ -102,7 +106,7 @@ public class ScreenControl : MonoBehaviour
         forwardFrame.SetActive(false);
         backFrame.SetActive(false);
         // Showscreen0(); //starts only showing screen0
-        
+
     }
 
     void Update()
@@ -121,7 +125,7 @@ public class ScreenControl : MonoBehaviour
 
         if(IsScreenActive("Tap to Begin Screen")){
             if (Input.GetMouseButtonDown(0)){
-                Debug.Log("we going to the next screen");
+               UnityEngine.Debug.Log("we going to the next screen");
                 ShowScreen3(); //go to photo capture screen
             }
         }
@@ -167,7 +171,7 @@ private IEnumerator FlashRoutine()
             forwardFrame.SetActive(false);
             backFrame.SetActive(false);
         });
-        Debug.Log("Dev mode is active!");
+       UnityEngine.Debug.Log("Dev mode is active!");
     }
     public void Showscreen0(){//Start Screen
         transitionOverlay.FadeTransition(() => {
@@ -198,7 +202,7 @@ private IEnumerator FlashRoutine()
             forwardFrame.SetActive(false);
             backFrame.SetActive(false);
         });
-        Debug.Log("Start screen is active!");
+       UnityEngine.Debug.Log("Start screen is active!");
     }
 
     public void Showscreen1(){//Instructions Screen
@@ -221,7 +225,7 @@ private IEnumerator FlashRoutine()
             forwardFrame.SetActive(false);
             backFrame.SetActive(false);
         });
-        Debug.Log("instructions screen is active!");
+       UnityEngine.Debug.Log("instructions screen is active!");
     }
 
     public void Showscreen8(){//Privacy Policy
@@ -244,7 +248,7 @@ private IEnumerator FlashRoutine()
             forwardFrame.SetActive(false);
             backFrame.SetActive(false);
         });
-        Debug.Log("Privacy Policy screen is active!");
+       UnityEngine.Debug.Log("Privacy Policy screen is active!");
     }
 
         public void ShowFramesScreen(){
@@ -269,17 +273,17 @@ private IEnumerator FlashRoutine()
     //            frame3Selec.SetActive(true);
   //              frame4Selec.SetActive(true);
             });
-            Debug.Log("SWAMP IZZO");
-            Debug.Log("CARTI");
-            Debug.Log("HE'S COMIN");
-            Debug.Log("I AM THE MUSIC");
+           UnityEngine.Debug.Log("SWAMP IZZO");
+           UnityEngine.Debug.Log("CARTI");
+           UnityEngine.Debug.Log("HE'S COMIN");
+           UnityEngine.Debug.Log("I AM THE MUSIC");
     }
 
 
         public void ShowScreen2()
     {
             // Any setup logic before camera activation can go here
-            Debug.Log("showscreen2() called");
+           UnityEngine.Debug.Log("showscreen2() called");
             
             transitionOverlay.FadeTransition(() => {
                 websosa.SetActive(true);
@@ -290,7 +294,7 @@ private IEnumerator FlashRoutine()
                 screen2.SetActive(true);
 
             loadingScreen.SetActive(false);
-            Debug.Log("Loading screen deactivated");
+           UnityEngine.Debug.Log("Loading screen deactivated");
 
                 screen3.SetActive(false);
                 screen4.SetActive(false);
@@ -305,7 +309,7 @@ private IEnumerator FlashRoutine()
                 backFrame.SetActive(false);
             });
 
-            Debug.Log("tap to begin screen is active!");
+           UnityEngine.Debug.Log("tap to begin screen is active!");
         }
     
 
@@ -323,7 +327,7 @@ private IEnumerator FlashRoutine()
             gifPrev.SetActive(false);
             previewShareButton.SetActive(false);
 
-        Debug.Log("Photo Capture is active!");
+       UnityEngine.Debug.Log("Photo Capture is active!");
     }
 
     public void ShowScreen4(){//Preview GIF Screen
@@ -346,7 +350,7 @@ private IEnumerator FlashRoutine()
             
 
             loadingScreen.SetActive(false);
-            Debug.Log("Loading screen deactivated");
+           UnityEngine.Debug.Log("Loading screen deactivated");
             
 
             emailEntryBox.SetActive(false);
@@ -358,7 +362,7 @@ private IEnumerator FlashRoutine()
 
             
         });
-        Debug.Log("Preview GIF screen is active!");
+       UnityEngine.Debug.Log("Preview GIF screen is active!");
     }
 
     public void ShowScreen5(){//Info Screen
@@ -383,7 +387,7 @@ private IEnumerator FlashRoutine()
             sendEmailButton.SetActive(false);
             nextButtonInfo.SetActive(true);
         });
-        Debug.Log("Info screen is active!");
+       UnityEngine.Debug.Log("Info screen is active!");
     }
 
     public void ShowScreen6(){//Confirmation Screen
@@ -405,7 +409,7 @@ private IEnumerator FlashRoutine()
             gifPrev.SetActive(true);
             
         });
-        Debug.Log("Confirmation screen is active!");
+       UnityEngine.Debug.Log("Confirmation screen is active!");
     }
         public void ShowScreen7(){//Success Screen
         transitionOverlay.FadeTransition(() => {
@@ -424,7 +428,7 @@ private IEnumerator FlashRoutine()
             backButtonConfirm.SetActive(false);
             sendEmailButton.SetActive(false);
         });
-        Debug.Log("Success screen is active!");
+       UnityEngine.Debug.Log("Success screen is active!");
     }
 public void showloadingScreen(Action onShown = null, bool useFade = true)
 {
@@ -468,34 +472,6 @@ public void showloadingScreen(Action onShown = null, bool useFade = true)
     }
 }
 
-
-/*     public void showloadingScreen(Action onShown = null)
-{
-    //loadingBar?.ResetBar(); // reset bar to 0 before screen is active
-
-    transitionOverlay.FadeTransition(() =>
-    {
-        loadingScreen.SetActive(true);
-
-        // Deactivate other screens
-        devMode.SetActive(false);
-        screen0.SetActive(false);
-        screen1.SetActive(false);
-        screen2.SetActive(false);
-        screen3.SetActive(false);
-        screen4.SetActive(false);
-        screen5.SetActive(false);
-        screen6.SetActive(false);
-        screen7.SetActive(false);
-        gifPrev.SetActive(false);
-        backButtonConfirm.SetActive(false);
-        sendEmailButton.SetActive(false);
-
-        onShown?.Invoke(); // kick off the rest AFTER fade and loading screen is visible
-    });
-} */
-
-
     public bool IsScreenActive(string screenName){
         GameObject screen = GameObject.Find(screenName);
         if (screen != null){
@@ -506,9 +482,13 @@ public void showloadingScreen(Action onShown = null, bool useFade = true)
         }
     }
 
-    public void TouchKeyboard(){
-        System.Diagnostics.Process.Start("tabtip.exe");
-    }
+    
+    public void TouchKeyboard()
+{
+    System.Diagnostics.Process.Start("tabtip.exe");
+    
+}
+
 
     private const uint WM_SYSCOMMAND = 0x0112;
     private const uint SC_CLOSE = 0xF060;
@@ -582,20 +562,14 @@ public void showloadingScreen(Action onShown = null, bool useFade = true)
         onComplete?.Invoke();
     }
 
-
         // Call this from Button in Inspector to go to Screen2 with a loading screen
     public void ShowScreen2_WithLoading()
     {
-        webcamScript.StartWebcamFeed();
-        RunWithLoadingScreen(() => ShowScreen2(), null, 3.0f);
+        
+        RunWithLoadingScreen(
+            onComplete: () => ShowScreen2(), 
+            onStart: () => webcamScript.StartWebcamFeed(),
+            delay: 3.0f);
     }
-
-/*     public void ShowScreen4_WithLoading()
-    {
-        giffy.ConvertImagesToGif();
-        loader.LoadSprites();
-        RunWithLoadingScreen(() => ShowScreen4(), null, 3.0f);
-    }
-     */
 }
 
