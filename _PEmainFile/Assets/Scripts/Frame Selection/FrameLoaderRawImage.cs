@@ -56,6 +56,18 @@ public class FrameLoaderUI : MonoBehaviour
                     imagePaths.Add(file);
                 }
             }
+            folderPath = folderPath + @"\COFCBorders";
+            files = Directory.GetFiles(folderPath);
+                        foreach (string file in files)
+            {
+                string extension = Path.GetExtension(file).ToLowerInvariant();
+                if (extension == ".png")
+                {
+                    imagePaths.Add(file);
+                }
+            }
+
+
         }
         else
         {

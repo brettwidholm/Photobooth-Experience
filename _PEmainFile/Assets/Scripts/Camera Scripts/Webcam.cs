@@ -30,6 +30,7 @@ public class Webcam : MonoBehaviour
     Texture2D frame;
 
     public bool frameExist = false;
+    public bool borderExist = false;
 
     public Clicker1 c1;
     public Clicker2 c2;
@@ -79,11 +80,19 @@ public class Webcam : MonoBehaviour
         messageText.enabled = true;
 
         if(!(c1.getCurrentFrame().Equals("None"))){
-            frameExist = true;
-            frame = LoadTexture(c1.getCurrentFrame());
+            if(!(c1.getCurrentFrame().Contains("COFCBorders"))){
+                frameExist = true;
+                frame = LoadTexture(c1.getCurrentFrame());
+            }
+            else{
+                borderExist = true;
+                frame = LoadTexture(c1.getCurrentFrame());
+
+            }
 
 
         }
+        
         
         if(programTime <= 0.0f){
           //  messageText.text = "click";
@@ -98,10 +107,15 @@ public class Webcam : MonoBehaviour
    //     messageText.enabled = true;
 
         if(!(c2.getCurrentFrame().Equals("None"))){
-            frameExist = true;
-            frame = LoadTexture(c2.getCurrentFrame());
+            if(!(c2.getCurrentFrame().Contains("COFCBorders"))){
+                frameExist = true;
+                frame = LoadTexture(c2.getCurrentFrame());
+            }
+            else{
+                borderExist = true;
+                frame = LoadTexture(c2.getCurrentFrame());
 
-
+            }
         }
         
         if(programTime <= 0.0f){
@@ -116,10 +130,15 @@ public class Webcam : MonoBehaviour
        messageText.text = "Rad";
         //messageText.enabled = true;
         if(!(c3.getCurrentFrame().Equals("None"))){
-            frameExist = true;
-            frame = LoadTexture(c3.getCurrentFrame());
+            if(!(c3.getCurrentFrame().Contains("COFCBorders"))){
+                frameExist = true;
+                frame = LoadTexture(c3.getCurrentFrame());
+            }
+            else{
+                borderExist = true;
+                frame = LoadTexture(c3.getCurrentFrame());
 
-
+            }
         }
         
         if(programTime <= 0.0f){
@@ -133,10 +152,15 @@ public class Webcam : MonoBehaviour
     public void Photo3(){
 
         if(!(c4.getCurrentFrame().Equals("None"))){
-            frameExist = true;
-            frame = LoadTexture(c4.getCurrentFrame());
+            if(!(c4.getCurrentFrame().Contains("COFCBorders"))){
+                frameExist = true;
+                frame = LoadTexture(c4.getCurrentFrame());
+            }
+            else{
+                borderExist = true;
+                frame = LoadTexture(c4.getCurrentFrame());
 
-
+            }
         }
       //  messageText.enabled = true;    
         if(programTime <= 0){
@@ -279,6 +303,17 @@ public class Webcam : MonoBehaviour
             Debug.Log("✅ Photo saved at: " + savedPath);
 
         }
+        else if(borderExist){
+            Texture2D finalphotofr = MergeImages(frame, square);
+            
+            byte[] bytes = finalphotofr.EncodeToPNG();
+            savedPath = Path.Combine(filePath, newName);
+            File.WriteAllBytes(savedPath, bytes);
+
+            Debug.Log("✅ Photo saved at: " + savedPath);
+
+        }
+
         else{
             byte[] bytes = square.EncodeToPNG();
             savedPath = Path.Combine(filePath, newName);
@@ -289,6 +324,7 @@ public class Webcam : MonoBehaviour
         }
 
         frameExist = false;
+        borderExist = false;
 
         
 
