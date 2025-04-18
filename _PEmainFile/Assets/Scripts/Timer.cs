@@ -16,8 +16,8 @@ public class Timer : MonoBehaviour
         
         UpdateScreenReference(); // Find the active screen at startup
 
-        timerText.text = $"Timer: {programTime:F0}";
-        warningText.text = "TOUCH THE SCREEN";
+        timerText.text = $"{programTime:F0}";
+        warningText.text = "Tap for more time";
         timerText.enabled = false;
         warningText.enabled = false;
         screenControl.timerPanel.SetActive(false); // Hide the timer panel at the start
@@ -25,7 +25,7 @@ public class Timer : MonoBehaviour
 
     void Update()
     {
-        timerText.text = $"Timer: {programTime:F0}";
+        timerText.text = $"{programTime:F0}";
 
         if (Input.GetMouseButtonDown(0) || Input.anyKeyDown){
             programTime = 20.0f; //if left click made reset timer 
@@ -45,7 +45,6 @@ public class Timer : MonoBehaviour
         UpdateTextPosition();
 
         if (programTime <= 0.0f){
-            Debug.Log("out of time... bye :(");
             resetScene.RestartScene();
         }
 
@@ -53,17 +52,22 @@ public class Timer : MonoBehaviour
         if (programTime <= 5.0f){
             screenControl.timerPanel.SetActive(true); // Show the timer panel
             screenControl.gifPrev.SetActive(false); // Hide the animated panel
+            screenControl.websosa.SetActive(false); // Hide the websosa panel
             timerText.enabled = true;
             warningText.enabled = true;
         }
         else{
             screenControl.timerPanel.SetActive(false); // Hide the timer panel
+            timerText.enabled = false;
+            warningText.enabled = false;
+
             if (screenControl.IsScreenActive("Preview GIF") || screenControl.IsScreenActive("Confirmation")){
                 screenControl.gifPrev.SetActive(true); // Show the websosa panel
             }
-            
-            timerText.enabled = false;
-            warningText.enabled = false;
+            //
+            if(screenControl.IsScreenActive("Tap to Begin Screen")){
+                screenControl.websosa.SetActive(true); // Show the websosa panel
+            }
         }
     }
 

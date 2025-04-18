@@ -31,7 +31,7 @@ public class ScreenControl : MonoBehaviour
     public GameObject framesScreen; //frames Screen
 
     public TransitionOverlay transitionOverlay; //fade to white
-    public GameObject timerPanel;
+    public GameObject timerPanel; //timer overlay panel
     
     
     //-------------------------------------------------
@@ -57,7 +57,7 @@ public class ScreenControl : MonoBehaviour
     public GameObject BlockCLogo; //our lovely cofc logo
     public Button resetButton;  //global reset button
 
-    public GameObject backButtonInstructions; //back button on instructions
+    public GameObject backButtonInstructions; //back button on instructions/privacy policy
     public GameObject backButtonInfo; //back button on info
 
     public GameObject backButtonConfirm; //back button on confirmation
@@ -131,29 +131,18 @@ public class ScreenControl : MonoBehaviour
         }
     }
 
-/*     public void Flash(){
-        //Debug.Log("in the cut");
-        flashOn = true;
+        public void Flash()
+    {
+        StartCoroutine(FlashRoutine());
+    }
+
+    private IEnumerator FlashRoutine()
+    {
         flash.SetActive(true);
-        if(flashTime < 0.0f){
-            flashOn = false;
-            flash.SetActive(false);
-            flashTime = 0.3f;
-        }
-    } */
-    public void Flash()
-{
-    StartCoroutine(FlashRoutine());
-}
+        yield return new WaitForSeconds(flashTime);
+        flash.SetActive(false);
+    }
 
-private IEnumerator FlashRoutine()
-{
-    flash.SetActive(true);
-    yield return new WaitForSeconds(flashTime);
-    flash.SetActive(false);
-}
-
- 
     public void ShowDevMode(){//Dev Mode
         transitionOverlay.FadeTransition(() => {
             devMode.SetActive(true);
@@ -166,7 +155,6 @@ private IEnumerator FlashRoutine()
             screen6.SetActive(false);
             screen7.SetActive(false);
 
-            
             framesScreen.SetActive(false); //frames Screen
             forwardFrame.SetActive(false);
             backFrame.SetActive(false);
@@ -218,7 +206,6 @@ private IEnumerator FlashRoutine()
             screen7.SetActive(false);
             websosa.SetActive(false);
             
-
             backButtonInstructions.SetActive(true);
 
             framesScreen.SetActive(false); //frames Screen
@@ -268,10 +255,7 @@ private IEnumerator FlashRoutine()
 
                 forwardFrame.SetActive(true);
                 backFrame.SetActive(true);
-     //           frame1Selec.SetActive(true);
-     //           frame2Selec.SetActive(true);
-    //            frame3Selec.SetActive(true);
-  //              frame4Selec.SetActive(true);
+
             });
            UnityEngine.Debug.Log("SWAMP IZZO");
            UnityEngine.Debug.Log("CARTI");
@@ -282,7 +266,6 @@ private IEnumerator FlashRoutine()
 
         public void ShowScreen2()
     {
-            // Any setup logic before camera activation can go here
            UnityEngine.Debug.Log("showscreen2() called");
             
             transitionOverlay.FadeTransition(() => {
@@ -334,7 +317,7 @@ private IEnumerator FlashRoutine()
         
         /* giffy.ConvertImagesToGif();
         loader.LoadSprites(); */
-            
+        //the above are now handled by the ShowScreen4WithLoading method in Webcam.cs
         transitionOverlay.FadeTransition(() => {
             gifPrev.SetActive(true);
             devMode.SetActive(false);
@@ -348,7 +331,6 @@ private IEnumerator FlashRoutine()
             screen7.SetActive(false);
             websosa.SetActive(false);
             
-
             loadingScreen.SetActive(false);            
 
             emailEntryBox.SetActive(false);
@@ -428,49 +410,86 @@ private IEnumerator FlashRoutine()
         });
        UnityEngine.Debug.Log("Success screen is active!");
     }
-public void showloadingScreen(Action onShown = null, bool useFade = true)
-{
-    Action activate = () =>
+    public void showloadingScreen(Action onShown = null, bool useFade = true)
     {
-        websosa.SetActive(false);
+        Action activate = () =>
+        {
+            websosa.SetActive(false);
 
-        loadingBar?.ResetBar(); //  Reset bar before it becomes visible
-        loadingScreen.SetActive(true);
+            loadingBar?.ResetBar(); //  Reset bar before it becomes visible
+            loadingScreen.SetActive(true);
 
-         // Hide reset button on loading screen
+            devMode.SetActive(false);
+            screen0.SetActive(false);
+            screen1.SetActive(false);
+            screen2.SetActive(false);
+            screen3.SetActive(false);
+            screen4.SetActive(false);
+            screen5.SetActive(false);
+            screen6.SetActive(false);
+            screen7.SetActive(false);
+            gifPrev.SetActive(false);
+            backButtonConfirm.SetActive(false);
+            sendEmailButton.SetActive(false);
+
+            backButtonConfirm.SetActive(false);
+            nextButtonInfo.SetActive(false);
+            framesScreen.SetActive(false);
+
+
+            onShown?.Invoke();
+        };
+
+        if (useFade)
+        {
+            transitionOverlay.FadeTransition(activate);
+        }
+        else
+        {
+            activate.Invoke();
+        }
+    }
+
+    //the following methods are used to run actions with a loading screen in between
+    public void RunWithLoadingScreen(Action onComplete, Action onStart = null, float delay = 1f)
+    {
+        StartCoroutine(HandleWithLoadingScreen(onComplete, onStart, delay));
+    }
+
+    IEnumerator HandleWithLoadingScreen(Action actionAfter, Action onComplete = null, float delay = 1f)
+    {
+        bool screenReady = false;
+
+        showloadingScreen(() => {
+            screenReady = true;
+        });
+
+        yield return new WaitUntil(() => screenReady); 
+
+        loadingBar?.IncreaseLoading(1f); 
+
+        yield return new WaitForSeconds(delay); 
+
+        //loadingBar?.CompleteLoading(); // force fill if needed
+        //loadingScreen.SetActive(false);
+        yield return new WaitForEndOfFrame();
+
+        actionAfter?.Invoke();
+        onComplete?.Invoke();
+    }
+
+        // called onclick of start button on Start Screen
+    public void ShowScreen2_WithLoading()
+    {
         
-        devMode.SetActive(false);
-        screen0.SetActive(false);
-        screen1.SetActive(false);
-        screen2.SetActive(false);
-        screen3.SetActive(false);
-        screen4.SetActive(false);
-        screen5.SetActive(false);
-        screen6.SetActive(false);
-        screen7.SetActive(false);
-        gifPrev.SetActive(false);
-        backButtonConfirm.SetActive(false);
-        sendEmailButton.SetActive(false);
-
-        backButtonConfirm.SetActive(false);
-        nextButtonInfo.SetActive(false);
-        framesScreen.SetActive(false);
-
-
-        onShown?.Invoke();
-    };
-
-    if (useFade)
-    {
-        transitionOverlay.FadeTransition(activate);
+        RunWithLoadingScreen(
+            onComplete: () => ShowScreen2(), 
+            onStart: () => webcamScript.StartWebcamFeed(),
+            delay: 3.0f);
     }
-    else
-    {
-        activate.Invoke();
-    }
-}
 
-    public bool IsScreenActive(string screenName){
+    
+    public bool IsScreenActive(string screenName){  // Checks if a screen is active by its name in the hierarchy
         GameObject screen = GameObject.Find(screenName);
         if (screen != null){
             return screen.activeInHierarchy;
@@ -480,13 +499,12 @@ public void showloadingScreen(Action onShown = null, bool useFade = true)
         }
     }
 
-    
-    public void TouchKeyboard()
-{
-    System.Diagnostics.Process.Start("tabtip.exe");
-    
-}
-
+//REST OF SCRIPT IS TABTIP RELATED
+        public void TouchKeyboard()
+    {
+        System.Diagnostics.Process.Start("tabtip.exe");
+        
+    }
 
     private const uint WM_SYSCOMMAND = 0x0112;
     private const uint SC_CLOSE = 0xF060;
@@ -510,6 +528,8 @@ public void showloadingScreen(Action onShown = null, bool useFade = true)
         }
     }
 
+
+    //this is the only method I got to work half decently for closing tabtip when clicking away from an input field - william
     public void DeselectCurrentInput()
     {
         StartCoroutine(WaitAndDeselect());
@@ -531,43 +551,6 @@ public void showloadingScreen(Action onShown = null, bool useFade = true)
         // User pressed Return or clicked away
         CloseTouchKeyboard();
         EventSystem.current.SetSelectedGameObject(null);
-    }
-
-    public void RunWithLoadingScreen(Action onComplete, Action onStart = null, float delay = 1f)
-    {
-        StartCoroutine(HandleWithLoadingScreen(onComplete, onStart, delay));
-    }
-
-    IEnumerator HandleWithLoadingScreen(Action actionAfter, Action onComplete = null, float delay = 1f)
-    {
-        bool screenReady = false;
-
-        showloadingScreen(() => {
-            screenReady = true;
-        });
-
-        yield return new WaitUntil(() => screenReady); // wait for fade to complete
-
-        loadingBar?.IncreaseLoading(1f); // now it's safe to animate
-
-        yield return new WaitForSeconds(delay); // let loading bar run
-
-        //loadingBar?.CompleteLoading(); // force fill if needed
-        //loadingScreen.SetActive(false);
-        yield return new WaitForEndOfFrame();
-
-        actionAfter?.Invoke();
-        onComplete?.Invoke();
-    }
-
-        // Call this from Button in Inspector to go to Screen2 with a loading screen
-    public void ShowScreen2_WithLoading()
-    {
-        
-        RunWithLoadingScreen(
-            onComplete: () => ShowScreen2(), 
-            onStart: () => webcamScript.StartWebcamFeed(),
-            delay: 3.0f);
     }
 }
 

@@ -87,15 +87,10 @@ public class Webcam : MonoBehaviour
             else{
                 borderExist = true;
                 frame = LoadTexture(c1.getCurrentFrame());
-
             }
-
-
         }
         
-        
         if(programTime <= 0.0f){
-          //  messageText.text = "click";
             timerText.enabled = false;
             state++;
             programTime = 5.0f;
@@ -104,8 +99,6 @@ public class Webcam : MonoBehaviour
 
     public void Photo1(){
        messageText.text = "Set";
-   //     messageText.enabled = true;
-
         if(!(c2.getCurrentFrame().Equals("None"))){
             if(!(c2.getCurrentFrame().Contains("COFCBorders"))){
                 frameExist = true;
@@ -119,7 +112,6 @@ public class Webcam : MonoBehaviour
         }
         
         if(programTime <= 0.0f){
-     //       messageText.text = "click";
             timerText.enabled = false;
             state++;
             programTime = 5.0f;
@@ -128,7 +120,6 @@ public class Webcam : MonoBehaviour
 
     public void Photo2(){
        messageText.text = "Pose";
-        //messageText.enabled = true;
         if(!(c3.getCurrentFrame().Equals("None"))){
             if(!(c3.getCurrentFrame().Contains("COFCBorders"))){
                 frameExist = true;
@@ -142,7 +133,6 @@ public class Webcam : MonoBehaviour
         }
         
         if(programTime <= 0.0f){
-           // messageText.text = "click";
             timerText.enabled = false;
             state++;
             programTime = 5.0f;
@@ -162,9 +152,7 @@ public class Webcam : MonoBehaviour
 
             }
         }
-      //  messageText.enabled = true;    
         if(programTime <= 0){
-      //      messageText.text = "click";
             timerText.enabled = false;
             state++;
             programTime = 5.0f;
@@ -178,13 +166,6 @@ public class Webcam : MonoBehaviour
         }
         else{
             messageText.enabled = true;
-            /* if (state > 3)
-                {
-                    StartCoroutine(TriggerScreen4WithLoading());
-                    enabled = false; // disable further Update loop once done
-                    return;// exit early
-                } */
-            
             timerText.text = $"{programTime:F0}";
             programTime -= Time.deltaTime;
             
@@ -223,7 +204,6 @@ public class Webcam : MonoBehaviour
 
         }
     }
-
     public void TakePhoto()
     {
         string newName = name + cnt + ".png";
@@ -276,19 +256,6 @@ public class Webcam : MonoBehaviour
 
         photo.Apply();
 
-/*
-        // Create rotated texture 90deg 
-        Texture2D photo = new Texture2D(height, width);
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                photo.SetPixel(height - y - 1, x, pixels[y * width + x]);
-            }
-        }
-
-        photo.Apply();
-*/
         // Crop to center square
         Texture2D square = CropToSquare(photo);
 
@@ -325,12 +292,7 @@ public class Webcam : MonoBehaviour
 
         frameExist = false;
         borderExist = false;
-
-        
-
         // Save to PNG
-
-
     }
 
     public void OnDestroy()
@@ -551,19 +513,4 @@ private IEnumerator TriggerScreen4WithLoading()
     );
 }
 
-
-
-/*     private IEnumerator TriggerScreen4WithLoading()
-{
-    Debug.Log("Triggering Screen 4 with loading screen");
-    yield return null; // optional small delay to let last photo process
-
-    
-        screenControl.giffy.ConvertImagesToGif();
-        screenControl.loader.LoadSprites();
-        screenControl.RunWithLoadingScreen(() => screenControl.ShowScreen4(), null, 3.0f);
-        StopWebcamFeed(); // Stop the webcam feed after taking the last photo
-        //screenControl.gifPrev.SetActive(true); // Show the GIF preview screen
-
-} */
 }
