@@ -257,10 +257,6 @@ public class ScreenControl : MonoBehaviour
                 backFrame.SetActive(true);
 
             });
-           UnityEngine.Debug.Log("SWAMP IZZO");
-           UnityEngine.Debug.Log("CARTI");
-           UnityEngine.Debug.Log("HE'S COMIN");
-           UnityEngine.Debug.Log("I AM THE MUSIC");
     }
 
 

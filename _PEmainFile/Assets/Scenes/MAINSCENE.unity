@@ -12020,7 +12020,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6950c25140298ae43aac2bb685956c52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outputGifName: rad.gif
+  outputGifName: 
   frameRate: 2
   getter: {fileID: 608491819}
 --- !u!1 &1969412742

@@ -8,13 +8,14 @@ public class GifGen : MonoBehaviour
 {
     private string inputFolder;
     private string outputFolder;
-    public string outputGifName = "rad.gif";
+    public string outputGifName;
     public int frameRate = 2;
 
     public PathGetter getter;
 
     void Start()
     {
+        outputGifName = "CofC.gif";
         inputFolder =  Path.Combine(getter.getPath(), "Photos");
         outputFolder =  Path.Combine(getter.getPath(), "gif");
     }

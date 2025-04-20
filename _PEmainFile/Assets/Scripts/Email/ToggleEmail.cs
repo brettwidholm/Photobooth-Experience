@@ -42,7 +42,7 @@ void Start(){
     UnityMainThreadDispatcher.Init();
 
     // Now it's safe to access references
-    gifFilePath = Path.Combine(getter.getPath(), "gif\\rad.gif");
+    gifFilePath = Path.Combine(getter.getPath(), "gif\\CofC.gif");
     startButton.onClick.AddListener(OnStartButtonClick);
     confirmButton.onClick.AddListener(OnConfirmButtonClick);
     yesButton.onClick.AddListener(OnYesButtonClick);

@@ -37,7 +37,7 @@ public class FrameLoaderUI : MonoBehaviour
         else
         {
             //add screen control thing
-            Debug.LogWarning("No images found in Frames folder.");
+            Debug.Log("No images found in Frames folder.");
         }
     }
 
@@ -71,7 +71,7 @@ public class FrameLoaderUI : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Frames folder not found: " + folderPath);
+            Debug.Log("Frames folder not found: " + folderPath);
         }
     }
 
