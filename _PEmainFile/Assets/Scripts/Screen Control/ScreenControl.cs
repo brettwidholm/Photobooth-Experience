@@ -15,6 +15,8 @@ public class ScreenControl : MonoBehaviour
 
     //screens/transitions:
     //-------------------------------------
+    public GameObject backButtonPrivacyEmail; // new back button for returning to email input
+    private bool cameFromEmailScreen = false;
     public GameObject devMode; //dev mode screen
     public GameObject screen0; //Start Screen
     public GameObject screen1; //Instructions Screen
@@ -125,7 +127,6 @@ public class ScreenControl : MonoBehaviour
 
         if(IsScreenActive("Tap to Begin Screen")){
             if (Input.GetMouseButtonDown(0)){
-               UnityEngine.Debug.Log("we going to the next screen");
                 ShowScreen3(); //go to photo capture screen
             }
         }
@@ -215,28 +216,57 @@ public class ScreenControl : MonoBehaviour
        UnityEngine.Debug.Log("instructions screen is active!");
     }
 
-    public void Showscreen8(){//Privacy Policy
-        transitionOverlay.FadeTransition(() => {
-            devMode.SetActive(false);
-            screen0.SetActive(false);
-            screen1.SetActive(false);
-            screen2.SetActive(false);
-            screen3.SetActive(false);
-            screen4.SetActive(false);
-            screen5.SetActive(false);
-            screen6.SetActive(false);
-            screen7.SetActive(false);
-            screen8.SetActive(true);
-            websosa.SetActive(false);
+        // Replace your Showscreen8() with this version:
+public void Showscreen8(bool fromEmailScreen = false)
+{
+    cameFromEmailScreen = fromEmailScreen;
 
+    transitionOverlay.FadeTransition(() => {
+        devMode.SetActive(false);
+        screen0.SetActive(false);
+        screen1.SetActive(false);
+        screen2.SetActive(false);
+        screen3.SetActive(false);
+        screen4.SetActive(false);
+        screen5.SetActive(false);
+        screen6.SetActive(false);
+        screen7.SetActive(false);
+        screen8.SetActive(true);
+        websosa.SetActive(false);
+
+        // Hide all back buttons first
+        backButtonInstructions.SetActive(false);
+        backButtonConfirm.SetActive(false);
+        backButtonInfo.SetActive(false);
+        sendEmailButton.SetActive(false);
+        backButtonPrivacyEmail.SetActive(false);
+
+        if (fromEmailScreen)
+        {
+            // Show the back-to-email button
+            backButtonPrivacyEmail.SetActive(true);
+            backButtonPrivacyEmail.GetComponent<Button>().onClick.RemoveAllListeners();
+            backButtonPrivacyEmail.GetComponent<Button>().onClick.AddListener(() => ShowScreen5());
+        }
+        else
+        {
+            // Show the original back-to-start button
             backButtonInstructions.SetActive(true);
+        }
 
-            framesScreen.SetActive(false); //frames Screen
-            forwardFrame.SetActive(false);
-            backFrame.SetActive(false);
-        });
-       UnityEngine.Debug.Log("Privacy Policy screen is active!");
-    }
+        framesScreen.SetActive(false);
+        forwardFrame.SetActive(false);
+        backFrame.SetActive(false);
+    });
+
+}
+
+
+// Add this new method to be called from EmailController:
+public void ShowPrivacyPolicyFromEmail()
+{
+    Showscreen8(fromEmailScreen: true);
+}
 
         public void ShowFramesScreen(){
             transitionOverlay.FadeTransition(() => {

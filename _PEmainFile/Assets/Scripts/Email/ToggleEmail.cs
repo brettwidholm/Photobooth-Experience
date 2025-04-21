@@ -7,8 +7,6 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.Net.Mime;
 using System.Collections;
-using System.Diagnostics;
-using System.Linq;
 
 public class EmailController : MonoBehaviour
 {
@@ -19,6 +17,7 @@ public class EmailController : MonoBehaviour
     public TMP_InputField firstNameInputField;
     public TMP_InputField lastNameInputField;
     public Button confirmButton;
+    public Button startButton;
     public TextMeshProUGUI emailDisplayText;
 
     public string gifFilePath;
@@ -30,37 +29,66 @@ public class EmailController : MonoBehaviour
     public TextMeshProUGUI confirmationText;
     public Button yesButton;
     public Button noButton;
-    public Button startButton;
+
+    public Toggle policyToggle;
+    public TextMeshProUGUI privacyPolicyText;
 
     public PathGetter getter;
     public ScreenControl screenControl;
- 
 
+    void Start()
+    {
+        UnityMainThreadDispatcher.Init();
 
-void Start(){
+        gifFilePath = Path.Combine(getter.getPath(), "gif\\rad.gif");
 
-    UnityMainThreadDispatcher.Init();
+        startButton.onClick.AddListener(OnStartButtonClick);
+        confirmButton.onClick.AddListener(OnConfirmButtonClick);
+        yesButton.onClick.AddListener(OnYesButtonClick);
+        noButton.onClick.AddListener(OnNoButtonClick);
+        emailInputField.onValueChanged.AddListener(delegate { ValidateEmail(); });
+        policyToggle.onValueChanged.AddListener(delegate { ValidateEmail(); });
 
-    // Now it's safe to access references
-    gifFilePath = Path.Combine(getter.getPath(), "gif\\CofC.gif");
-    startButton.onClick.AddListener(OnStartButtonClick);
-    confirmButton.onClick.AddListener(OnConfirmButtonClick);
-    yesButton.onClick.AddListener(OnYesButtonClick);
-    noButton.onClick.AddListener(OnNoButtonClick);
-    emailInputField.onValueChanged.AddListener(delegate { ValidateEmail(); });
+        // Setup clickable privacy text
+        privacyPolicyText.text = "<link=\"privacy\">By using this program you agree to our <u><color=#800000>privacy policy</color></u></link>";
+        privacyPolicyText.richText = true;
+        privacyPolicyText.enabled = true;
+        privacyPolicyText.ForceMeshUpdate();
 
-    confirmButton.interactable = false;
-    UpdateUI();
+        confirmButton.interactable = false;
+        UpdateUI();
+    }
+
+   void Update()
+{
+    if (counter == 3 && Input.GetMouseButtonDown(0))
+    {
+        OnInvalidEmailReset();
+    }
+
+    // Only react to clicks that are actually over the link
+    if (privacyPolicyText.gameObject.activeInHierarchy && Input.GetMouseButtonDown(0))
+{
+    Vector3 worldMousePos = Input.mousePosition;
+    Camera cam = Camera.main;
+
+    if (RectTransformUtility.RectangleContainsScreenPoint(
+        privacyPolicyText.rectTransform, worldMousePos, cam))
+    {
+        int linkIndex = TMP_TextUtilities.FindIntersectingLink(privacyPolicyText, worldMousePos, cam);
+        if (linkIndex != -1)
+        {
+            TMP_LinkInfo linkInfo = privacyPolicyText.textInfo.linkInfo[linkIndex];
+            if (linkInfo.GetLinkID() == "privacy")
+            {
+                screenControl.ShowPrivacyPolicyFromEmail();
+            }
+        }
+    }
+}
 
 }
 
-    void Update()
-    {
-        if (counter == 3 && Input.GetMouseButtonDown(0))
-        {
-            OnInvalidEmailReset();
-        }
-    }
 
     void OnStartButtonClick()
     {
@@ -93,6 +121,8 @@ void Start(){
         firstNameInputField.gameObject.SetActive(false);
         lastNameInputField.gameObject.SetActive(false);
         confirmButton.gameObject.SetActive(false);
+        policyToggle.gameObject.SetActive(false);
+        privacyPolicyText.gameObject.SetActive(false);
     }
 
     void ShowConfirmationOptions()
@@ -102,11 +132,13 @@ void Start(){
         confirmationText.text = $"Name: {userFirstName} {userLastName}\nEmail: {userEmail}";
         yesButton.gameObject.SetActive(true);
         noButton.gameObject.SetActive(true);
-       
+
         emailInputField.gameObject.SetActive(false);
         firstNameInputField.gameObject.SetActive(false);
         lastNameInputField.gameObject.SetActive(false);
         confirmButton.gameObject.SetActive(false);
+        policyToggle.gameObject.SetActive(false);
+        privacyPolicyText.gameObject.SetActive(false);
     }
 
     void OnYesButtonClick()
@@ -117,25 +149,19 @@ void Start(){
     }
 
     void OnNoButtonClick()
-{
-
-    // Reset the counter and update the UI to go back to the input fields
-    counter = 1;
-
-    // Ensure the input fields are re-enabled and cleared
-    emailInputField.gameObject.SetActive(true);
-    firstNameInputField.gameObject.SetActive(true);
-    lastNameInputField.gameObject.SetActive(true);
-    confirmButton.gameObject.SetActive(true);
-   
-    // Hide the confirmation text and buttons
-    confirmationText.gameObject.SetActive(false);
-    yesButton.gameObject.SetActive(false);
-    noButton.gameObject.SetActive(false);
-   
-    UpdateUI();
-}
-
+    {
+        counter = 1;
+        emailInputField.gameObject.SetActive(true);
+        firstNameInputField.gameObject.SetActive(true);
+        lastNameInputField.gameObject.SetActive(true);
+        confirmButton.gameObject.SetActive(true);
+        policyToggle.gameObject.SetActive(true);
+        privacyPolicyText.gameObject.SetActive(true);
+        confirmationText.gameObject.SetActive(false);
+        yesButton.gameObject.SetActive(false);
+        noButton.gameObject.SetActive(false);
+        UpdateUI();
+    }
 
     bool IsValidEmail(string email)
     {
@@ -145,86 +171,85 @@ void Start(){
 
     void ValidateEmail()
     {
-        confirmButton.interactable = IsValidEmail(emailInputField.text.Trim());
+        confirmButton.interactable = IsValidEmail(emailInputField.text.Trim()) && policyToggle.isOn;
     }
-public void SendEmail(string recipientEmail, string firstName, string lastName)
-{
-    
-    if (isSendingEmail) return;
 
-    isSendingEmail = true;
-
-    screenControl.RunWithLoadingScreen(
-    onComplete: () =>
+    public void SendEmail(string recipientEmail, string firstName, string lastName)
     {
-        screenControl.loadingBar?.CompleteLoading();
-        screenControl.StartCoroutine(WaitThenShowSuccess());
-        isSendingEmail = false;
-    },
-    onStart: () =>
-    {
-        // NO manual showloadingScreen here!
-        // Just start your email thread.
-        System.Threading.Thread emailThread = new System.Threading.Thread(() =>
-        {
-            string senderEmail = "boothphoto57@gmail.com";
-            string senderPassword = "msfu xycd qnwz hilv";
+        if (isSendingEmail) return;
+        isSendingEmail = true;
 
-            try
+        screenControl.RunWithLoadingScreen(
+            onComplete: () =>
             {
-                using (MailMessage mail = new MailMessage())
-                using (Attachment gifAttachment = new Attachment(gifFilePath))
+                screenControl.loadingBar?.CompleteLoading();
+                screenControl.StartCoroutine(WaitThenShowSuccess());
+                isSendingEmail = false;
+            },
+            onStart: () =>
+            {
+                System.Threading.Thread emailThread = new System.Threading.Thread(() =>
                 {
-                    mail.From = new MailAddress(senderEmail);
-                    mail.To.Add(recipientEmail);
+                    string senderEmail = "boothphoto57@gmail.com";
+                    string senderPassword = "msfu xycd qnwz hilv";
 
-                     // Set the subject
-                    mail.Subject = string.IsNullOrWhiteSpace(firstName) && string.IsNullOrWhiteSpace(lastName)
-                        ? "Your College of Charleston GIF!"
-                        : $"Hi {firstName} {lastName}, here’s your College of Charleston GIF!";
-
-                    // Set plain text fallback
-                    mail.Body = "Hey there, here's your personalized event GIF! Thanks for stopping by – we hope you had fun!";
-                    mail.IsBodyHtml = true;
-
-                    // Add the HTML body
-                    AlternateView htmlBody = EmailTemplate.GetHtmlBody(firstName, lastName, gifFilePath);
-                    mail.AlternateViews.Add(htmlBody);
-                    mail.Attachments.Add(gifAttachment);
-                    using (SmtpClient smtpServer = new SmtpClient("smtp.gmail.com"))
+                    try
                     {
-                        smtpServer.Port = 587;
-                        smtpServer.Credentials = new NetworkCredential(senderEmail, senderPassword);
-                        smtpServer.EnableSsl = true;
-                        smtpServer.Send(mail);
+                        if (!File.Exists(gifFilePath))
+                        {
+                            Debug.LogError("❌ GIF not found at: " + gifFilePath);
+                            return;
+                        }
+
+                        using (MailMessage mail = new MailMessage())
+                        using (Attachment gifAttachment = new Attachment(gifFilePath))
+                        {
+                            mail.From = new MailAddress(senderEmail);
+                            mail.To.Add(recipientEmail);
+
+                            mail.Subject = string.IsNullOrWhiteSpace(firstName) && string.IsNullOrWhiteSpace(lastName)
+                                ? "Your College of Charleston GIF!"
+                                : $"Hi {firstName} {lastName}, here’s your College of Charleston GIF!";
+
+                            mail.Body = "Hey there, here's your personalized event GIF! Thanks for stopping by – we hope you had fun!";
+                            mail.IsBodyHtml = true;
+
+                            AlternateView htmlBody = EmailTemplate.GetHtmlBody(firstName, lastName, gifFilePath);
+                            mail.AlternateViews.Add(htmlBody);
+                            mail.Attachments.Add(gifAttachment);
+
+                            using (SmtpClient smtpServer = new SmtpClient("smtp.gmail.com"))
+                            {
+                                smtpServer.Port = 587;
+                                smtpServer.Credentials = new NetworkCredential(senderEmail, senderPassword);
+                                smtpServer.EnableSsl = true;
+                                smtpServer.Send(mail);
+                            }
+                        }
+
+                        UnityMainThreadDispatcher.Enqueue(() => {
+                            Debug.Log("✅ Email sent successfully to " + recipientEmail);
+                        });
                     }
-                }
-
-                UnityMainThreadDispatcher.Enqueue(() =>
-                {
-                   UnityEngine.Debug.Log("✅ Email sent successfully to " + recipientEmail);
+                    catch (System.Exception e)
+                    {
+                        UnityMainThreadDispatcher.Enqueue(() => {
+                            Debug.LogError("❌ Failed to send email: " + e.Message);
+                        });
+                    }
                 });
-            }
-            catch (System.Exception e)
-            {
-                UnityMainThreadDispatcher.Enqueue(() =>
-                {
-                   UnityEngine.Debug.LogError("❌ Failed to send email: " + e.Message);
-                });
-            }
-        });
 
-        emailThread.Start();
-    },
-    delay: 2.0f // optional for feel
-);
+                emailThread.Start();
+            },
+            delay: 2.0f
+        );
+    }
 
-}
-private IEnumerator WaitThenShowSuccess()
-{
-    yield return new WaitForSeconds(0.5f); // slight delay to let the bar visually "complete"
-    screenControl.ShowScreen7(); // success screen
-}
+    private IEnumerator WaitThenShowSuccess()
+    {
+        yield return new WaitForSeconds(0.5f);
+        screenControl.ShowScreen7();
+    }
 
     void UpdateUI()
     {
@@ -232,6 +257,9 @@ private IEnumerator WaitThenShowSuccess()
         firstNameInputField.gameObject.SetActive(counter == 1);
         lastNameInputField.gameObject.SetActive(counter == 1);
         confirmButton.gameObject.SetActive(counter == 1);
+        policyToggle.gameObject.SetActive(counter == 1);
+        privacyPolicyText.gameObject.SetActive(counter == 1);
+
         emailDisplayText.gameObject.SetActive(counter == 2);
         emailDisplayText.text = (counter == 2) ? $"Email: {userEmail}" : "";
 
@@ -248,6 +276,9 @@ private IEnumerator WaitThenShowSuccess()
         firstNameInputField.gameObject.SetActive(true);
         lastNameInputField.gameObject.SetActive(true);
         confirmButton.gameObject.SetActive(true);
+        policyToggle.gameObject.SetActive(true);
+        privacyPolicyText.gameObject.SetActive(true);
+
         emailInputField.text = "";
         firstNameInputField.text = "";
         lastNameInputField.text = "";
@@ -259,7 +290,8 @@ private IEnumerator WaitThenShowSuccess()
     {
         public static AlternateView GetHtmlBody(string firstName, string lastName, string gifPath)
         {
-            LinkedResource logo = new LinkedResource("Assets/Logos/CofC.png", MediaTypeNames.Image.Jpeg)
+            string logoPath = "Assets/Logos/CofC.png";
+            LinkedResource logo = new LinkedResource(logoPath, MediaTypeNames.Image.Jpeg)
             {
                 ContentId = "cofcLogo"
             };
@@ -271,7 +303,7 @@ private IEnumerator WaitThenShowSuccess()
                     <h2>College of Charleston</h2>
                     <p style='font-size: 18px;'>Hey {(string.IsNullOrWhiteSpace(firstName) ? "there" : firstName)}, here's your personalized event GIF!</p>
                     <p style='font-size: 16px;'>Thanks for stopping by – we hope you had fun!</p>
-                    <p style='font-size: 16px;'>Do not forget to tag us with <strong>#CougarPride</strong> when you share your GIF.</p>
+                    <p style='font-size: 16px;'>Don’t forget to tag us with <strong>#CougarPride</strong> when you share your GIF.</p>
                 </div>
             </body>";
 
