@@ -76,6 +76,7 @@ public class ScreenControl : MonoBehaviour
 
     public GameObject forwardFrame; //button for frames selction
     public GameObject backFrame; //button for frames selction
+
     
     public VirtualKeyboardInjector virtualKeyboardInjector; //injects the virtual keyboard for touch devices NOT IN USE
 
@@ -118,7 +119,7 @@ public class ScreenControl : MonoBehaviour
             Flash();
         }
 
-        if(IsScreenActive("Start Screen") || IsScreenActive("Loading Screen") || IsScreenActive("Privacy Policy") || IsScreenActive("DevMode") || IsScreenActive("Instructions Screen")){
+        if(IsScreenActive("Start Screen") || IsScreenActive("Loading Screen") || IsScreenActive("Privacy Policy") ||  IsScreenActive("Instructions Screen")){
             resetButton.gameObject.SetActive(false);
         }
         else{
