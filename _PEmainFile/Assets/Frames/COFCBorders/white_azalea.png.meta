@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 1b87753221ca51e48845bdd9da75a5e9
+guid: fb13b1dc10928ad45adfea7065476255
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8641477105772473149
-    second: HeartFrame1_0
+      213: -8062838396288386330
+    second: white_azalea_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -97,7 +97,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: Android
+    buildTarget: WindowsStoreApps
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: HeartFrame1_0
+      name: white_azalea_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 2048
-        height: 2048
+        width: 1640
+        height: 1640
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d3b2d38a4a1bce770800000000000000
-      internalID: 8641477105772473149
+      spriteID: 6eab9d3823b0b1090800000000000000
+      internalID: -8062838396288386330
       vertices: []
       indices: 
       edges: []
@@ -147,8 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      HeartFrame1_0: 8641477105772473149
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

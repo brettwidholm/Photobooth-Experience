@@ -40,7 +40,7 @@ public class EmailController : MonoBehaviour
     {
         UnityMainThreadDispatcher.Init();
 
-        gifFilePath = Path.Combine(getter.getPath(), "gif\\rad.gif");
+        gifFilePath = Path.Combine(getter.getPath(), "gif\\CofC.gif");
 
         startButton.onClick.AddListener(OnStartButtonClick);
         confirmButton.onClick.AddListener(OnConfirmButtonClick);
