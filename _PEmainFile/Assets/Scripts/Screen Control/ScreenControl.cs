@@ -43,7 +43,7 @@ public class ScreenControl : MonoBehaviour
     public Webcam webcamScript;
     public GameObject flash;  //camera flash
     public bool flashOn = false;
-    public float flashTime = 0.3f;
+    public float flashTime = 0.9f;
 
     //-----------------------------------------------
     //gif related:

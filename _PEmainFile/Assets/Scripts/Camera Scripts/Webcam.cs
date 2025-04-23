@@ -19,7 +19,7 @@ public class Webcam : MonoBehaviour
 
 
     public int state = 0;
-    public float programTime = 3.0f;
+    public float programTime = 3.5f;
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI messageText;
     public ScreenControl screenControl; 
@@ -93,7 +93,7 @@ public class Webcam : MonoBehaviour
         if(programTime <= 0.0f){
             timerText.enabled = false;
             state++;
-            programTime = 3.0f;
+            programTime = 3.5f;
         }
     }
 
@@ -114,7 +114,7 @@ public class Webcam : MonoBehaviour
         if(programTime <= 0.0f){
             timerText.enabled = false;
             state++;
-            programTime = 3.0f;
+            programTime = 3.5f;
         }
     }
 
@@ -135,7 +135,7 @@ public class Webcam : MonoBehaviour
         if(programTime <= 0.0f){
             timerText.enabled = false;
             state++;
-            programTime = 3.0f;
+            programTime = 3.5f;
         }
     }
 
@@ -155,7 +155,7 @@ public class Webcam : MonoBehaviour
         if(programTime <= 0){
             timerText.enabled = false;
             state++;
-            programTime = 3.0f;
+            programTime = 3.5f;
         }
     }
     public void Update()
@@ -164,7 +164,7 @@ public class Webcam : MonoBehaviour
         if(!(screenControl.IsScreenActive("Photo Capture")) ){
             
             messageText.enabled = false;
-            programTime = 3.0f;
+            programTime = 3.5f;
         }
         else{
             Debug.Log("Program Time: " + programTime);
